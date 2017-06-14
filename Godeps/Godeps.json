@@ -1,0 +1,34 @@
+{
+	"ImportPath": "github.com/jsam/zbc-go",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v79",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/BurntSushi/toml",
+			"Comment": "v0.3.0",
+			"Rev": "b26d9c308763d68093482582cea63d69be07a0f0"
+		},
+		{
+			"ImportPath": "github.com/urfave/cli",
+			"Comment": "v1.19.1-43-gcf33a9b",
+			"Rev": "cf33a9befefdd6c6ea1a236ab6d546e797a62cbf"
+		},
+		{
+			"ImportPath": "gopkg.in/vmihailenco/msgpack.v2",
+			"Comment": "v2.9.1",
+			"Rev": "f4f8982de4ef0de18be76456617cc3f5d8d8141e"
+		},
+		{
+			"ImportPath": "gopkg.in/vmihailenco/msgpack.v2/codes",
+			"Comment": "v2.9.1",
+			"Rev": "f4f8982de4ef0de18be76456617cc3f5d8d8141e"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b"
+		}
+	]
+}

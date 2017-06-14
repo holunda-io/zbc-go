@@ -1,0 +1,17 @@
+eventType: CREATE
+headers:
+  k1: a
+  k2: b
+payload:
+- 129
+- 167
+- 112
+- 97
+- 121
+- 108
+- 111
+- 97
+- 100
+- 123
+retries: 3
+type: foo
