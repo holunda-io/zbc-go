@@ -8,7 +8,7 @@ build:
 
 install:
 	@mkdir -p /etc/zeebe/
-	@cp target/bin/config.toml /etc/zeebe
+	@cp target/bin/config.toml /etc/zeebe/
 	@cp target/bin/zbctl /usr/local/bin
 
 run:

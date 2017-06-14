@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/jsam/zbc-go/zbc"
@@ -12,6 +13,19 @@ import (
 	"os"
 	"path/filepath"
 )
+
+var (
+	configPaths      = []string{"./config.toml", "/etc/zeebe/config.toml"}
+	ResourceNotFound = errors.New("Resource at the given path not found.")
+	ConfigNotFound   = errors.New("Configuration file not found.")
+)
+
+func logAndDie(err error) {
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+}
 
 type Contact struct {
 	Address string `toml:"address"`
@@ -27,14 +41,17 @@ type Config struct {
 	Broker  Contact `toml:"broker"`
 }
 
-var configPath = "./config.toml"
+func (cf *Config) String() string {
+	return fmt.Sprintf("Version: %s\tBroker: %s", cf.Version, cf.Broker.String())
 
-func sendCreateTask(client *zbc.Client, m *zbc.CreateTask) (*zbc.Message, error) {
+}
+
+func sendCreateTask(client *zbc.Client, topic string, m *zbc.CreateTask) (*zbc.Message, error) {
 	commandRequest := zbc.NewCreateTaskMessage(&sbe.ExecuteCommandRequest{
 		PartitionId: 0,
 		Key:         0,
 		EventType:   sbe.EventTypeEnum(0),
-		TopicName:   []uint8("default-topic"),
+		TopicName:   []uint8(topic),
 		Command:     []uint8{},
 	}, m)
 
@@ -47,6 +64,11 @@ func sendCreateTask(client *zbc.Client, m *zbc.CreateTask) (*zbc.Message, error)
 }
 
 func loadCommandYaml(path string) (*zbc.CreateTask, error) {
+	log.Printf("Loading resource at %s\n", path)
+	if len(path) == 0 {
+		return nil, ResourceNotFound
+	}
+
 	filename, _ := filepath.Abs(path)
 	yamlFile, _ := ioutil.ReadFile(filename)
 
@@ -58,19 +80,23 @@ func loadCommandYaml(path string) (*zbc.CreateTask, error) {
 	return &command, nil
 }
 
-func loadConfig(configPath string) (*Config, error) {
-	var config Config
-	if _, err := toml.DecodeFile(configPath, &config); err != nil {
-		return nil, err
+func loadConfig() (*Config, error) {
+	for i := 0; i < len(configPaths); i++ {
+		log.Printf("Loading configuration at %s\n", configPaths[i])
+
+		var config Config
+		if _, err := toml.DecodeFile(configPaths[i], &config); err != nil {
+			continue
+		}
+		return &config, nil
 	}
-	return &config, nil
+	return nil, ConfigNotFound
 }
 
 func main() {
-	config, err := loadConfig(configPath)
-	if err != nil {
-		log.Printf("cannot find config: %+#v", err)
-	}
+	config, err := loadConfig()
+	logAndDie(err)
+	log.Println(config.String())
 
 	app := cli.NewApp()
 	app.Commands = []cli.Command{
@@ -78,21 +104,24 @@ func main() {
 			Name:    "create",
 			Aliases: []string{"c"},
 			Usage:   "create a resource",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "topic, t",
+					Value:  "default-topic",
+					Usage:  "Executing command request on specific topic.",
+					EnvVar: "ZB_TOPIC_NAME",
+				},
+			},
 			Action: func(c *cli.Context) error {
-				log.Printf("added something %+#v", c.Args())
+				createTask, err := loadCommandYaml(c.Args().First())
+				logAndDie(err)
 
 				client, err := zbc.NewClient(config.Broker.String())
-				if err != nil {
-					log.Println(err)
-				}
-
+				logAndDie(err)
 				log.Println("Connected to Zeebe.")
-				createTask, _ := loadCommandYaml(c.Args().First())
 
-				response, err := sendCreateTask(client, createTask)
-				if err != nil {
-					log.Printf("something really bad happend: %+#v", err)
-				}
+				response, err := sendCreateTask(client, c.String("topic"), createTask)
+				logAndDie(err)
 
 				log.Println("Success. Received response:")
 				log.Println(*response.Data)
