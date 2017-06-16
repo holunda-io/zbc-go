@@ -13,7 +13,7 @@ import (
 )
 
 type ExecuteCommandResponse struct {
-	PartitionId int32
+	PartitionId uint16
 	Key         uint64
 	TopicName   []uint8 // string and first byte is the length of string
 	Event       []uint8 // msgpack
@@ -123,7 +123,7 @@ func ExecuteCommandResponseInit(e *ExecuteCommandResponse) {
 }
 
 func (e ExecuteCommandResponse) SbeBlockLength() (blockLength uint16) {
-	return 12
+	return 10
 }
 
 func (e ExecuteCommandResponse) SbeTemplateId() (templateId uint16) {
@@ -170,16 +170,16 @@ func (e ExecuteCommandResponse) PartitionIdMetaAttribute(meta int) string {
 	return ""
 }
 
-func (e ExecuteCommandResponse) PartitionIdMinValue() int32 {
-	return math.MinInt32 + 1
+func (e ExecuteCommandResponse) PartitionIdMinValue() uint16 {
+	return 0
 }
 
-func (e ExecuteCommandResponse) PartitionIdMaxValue() int32 {
-	return math.MaxInt32
+func (e ExecuteCommandResponse) PartitionIdMaxValue() uint16 {
+	return math.MaxUint16 - 1
 }
 
-func (e ExecuteCommandResponse) PartitionIdNullValue() int32 {
-	return math.MinInt32
+func (e ExecuteCommandResponse) PartitionIdNullValue() uint16 {
+	return math.MaxUint16
 }
 
 func (e ExecuteCommandResponse) KeyId() uint16 {

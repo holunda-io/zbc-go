@@ -13,7 +13,7 @@ import (
 )
 
 type SubscribedEvent struct {
-	PartitionId      int32
+	PartitionId      uint16
 	Position         uint64
 	Key              uint64
 	SubscriberKey    uint64
@@ -175,7 +175,7 @@ func SubscribedEventInit(s *SubscribedEvent) {
 }
 
 func (s SubscribedEvent) SbeBlockLength() (blockLength uint16) {
-	return 30
+	return 28
 }
 
 func (s SubscribedEvent) SbeTemplateId() (templateId uint16) {
@@ -222,16 +222,16 @@ func (s SubscribedEvent) PartitionIdMetaAttribute(meta int) string {
 	return ""
 }
 
-func (s SubscribedEvent) PartitionIdMinValue() int32 {
-	return math.MinInt32 + 1
+func (s SubscribedEvent) PartitionIdMinValue() uint16 {
+	return 0
 }
 
-func (s SubscribedEvent) PartitionIdMaxValue() int32 {
-	return math.MaxInt32
+func (s SubscribedEvent) PartitionIdMaxValue() uint16 {
+	return math.MaxUint16 - 1
 }
 
-func (s SubscribedEvent) PartitionIdNullValue() int32 {
-	return math.MinInt32
+func (s SubscribedEvent) PartitionIdNullValue() uint16 {
+	return math.MaxUint16
 }
 
 func (s SubscribedEvent) PositionId() uint16 {
