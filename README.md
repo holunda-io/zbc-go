@@ -1,5 +1,6 @@
 # ZBC
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/jsam/zbc-go)](https://goreportcard.com/report/github.com/jsam/zbc-go)
 [![Build Status](https://travis-ci.org/jsam/zbc-go.svg?branch=master)](https://travis-ci.org/jsam/zbc-go)
 [![GoDoc](https://godoc.org/github.com/jsam/zbc-go?status.svg)](https://godoc.org/github.com/jsam/zbc-go)
 
@@ -47,6 +48,16 @@ zbctl create --topic default-topic examples/create-task.yaml
 ```
 
 To point your ```zbctl``` to some other broker edit ```config.toml``` which can be find in the ```/etc/zeebe/config.toml```.
+
+
+## Contributing
+
+  * Get started by checking our [contribution guidelines](https://github.com/jsam/zbc-go/blob/master/CONTRIBUTING.md).
+  * Make sure you follow our [code of conduct](https://github.com/jsam/zbc-go/blob/master/CODE_OF_CONDUCT.md).
+  * Read the zbc-go [wiki](https://github.com/jsam/zbc-go/wiki) for more technical and design details.
+  * The [Zeebe Protocol Specification](http://www.zeebe.io/) contains a wealth of useful information.
+  * If you have any questions, just [ask](https://github.com/jsam/zbc-go/issues)!
+
 
 ## Credits
 * Special thanks to Sebastian Menski and Daniel Meyer.
