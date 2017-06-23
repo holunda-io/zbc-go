@@ -1,4 +1,4 @@
-package test_zbdump
+package testzbdump
 
 import (
 	"bufio"
