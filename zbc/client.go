@@ -4,19 +4,22 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"github.com/jsam/zbc-go/zbc/sbe"
 	"log"
 	"net"
 	"time"
+
+	"github.com/jsam/zbc-go/zbc/sbe"
 )
 
-const REQUEST_TIMEOUT = 5
+// RequestTimeout specifies default timeout for Responder.
+const RequestTimeout = 5
 
 var (
-	TimeoutError     = errors.New("Request timeout.")
-	SocketWriteError = errors.New("Tried to write more bytes to socket.")
+	errTimeout     = errors.New("Request timeout")
+	errSocketWrite = errors.New("Tried to write more bytes to socket")
 )
 
+// Client for one Zeebe broker
 type Client struct {
 	conn          net.Conn
 	transactions  map[uint64]chan *Message
@@ -34,7 +37,7 @@ func (c *Client) sender(message *Message) error {
 	}
 
 	if n != len(byteBuff.Bytes()) {
-		return SocketWriteError
+		return errSocketWrite
 	}
 	return nil
 }
@@ -53,12 +56,12 @@ func (c *Client) receiver() {
 
 		if err != nil && !headers.IsSingleMessage() {
 			// TODO: Maybe we should panic here?
-			delete(c.transactions, headers.RequestResponseHeader.RequestId)
+			delete(c.transactions, headers.RequestResponseHeader.RequestID)
 			continue
 		}
 
 		if !headers.IsSingleMessage() && message != nil {
-			c.transactions[headers.RequestResponseHeader.RequestId] <- message
+			c.transactions[headers.RequestResponseHeader.RequestID] <- message
 			continue
 		}
 
@@ -79,19 +82,19 @@ func (c *Client) receiver() {
 // Responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
 func (c *Client) Responder(message *Message) (*Message, error) {
 	respCh := make(chan *Message)
-	c.transactions[message.Headers.RequestResponseHeader.RequestId] = respCh
+	c.transactions[message.Headers.RequestResponseHeader.RequestID] = respCh
 
 	if err := c.sender(message); err != nil {
 		return nil, err
 	}
 
 	select {
-	case resp := <-c.transactions[message.Headers.RequestResponseHeader.RequestId]:
-		delete(c.transactions, message.Headers.RequestResponseHeader.RequestId)
+	case resp := <-c.transactions[message.Headers.RequestResponseHeader.RequestID]:
+		delete(c.transactions, message.Headers.RequestResponseHeader.RequestID)
 		return resp, nil
-	case <-time.After(time.Second * REQUEST_TIMEOUT):
-		delete(c.transactions, message.Headers.RequestResponseHeader.RequestId)
-		return nil, TimeoutError
+	case <-time.After(time.Second * RequestTimeout):
+		delete(c.transactions, message.Headers.RequestResponseHeader.RequestID)
+		return nil, errTimeout
 	}
 }
 
@@ -110,12 +113,14 @@ func (c *Client) TaskConsumer(ts *TaskSubscription) (chan *Message, error) {
 	return subscriptionCh, nil
 }
 
+// Connect will spinoff receiver in goroutine, which will make client effectively ready to communicate with the broker.
 func (c *Client) Connect() {
 	go c.receiver()
 }
 
+// NewClient is constructor for Client structure. It will resolve IP address and dial the provided tcp address.
 func NewClient(addr string) (*Client, error) {
-	tcpAddr, wrongAddr := net.ResolveTCPAddr("tcp4", addr)
+	tcpAddr, wrongAddr := net.ResolveTCPAddr("tcp4", addr) // TODO: support IPv6 and TLS
 	if wrongAddr != nil {
 		return nil, wrongAddr
 	}

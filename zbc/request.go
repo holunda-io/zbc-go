@@ -6,7 +6,8 @@ import (
 	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
-type CreateTask struct {
+// Task structure for creating workflow task.
+type Task struct {
 	EventType string                 `yaml:"eventType" msgpack:"eventType"`
 	Headers   map[string]interface{} `yaml:"headers" msgpack:"headers"`
 	Payload   []uint8                `yaml:"payload" msgpack:"payload"`
@@ -14,7 +15,8 @@ type CreateTask struct {
 	Type      string                 `yaml:"type" msgpack:"type"`
 }
 
-func NewCreateTaskMessage(commandRequest *sbe.ExecuteCommandRequest, createTask *CreateTask) *Message {
+// NewTaskMessage is a constructor for Message which sends a Task to create.
+func NewTaskMessage(commandRequest *sbe.ExecuteCommandRequest, createTask *Task) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(createTask)
@@ -47,6 +49,7 @@ func NewCreateTaskMessage(commandRequest *sbe.ExecuteCommandRequest, createTask 
 	return &msg
 }
 
+// NewCommandRequestMessage generic way to send payload via ExecuteCommandRequest.
 func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, payload *map[string]interface{}) *Message {
 	var msg Message
 	msg.SetData(payload)
@@ -81,16 +84,18 @@ func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, payload
 	return &msg
 }
 
+// TaskSubscription is structure which we use to open a subscription on a task.
 type TaskSubscription struct {
 	SubscriberKey uint64 `msgpack:"subscriberKey"`
 	TopicName     string `msgpack:"topicName"`
-	PartitionId   int32  `msgpack:"partitionId"`
+	PartitionID   int32  `msgpack:"partitionId"`
 	TaskType      string `msgpack:"taskType"`
 	LockDuration  uint64 `msgpack:"lockDuration"`
 	LockOwner     string `msgpack:"lockOwner"`
 	Credits       int32  `msgpack:"credits"`
 }
 
+// NewTaskSubscriptionMessage is a constructor for Message object which will contain TaskSubscription as payload.
 func NewTaskSubscriptionMessage(ts *TaskSubscription) *Message {
 	var msg Message
 

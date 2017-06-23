@@ -3,12 +3,13 @@ package test_zbdump
 import (
 	"bufio"
 	"bytes"
-	"github.com/jsam/zbc-go/zbc"
-	"github.com/jsam/zbc-go/zbc/sbe"
 	"io/ioutil"
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/jsam/zbc-go/zbc"
+	"github.com/jsam/zbc-go/zbc/sbe"
 )
 
 const (
@@ -113,7 +114,7 @@ func TestCreateTaskRequest_CommandRequest2(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	executeCmdRequestI := *msg.SbeMessage
 	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
 	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + 26

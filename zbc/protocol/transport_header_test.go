@@ -17,7 +17,7 @@ func TestNewTransportHeader(t *testing.T) {
 
 func TestTransportHeader_Encode(t *testing.T) {
 	var transport TransportHeader
-	transport.ProtocolId = RequestResponse
+	transport.ProtocolID = RequestResponse
 
 	buff := bytes.Buffer{}
 	err := transport.Encode(&buff)
@@ -33,7 +33,7 @@ func TestTransportHeader_Encode(t *testing.T) {
 
 func TestTransportHeader_Encode2(t *testing.T) {
 	var transport TransportHeader
-	transport.ProtocolId = FullDuplexSingleMessage
+	transport.ProtocolID = FullDuplexSingleMessage
 
 	buff := bytes.Buffer{}
 	err := transport.Encode(&buff)
@@ -57,7 +57,7 @@ func TestTransportHeader_Decode(t *testing.T) {
 		t.Fatalf("Decoding went wrong. %s", err)
 	}
 
-	if transport.ProtocolId != RequestResponse {
+	if transport.ProtocolID != RequestResponse {
 		t.Fatal("Wrong ProtocolId.")
 	}
 }
@@ -72,7 +72,7 @@ func TestTransportHeader_Decode2(t *testing.T) {
 		t.Fatalf("Decoding went wrong. %s", err)
 	}
 
-	if transport.ProtocolId != FullDuplexSingleMessage {
+	if transport.ProtocolID != FullDuplexSingleMessage {
 		t.Fatal("Wrong ProtocolId.")
 	}
 }
