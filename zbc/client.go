@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"github.com/jsam/zbc-go/zbc/sbe"
 	"log"
 	"net"
 	"time"
@@ -17,8 +18,9 @@ var (
 )
 
 type Client struct {
-	conn         net.Conn
-	transactions map[uint64]chan *Message
+	conn          net.Conn
+	transactions  map[uint64]chan *Message
+	subscriptions map[uint64]chan *Message
 }
 
 func (c *Client) sender(message *Message) error {
@@ -42,29 +44,46 @@ func (c *Client) receiver() {
 		buffer := bufio.NewReader(c.conn)
 		r := NewMessageReader(buffer)
 		headers, tail, err := r.ReadHeaders()
+
 		if err != nil {
 			log.Printf("[R] Error %+#v\n", err)
 			continue
 		}
-
 		message, err := r.ParseMessage(headers, tail)
-		if err != nil {
+
+		if err != nil && !headers.IsSingleMessage() {
 			// TODO: Maybe we should panic here?
 			delete(c.transactions, headers.RequestResponseHeader.RequestId)
-			return
+			continue
 		}
 
-		if !headers.IsSingleMessage() {
+		if !headers.IsSingleMessage() && message != nil {
 			c.transactions[headers.RequestResponseHeader.RequestId] <- message
+			continue
 		}
+
+		if err != nil && headers.IsSingleMessage() {
+			// TODO: close and delete subscription
+			continue
+		}
+
+		if headers.IsSingleMessage() && message != nil {
+			subscriberKey := (*message.SbeMessage).(*sbe.SubscribedEvent).SubscriberKey
+			c.subscriptions[subscriberKey] <- message
+			continue
+		}
+
 	}
 }
 
+// Responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
 func (c *Client) Responder(message *Message) (*Message, error) {
 	respCh := make(chan *Message)
 	c.transactions[message.Headers.RequestResponseHeader.RequestId] = respCh
 
-	go c.sender(message)
+	if err := c.sender(message); err != nil {
+		return nil, err
+	}
 
 	select {
 	case resp := <-c.transactions[message.Headers.RequestResponseHeader.RequestId]:
@@ -76,8 +95,19 @@ func (c *Client) Responder(message *Message) (*Message, error) {
 	}
 }
 
-func (c *Client) Consumer() {
-	// TODO: Streamer?
+// TaskConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
+func (c *Client) TaskConsumer(ts *TaskSubscription) (chan *Message, error) {
+	subscriptionCh := make(chan *Message, ts.Credits)
+	msg := NewTaskSubscriptionMessage(ts)
+
+	response, err := c.Responder(msg)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	c.subscriptions[(*response.Data)["subscriberKey"].(uint64)] = subscriptionCh
+
+	return subscriptionCh, nil
 }
 
 func (c *Client) Connect() {
@@ -95,7 +125,11 @@ func NewClient(addr string) (*Client, error) {
 		return nil, err
 	}
 
-	c := &Client{conn, make(map[uint64]chan *Message)}
+	c := &Client{
+		conn,
+		make(map[uint64]chan *Message),
+		make(map[uint64]chan *Message),
+	}
 	c.Connect()
 
 	return c, nil

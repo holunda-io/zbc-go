@@ -3,6 +3,7 @@ package zbc
 import (
 	"bytes"
 	"encoding/binary"
+	"log"
 )
 
 type MessageWriter struct {
@@ -60,15 +61,9 @@ func (mw *MessageWriter) writeHeaders(writer *bytes.Buffer) error {
 }
 
 func (mw *MessageWriter) writeMessage(writer *bytes.Buffer) error {
-	switch mw.message.Headers.SbeMessageHeader.TemplateId {
-
-	case SBE_ExecuteCommandRequest_TemplateId:
-		if err := (*mw.message.SbeMessage).Encode(writer, binary.LittleEndian, false); err != nil {
-			return err
-		}
-		return nil
+	if err := (*mw.message.SbeMessage).Encode(writer, binary.LittleEndian, false); err != nil {
+		return err
 	}
-
 	return nil
 }
 
@@ -83,8 +78,14 @@ func (mw *MessageWriter) align(writer *bytes.Buffer) {
 }
 
 func (mw *MessageWriter) Write(writer *bytes.Buffer) {
-	mw.writeHeaders(writer)
-	mw.writeMessage(writer)
+	err := mw.writeHeaders(writer)
+	if err != nil {
+		log.Fatal("failed writing header")
+	}
+	err = mw.writeMessage(writer)
+	if err != nil {
+		log.Fatalf("failed writing message")
+	}
 	mw.align(writer)
 }
 

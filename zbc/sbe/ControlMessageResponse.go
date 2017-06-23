@@ -4,10 +4,8 @@ package sbe
 
 import (
 	"encoding/binary"
-	"errors"
 	"io"
 	"io/ioutil"
-	"unicode/utf8"
 )
 
 type ControlMessageResponse struct {
@@ -53,9 +51,6 @@ func (c *ControlMessageResponse) Decode(reader io.Reader, order binary.ByteOrder
 }
 
 func (c ControlMessageResponse) RangeCheck(actingVersion uint16, schemaVersion uint16) error {
-	if !utf8.Valid(c.Data[:]) {
-		return errors.New("c.Data failed UTF-8 validation")
-	}
 	return nil
 }
 

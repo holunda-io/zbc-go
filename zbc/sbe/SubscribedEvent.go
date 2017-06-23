@@ -4,12 +4,10 @@ package sbe
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
-	"unicode/utf8"
 )
 
 type SubscribedEvent struct {
@@ -161,12 +159,12 @@ func (s SubscribedEvent) RangeCheck(actingVersion uint16, schemaVersion uint16) 
 	if err := s.EventType.RangeCheck(actingVersion, schemaVersion); err != nil {
 		return err
 	}
-	if !utf8.Valid(s.TopicName[:]) {
-		return errors.New("s.TopicName failed UTF-8 validation")
-	}
-	if !utf8.Valid(s.Event[:]) {
-		return errors.New("s.Event failed UTF-8 validation")
-	}
+	//if !utf8.Valid(s.TopicName[:]) {
+	//	return errors.New("s.TopicName failed UTF-8 validation")
+	//}
+	//if !utf8.Valid(s.Event[:]) {
+	//	return errors.New("s.Event failed UTF-8 validation")
+	//}
 	return nil
 }
 
@@ -267,7 +265,7 @@ func (s SubscribedEvent) PositionMinValue() uint64 {
 }
 
 func (s SubscribedEvent) PositionMaxValue() uint64 {
-	return math.MaxUint64 - 1
+	return math.MaxUint64
 }
 
 func (s SubscribedEvent) PositionNullValue() uint64 {

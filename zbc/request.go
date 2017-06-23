@@ -80,3 +80,44 @@ func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, payload
 	msg.SetHeaders(&headers)
 	return &msg
 }
+
+type TaskSubscription struct {
+	SubscriberKey uint64 `msgpack:"subscriberKey"`
+	TopicName     string `msgpack:"topicName"`
+	PartitionId   int32  `msgpack:"partitionId"`
+	TaskType      string `msgpack:"taskType"`
+	LockDuration  uint64 `msgpack:"lockDuration"`
+	LockOwner     string `msgpack:"lockOwner"`
+	Credits       int32  `msgpack:"credits"`
+}
+
+func NewTaskSubscriptionMessage(ts *TaskSubscription) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(ts)
+	if err != nil {
+		return nil
+	}
+	controlRequest := &sbe.ControlMessageRequest{
+		MessageType: sbe.ControlMessageType.ADD_TASK_SUBSCRIPTION,
+		Data:        b,
+	}
+	msg.SetSbeMessage(controlRequest)
+
+	length := 1 + uint32(2+len(controlRequest.Data)) + 26
+
+	var headers Headers
+	headers.SetSbeMessageHeader(&sbe.MessageHeader{
+		BlockLength: controlRequest.SbeBlockLength(),
+		TemplateId:  controlRequest.SbeTemplateId(),
+		SchemaId:    controlRequest.SbeSchemaId(),
+		Version:     controlRequest.SbeSchemaVersion(),
+	})
+
+	headers.SetRequestResponseHeader(protocol.NewRequestResponseHeader())
+	headers.SetTransportHeader(protocol.NewTransportHeader(protocol.RequestResponse))
+	headers.SetFrameHeader(protocol.NewFrameHeader(uint32(length), 0, 0, 0, 2))
+
+	msg.SetHeaders(&headers)
+	return &msg
+}
