@@ -2,18 +2,20 @@ package zbc
 
 import (
 	"encoding/binary"
+	"io"
+
 	"github.com/jsam/zbc-go/zbc/protocol"
 	"github.com/jsam/zbc-go/zbc/sbe"
-	"io"
 )
 
 const (
-	SBE_ExecuteCommandRequest_TemplateId   = 20
-	SBE_ExecuteCommandResponse_TemplateId  = 21
-	SBE_ControlMessage_Response_TemplateId = 11
-	SBE_SubscriptionEvent_TemplateId       = 30
+	templateIDExecuteCommandRequest  = 20
+	templateIDExecuteCommandResponse = 21
+	templateIDControlMessageResponse = 11
+	templateIDSubscriptionEvent      = 30
 )
 
+// Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.
 type Headers struct {
 	FrameHeader           *protocol.FrameHeader
 	TransportHeader       *protocol.TransportHeader
@@ -21,45 +23,55 @@ type Headers struct {
 	SbeMessageHeader      *sbe.MessageHeader
 }
 
+// SetFrameHeader is a setter for FrameHeader.
 func (h *Headers) SetFrameHeader(header *protocol.FrameHeader) {
 	h.FrameHeader = header
 }
 
+// SetTransportHeader is a setter for TransportHeader.
 func (h *Headers) SetTransportHeader(header *protocol.TransportHeader) {
 	h.TransportHeader = header
 }
 
+// SetRequestResponseHeader is a setting for RequestResponseHeader.
 func (h *Headers) SetRequestResponseHeader(header *protocol.RequestResponseHeader) {
 	h.RequestResponseHeader = header
 }
 
+// IsSingleMessage is helper to determine which model of communication we use.
 func (h *Headers) IsSingleMessage() bool {
 	return h.RequestResponseHeader == nil
 }
 
+// SetSbeMessageHeader is a setter for SBEMessageHeader.
 func (h *Headers) SetSbeMessageHeader(header *sbe.MessageHeader) {
 	h.SbeMessageHeader = header
 }
 
+// SBE interface is apstraction over all SBE Messages.
 type SBE interface {
 	Encode(writer io.Writer, order binary.ByteOrder, doRangeCheck bool) error
 	Decode(reader io.Reader, order binary.ByteOrder, actingVersion uint16, blockLength uint16, doRangeCheck bool) error
 }
 
+// Message is zeebe message which will contain pointers to all parts of the message. Data is Message Pack layer.
 type Message struct {
 	Headers    *Headers
 	SbeMessage *SBE
 	Data       *map[string]interface{}
 }
 
+// SetHeaders is a setter for Headers attribute.
 func (m *Message) SetHeaders(headers *Headers) {
 	m.Headers = headers
 }
 
+// SetSbeMessage is a setter for SBE attribute.
 func (m *Message) SetSbeMessage(data SBE) {
 	m.SbeMessage = &data
 }
 
+// SetData is a setter for unmarshaled message pack data.
 func (m *Message) SetData(data *map[string]interface{}) {
 	m.Data = data
 }

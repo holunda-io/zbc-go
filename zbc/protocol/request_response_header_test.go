@@ -17,8 +17,8 @@ func TestNewRequestResponseHeader(t *testing.T) {
 
 func TestRequestResponseHeader_Encode(t *testing.T) {
 	var rrHeader RequestResponseHeader
-	rrHeader.ConnectionId = 0
-	rrHeader.RequestId = 1
+	rrHeader.ConnectionID = 0
+	rrHeader.RequestID = 1
 
 	buff := bytes.Buffer{}
 	err := rrHeader.Encode(&buff)
@@ -49,11 +49,11 @@ func TestRequestResponseHeader_Decode(t *testing.T) {
 		t.Fatalf("Decoding went wrong. %s", err)
 	}
 
-	if rrHeader.RequestId != 1 {
-		t.Fatalf("Wrong RequestId. Expected 1, received %d.", rrHeader.RequestId)
+	if rrHeader.RequestID != 1 {
+		t.Fatalf("Wrong RequestId. Expected 1, received %d.", rrHeader.RequestID)
 	}
 
-	if rrHeader.ConnectionId != 0 {
-		t.Fatalf("Wrong ConnectionId. Expected 0, received %d.", rrHeader.ConnectionId)
+	if rrHeader.ConnectionID != 0 {
+		t.Fatalf("Wrong ConnectionId. Expected 0, received %d.", rrHeader.ConnectionID)
 	}
 }

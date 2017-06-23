@@ -6,6 +6,7 @@ import (
 	"log"
 )
 
+// MessageWriter is builder which will take Message pointer and create valid byte array.
 type MessageWriter struct {
 	message *Message
 }
@@ -73,7 +74,7 @@ func (mw *MessageWriter) align(writer *bytes.Buffer) {
 
 	for currentSize < expectedSize {
 		writer.Write([]byte{0x00})
-		currentSize += 1
+		currentSize++
 	}
 }
 
@@ -89,6 +90,7 @@ func (mw *MessageWriter) Write(writer *bytes.Buffer) {
 	mw.align(writer)
 }
 
+// NewMessageWriter constructor for MessageWriter builder.
 func NewMessageWriter(message *Message) *MessageWriter {
 	return &MessageWriter{
 		message,

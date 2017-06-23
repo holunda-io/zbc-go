@@ -5,18 +5,20 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"io"
+
 	"github.com/jsam/zbc-go/zbc/protocol"
 	"github.com/jsam/zbc-go/zbc/sbe"
 	"gopkg.in/vmihailenco/msgpack.v2"
-	"io"
 )
 
 var (
-	FrameHeaderReadError   = errors.New("Cannot read bytes for frame header.")
-	FrameHeaderDecodeError = errors.New("Cannot decode bytes into frame header.")
-	ProtocolIdNotFound     = errors.New("ProtocolId not found.")
+	errFrameHeaderRead    = errors.New("Cannot read bytes for frame header")
+	errFrameHeaderDecode  = errors.New("Cannot decode bytes into frame header")
+	errProtocolIDNotFound = errors.New("ProtocolId not found")
 )
 
+// MessageReader is builder which will read byte array and construct Message with all their parts.
 type MessageReader struct {
 	io.Reader
 }
@@ -27,7 +29,7 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 	numBytes, err := mr.Read(buffer)
 
 	if uint32(numBytes) != n || err != nil {
-		return nil, err //MessageBinaryReadError
+		return nil, err
 	}
 
 	return buffer, nil
@@ -36,7 +38,7 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 func (mr *MessageReader) readFrameHeader(data []byte) (*protocol.FrameHeader, error) {
 	var frameHeader protocol.FrameHeader
 	if frameHeader.Decode(bytes.NewReader(data[:12]), binary.LittleEndian, 0) != nil {
-		return nil, FrameHeaderDecodeError
+		return nil, errFrameHeaderDecode
 	}
 	return &frameHeader, nil
 }
@@ -47,11 +49,11 @@ func (mr *MessageReader) readTransportHeader(data []byte) (*protocol.TransportHe
 	if err != nil {
 		return nil, err
 	}
-	if transport.ProtocolId == protocol.RequestResponse || transport.ProtocolId == protocol.FullDuplexSingleMessage {
+	if transport.ProtocolID == protocol.RequestResponse || transport.ProtocolID == protocol.FullDuplexSingleMessage {
 		return &transport, nil
 	}
 
-	return nil, ProtocolIdNotFound
+	return nil, errProtocolIDNotFound
 }
 
 func (mr *MessageReader) readRequestResponseHeader(data []byte) (*protocol.RequestResponseHeader, error) {
@@ -73,12 +75,13 @@ func (mr *MessageReader) readSbeMessageHeader(data []byte) (*sbe.MessageHeader, 
 	return &sbeMessageHeader, nil
 }
 
+// ReadHeaders will read entire message and interpret all headers. It will return pointer to headers object and tail of the message as byte array.
 func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	var header Headers
 
 	headerByte, err := mr.readNext(12)
 	if err != nil {
-		return nil, nil, FrameHeaderReadError
+		return nil, nil, errFrameHeaderRead
 	}
 
 	frameHeader, err := mr.readFrameHeader(headerByte)
@@ -99,10 +102,10 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	header.SetTransportHeader(transport)
 
 	sbeIndex := 2
-	switch transport.ProtocolId {
+	switch transport.ProtocolID {
 	case protocol.RequestResponse:
-		requestResponse, err := mr.readRequestResponseHeader(message[2:18])
-		if err != nil {
+		requestResponse, errHeader := mr.readRequestResponseHeader(message[2:18])
+		if errHeader != nil {
 			return nil, nil, err
 		}
 		header.SetRequestResponseHeader(requestResponse)
@@ -120,7 +123,7 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	}
 	header.SetSbeMessageHeader(sbeMessageHeader)
 
-	// this should align the reader for the next message
+	// TODO: make client less reliable on garbage -> this should align the reader for the next message
 	mr.align()
 
 	body := message[sbeIndex+8:]
@@ -185,6 +188,7 @@ func (mr *MessageReader) parseMessagePack(data *[]byte) (*map[string]interface{}
 	return &item, nil
 }
 
+// ParseMessage will take the headers and tail and construct Message.
 func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Message, error) {
 	var msg Message
 	msg.SetHeaders(headers)
@@ -192,7 +196,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 
 	switch headers.SbeMessageHeader.TemplateId {
 
-	case SBE_ExecuteCommandRequest_TemplateId: // Testing purposes.
+	case templateIDExecuteCommandRequest: // Testing purposes.
 		commandRequest, err := mr.decodeCmdRequest(reader, headers.SbeMessageHeader)
 		if err != nil {
 			return nil, err
@@ -207,7 +211,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		msg.SetData(msgPackData)
 		break
 
-	case SBE_ExecuteCommandResponse_TemplateId: // Read response from the socket.
+	case templateIDExecuteCommandResponse: // Read response from the socket.
 		commandResponse, err := mr.decodeCmdResponse(reader, headers.SbeMessageHeader)
 		if err != nil {
 			return nil, err
@@ -221,7 +225,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		msg.SetData(msgPackData)
 		break
 
-	case SBE_ControlMessage_Response_TemplateId:
+	case templateIDControlMessageResponse:
 		ctlResponse, err := mr.decodeCtlResponse(reader, headers.SbeMessageHeader)
 		if err != nil {
 			return nil, err
@@ -234,7 +238,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		msg.SetData(msgPackData)
 		break
 
-	case SBE_SubscriptionEvent_TemplateId:
+	case templateIDSubscriptionEvent:
 		subscribedEvent, err := mr.decodeSubEvent(reader, headers.SbeMessageHeader)
 		if err != nil {
 			return nil, err
@@ -251,6 +255,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 	return &msg, nil
 }
 
+// NewMessageReader is constructor for MessageReader builder.
 func NewMessageReader(rd *bufio.Reader) *MessageReader {
 	return &MessageReader{
 		rd,

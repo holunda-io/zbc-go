@@ -28,7 +28,7 @@ func TestFrameHeader_Encode(t *testing.T) {
 	if frame.Length != 147 {
 		t.Fatal("FrameHeader construction failed. Wrong Length.")
 	}
-	if frame.StreamId != 2 {
+	if frame.StreamID != 2 {
 		t.Fatal("FrameHeader construction failed. Wrong StreamId.")
 	}
 
@@ -79,10 +79,10 @@ func TestFrameHeader_Decode(t *testing.T) {
 	if frameHeader.Flags != 0 {
 		t.Fatal("Wrong Flag.")
 	}
-	if frameHeader.TypeId != FrameType_Message {
+	if frameHeader.TypeID != FrameTypeMessage {
 		t.Fatal("Wrong TypeId.")
 	}
-	if frameHeader.StreamId != 2 {
-		t.Fatalf("Wrong StreamId. Received %d", frameHeader.StreamId)
+	if frameHeader.StreamID != 2 {
+		t.Fatalf("Wrong StreamId. Received %d", frameHeader.StreamID)
 	}
 }

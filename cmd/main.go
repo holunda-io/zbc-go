@@ -3,24 +3,25 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+
 	"github.com/BurntSushi/toml"
 	"github.com/jsam/zbc-go/zbc"
 	"github.com/jsam/zbc-go/zbc/sbe"
 	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"log"
-	"os"
-	"path/filepath"
 )
 
 const (
-	Version              = "0.1.0-alpha1"
-	DefaultConfiguration = "/etc/zeebe/config.toml"
+	version              = "0.1.0-alpha1"
+	defaultConfiguration = "/etc/zeebe/config.toml"
 )
 
 var (
-	ResourceNotFound = errors.New("Resource at the given path not found.")
+	errResourceNotFound = errors.New("Resource at the given path not found")
 )
 
 func isFatal(err error) {
@@ -30,27 +31,27 @@ func isFatal(err error) {
 	}
 }
 
-type Contact struct {
+type contact struct {
 	Address string `toml:"address"`
 	Port    string `toml:"port"`
 }
 
-func (c *Contact) String() string {
+func (c *contact) String() string {
 	return fmt.Sprintf("%s:%s", c.Address, c.Port)
 }
 
-type Config struct {
+type config struct {
 	Version string  `toml:"version"`
-	Broker  Contact `toml:"broker"`
+	Broker  contact `toml:"broker"`
 }
 
-func (cf *Config) String() string {
-	return fmt.Sprintf("Version: %s\tBroker: %s", cf.Version, cf.Broker.String())
+func (cf *config) String() string {
+	return fmt.Sprintf("version: %s\tBroker: %s", cf.Version, cf.Broker.String())
 
 }
 
-func sendCreateTask(client *zbc.Client, topic string, m *zbc.CreateTask) (*zbc.Message, error) {
-	commandRequest := zbc.NewCreateTaskMessage(&sbe.ExecuteCommandRequest{
+func sendCreateTask(client *zbc.Client, topic string, m *zbc.Task) (*zbc.Message, error) {
+	commandRequest := zbc.NewTaskMessage(&sbe.ExecuteCommandRequest{
 		PartitionId: 0,
 		Key:         0,
 		EventType:   sbe.EventTypeEnum(0),
@@ -66,10 +67,10 @@ func sendCreateTask(client *zbc.Client, topic string, m *zbc.CreateTask) (*zbc.M
 	return response, nil
 }
 
-func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) (*zbc.Message, error) {
+func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) {
 	taskSub := &zbc.TaskSubscription{
 		TopicName:     topic,
-		PartitionId:   pid,
+		PartitionID:   pid,
 		Credits:       32,
 		LockDuration:  300000,
 		LockOwner:     lo,
@@ -84,20 +85,18 @@ func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt
 		message := <-subscriptionCh
 		fmt.Printf("%#v\n", *message.Data)
 	}
-
-	return nil, nil
 }
 
-func loadCommandYaml(path string) (*zbc.CreateTask, error) {
+func loadCommandYaml(path string) (*zbc.Task, error) {
 	log.Printf("Loading resource at %s\n", path)
 	if len(path) == 0 {
-		return nil, ResourceNotFound
+		return nil, errResourceNotFound
 	}
 
 	filename, _ := filepath.Abs(path)
 	yamlFile, _ := ioutil.ReadFile(filename)
 
-	var command zbc.CreateTask
+	var command zbc.Task
 	err := yaml.Unmarshal(yamlFile, &command)
 	if err != nil {
 		return nil, err
@@ -105,7 +104,7 @@ func loadCommandYaml(path string) (*zbc.CreateTask, error) {
 	return &command, nil
 }
 
-func loadConfig(path string, c *Config) {
+func loadConfig(path string, c *config) {
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		log.Printf("Reading configuration failed. Expecting to found configuration file at %s\n", path)
 		log.Printf("HINT: Configuration file is not in place. Try setting configuration path with:")
@@ -114,22 +113,22 @@ func loadConfig(path string, c *Config) {
 }
 
 func main() {
-	var config Config
+	var conf config
 
 	app := cli.NewApp()
 	app.Usage = "Zeebe control client application"
-	app.Version = Version
+	app.Version = version
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "config, cfg",
-			Value:  DefaultConfiguration,
+			Value:  defaultConfiguration,
 			Usage:  "Location of the configuration file.",
 			EnvVar: "ZBC_CONFIG",
 		},
 	}
 	app.Before = cli.BeforeFunc(func(c *cli.Context) error {
-		loadConfig(c.String("config"), &config)
-		log.Println(config.String())
+		loadConfig(c.String("config"), &conf)
+		log.Println(conf.String())
 		return nil
 	})
 
@@ -156,7 +155,7 @@ func main() {
 				createTask, err := loadCommandYaml(c.Args().First())
 				isFatal(err)
 
-				client, err := zbc.NewClient(config.Broker.String())
+				client, err := zbc.NewClient(conf.Broker.String())
 				isFatal(err)
 				log.Println("Connected to Zeebe.")
 
@@ -199,7 +198,7 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				client, err := zbc.NewClient(config.Broker.String())
+				client, err := zbc.NewClient(conf.Broker.String())
 				isFatal(err)
 				log.Println("Connected to Zeebe.")
 				openSubscription(client, c.String("topic"),
