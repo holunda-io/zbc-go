@@ -66,7 +66,7 @@ func sendCreateTask(client *zbc.Client, topic string, m *zbc.CreateTask) (*zbc.M
 	return response, nil
 }
 
-func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) (*zbc.Message, error) {
+func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) {
 	taskSub := &zbc.TaskSubscription{
 		TopicName:     topic,
 		PartitionId:   pid,
@@ -84,8 +84,6 @@ func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt
 		message := <-subscriptionCh
 		fmt.Printf("%#v\n", *message.Data)
 	}
-
-	return nil, nil
 }
 
 func loadCommandYaml(path string) (*zbc.CreateTask, error) {

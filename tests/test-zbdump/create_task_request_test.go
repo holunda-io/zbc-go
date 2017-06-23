@@ -83,7 +83,9 @@ func TestCreateTaskRequest_CommandRequest(t *testing.T) {
 	}
 
 	msg, err := msgReader.ParseMessage(headers, message)
-
+	if err != nil {
+		t.Fatal(err)
+	}
 	executeCmdRequestI := *msg.SbeMessage
 	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
 	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + 26
@@ -108,7 +110,10 @@ func TestCreateTaskRequest_CommandRequest2(t *testing.T) {
 	}
 
 	msg, err := msgReader.ParseMessage(headers, message)
-
+	if err != nil {
+		t.Fatal(err)
+	}
+	
 	executeCmdRequestI := *msg.SbeMessage
 	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
 	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + 26
