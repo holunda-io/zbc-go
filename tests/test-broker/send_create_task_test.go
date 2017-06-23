@@ -1,3 +1,3 @@
-package test_broker
+package testbroker
 
 // TODO:
