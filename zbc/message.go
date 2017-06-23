@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	SBE_ExecuteCommandRequest_TemplateId  = 20
-	SBE_ExecuteCommandResponse_TemplateId = 21
+	SBE_ExecuteCommandRequest_TemplateId   = 20
+	SBE_ExecuteCommandResponse_TemplateId  = 21
+	SBE_ControlMessage_Response_TemplateId = 11
+	SBE_SubscriptionEvent_TemplateId       = 30
 )
 
 type Headers struct {

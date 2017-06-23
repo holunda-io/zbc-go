@@ -157,6 +157,24 @@ func (mr *MessageReader) decodeCmdResponse(reader *bytes.Reader, header *sbe.Mes
 	return &commandResponse, nil
 }
 
+func (mr *MessageReader) decodeCtlResponse(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.ControlMessageResponse, error) {
+	var controlResponse sbe.ControlMessageResponse
+	err := controlResponse.Decode(reader, binary.LittleEndian, header.Version, header.BlockLength, true)
+	if err != nil {
+		return nil, err
+	}
+	return &controlResponse, nil
+}
+
+func (mr *MessageReader) decodeSubEvent(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.SubscribedEvent, error) {
+	var subEvent sbe.SubscribedEvent
+	err := subEvent.Decode(reader, binary.LittleEndian, header.Version, header.BlockLength, true)
+	if err != nil {
+		return nil, err
+	}
+	return &subEvent, nil
+}
+
 func (mr *MessageReader) parseMessagePack(data *[]byte) (*map[string]interface{}, error) {
 	var item map[string]interface{}
 	err := msgpack.Unmarshal(*data, &item)
@@ -170,7 +188,6 @@ func (mr *MessageReader) parseMessagePack(data *[]byte) (*map[string]interface{}
 func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Message, error) {
 	var msg Message
 	msg.SetHeaders(headers)
-
 	reader := bytes.NewReader(*message)
 
 	switch headers.SbeMessageHeader.TemplateId {
@@ -198,6 +215,33 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		msg.SetSbeMessage(commandResponse)
 
 		msgPackData, err := mr.parseMessagePack(&commandResponse.Event)
+		if err != nil {
+			return nil, err
+		}
+		msg.SetData(msgPackData)
+		break
+
+	case SBE_ControlMessage_Response_TemplateId:
+		ctlResponse, err := mr.decodeCtlResponse(reader, headers.SbeMessageHeader)
+		if err != nil {
+			return nil, err
+		}
+		msg.SetSbeMessage(ctlResponse)
+		msgPackData, err := mr.parseMessagePack(&ctlResponse.Data)
+		if err != nil {
+			return nil, err
+		}
+		msg.SetData(msgPackData)
+		break
+
+	case SBE_SubscriptionEvent_TemplateId:
+		subscribedEvent, err := mr.decodeSubEvent(reader, headers.SbeMessageHeader)
+		if err != nil {
+			return nil, err
+		}
+
+		msg.SetSbeMessage(subscribedEvent)
+		msgPackData, err := mr.parseMessagePack(&subscribedEvent.Event)
 		if err != nil {
 			return nil, err
 		}
