@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jsam/zbc-go/zbc"
-	"github.com/jsam/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 )
 
 const (
@@ -38,8 +38,8 @@ func TestCreateTaskRequest(t *testing.T) {
 		t.Fatalf("Something went wrong during reading of headers. %+#v", err)
 	}
 
-	if int(headers.FrameHeader.Length) != len(*message)+26 {
-		t.Fatalf("FrameHeader contains wrong length. Expected %d, received %d", len(*message)+26, headers.FrameHeader.Length)
+	if int(headers.FrameHeader.Length) != len(*message)+zbc.TotalHeaderSizeNoFrame {
+		t.Fatalf("FrameHeader contains wrong length. Expected %d, received %d", len(*message)+zbc.TotalHeaderSizeNoFrame, headers.FrameHeader.Length)
 	}
 
 	msg, err := msgReader.ParseMessage(headers, message)
@@ -52,8 +52,8 @@ func TestCreateTaskRequest(t *testing.T) {
 		t.Fatalf("Wrong eventType. Expected CREATE, received %s", msgpackItem["eventType"].(string))
 	}
 
-	if headers.FrameHeader.Length != 129 {
-		t.Fatalf("Wrong FrameHeader Length. Expected %+#v, received: %d", 147, headers.FrameHeader.Length)
+	if headers.FrameHeader.Length != 121 {
+		t.Fatalf("Wrong FrameHeader Length. Expected %+#v, received: %d", 121, headers.FrameHeader.Length)
 	}
 
 	if err != nil {
@@ -74,9 +74,9 @@ func TestCreateTaskRequest_CommandRequest(t *testing.T) {
 	msgReader := zbc.NewMessageReader(buffer)
 
 	headers, message, err := msgReader.ReadHeaders()
-	if int(headers.FrameHeader.Length) != len(*message)+26 {
+	if int(headers.FrameHeader.Length) != len(*message)+zbc.TotalHeaderSizeNoFrame {
 		t.Fatalf("FrameHeader contains wrong length. Expected %d, received %d",
-			len(*message)+26, headers.FrameHeader.Length)
+			len(*message)+zbc.TotalHeaderSizeNoFrame, headers.FrameHeader.Length)
 	}
 
 	if err != nil {
@@ -89,7 +89,7 @@ func TestCreateTaskRequest_CommandRequest(t *testing.T) {
 	}
 	executeCmdRequestI := *msg.SbeMessage
 	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
-	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + 26
+	size := int(cmdReq.SbeBlockLength()) + zbc.LengthFieldSize + len(cmdReq.TopicName) + zbc.LengthFieldSize + len(cmdReq.Command) + zbc.TotalHeaderSizeNoFrame
 
 	if uint32(size) != headers.FrameHeader.Length {
 		t.Fatalf("size of sbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)
@@ -117,7 +117,7 @@ func TestCreateTaskRequest_CommandRequest2(t *testing.T) {
 
 	executeCmdRequestI := *msg.SbeMessage
 	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
-	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + 26
+	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + zbc.TotalHeaderSizeNoFrame
 
 	if uint32(size) != headers.FrameHeader.Length {
 		t.Fatalf("size of sbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)

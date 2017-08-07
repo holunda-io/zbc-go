@@ -8,11 +8,12 @@ import (
 	"os"
 	"path/filepath"
 
+	yaml "gopkg.in/yaml.v2"
+
 	"github.com/BurntSushi/toml"
-	"github.com/jsam/zbc-go/zbc"
-	"github.com/jsam/zbc-go/zbc/sbe"
 	"github.com/urfave/cli"
-	"gopkg.in/yaml.v2"
+	"github.com/zeebe-io/zbc-go/zbc"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 )
 
 const (
@@ -50,15 +51,43 @@ func (cf *config) String() string {
 
 }
 
-func sendCreateTask(client *zbc.Client, topic string, m *zbc.Task) (*zbc.Message, error) {
+func sendTask(client *zbc.Client, topic string, m *zbc.Task) (*zbc.Message, error) {
 	commandRequest := zbc.NewTaskMessage(&sbe.ExecuteCommandRequest{
 		PartitionId: 0,
+		Position:    0,
 		Key:         0,
-		EventType:   sbe.EventTypeEnum(0),
+		TopicName:   []uint8("default-topic"),
+		Command:     []uint8{},
+	}, m)
+
+	return sendRequest(client, commandRequest)
+}
+
+func sendWorkflowInstance(client *zbc.Client, topic string, m *zbc.WorkflowInstance) (*zbc.Message, error) {
+	commandRequest := zbc.NewWorkflowMessage(&sbe.ExecuteCommandRequest{
+		PartitionId: 0,
+		Position:    0,
+		Key:         0,
 		TopicName:   []uint8(topic),
 		Command:     []uint8{},
 	}, m)
 
+	return sendRequest(client, commandRequest)
+}
+
+func sendDeployment(client *zbc.Client, topic string, m *zbc.Deployment) (*zbc.Message, error) {
+	commandRequest := zbc.NewDeploymentMessage(&sbe.ExecuteCommandRequest{
+		PartitionId: 0,
+		Position:    0,
+		Key:         0,
+		TopicName:   []uint8(topic),
+		Command:     []uint8{},
+	}, m)
+
+	return sendRequest(client, commandRequest)
+}
+
+func sendRequest(client *zbc.Client, commandRequest *zbc.Message) (*zbc.Message, error) {
 	response, err := client.Responder(commandRequest)
 	if err != nil {
 		log.Println(err)
@@ -84,24 +113,28 @@ func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt
 	for {
 		message := <-subscriptionCh
 		fmt.Printf("%#v\n", *message.Data)
+		//
 	}
 }
 
-func loadCommandYaml(path string) (*zbc.Task, error) {
+func loadCommandYaml(path string, command interface{}) error {
+	yamlFile, _ := loadFile(path)
+
+	err := yaml.Unmarshal(yamlFile, command)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func loadFile(path string) ([]byte, error) {
 	log.Printf("Loading resource at %s\n", path)
 	if len(path) == 0 {
 		return nil, errResourceNotFound
 	}
 
 	filename, _ := filepath.Abs(path)
-	yamlFile, _ := ioutil.ReadFile(filename)
-
-	var command zbc.Task
-	err := yaml.Unmarshal(yamlFile, &command)
-	if err != nil {
-		return nil, err
-	}
-	return &command, nil
+	return ioutil.ReadFile(filename)
 }
 
 func loadConfig(path string, c *config) {
@@ -136,13 +169,13 @@ func main() {
 		{Name: "Daniel Meyer", Email: ""},
 		{Name: "Sebastian Menski", Email: ""},
 		{Name: "Philipp Ossler", Email: ""},
-		{Name: "Just Sam", Email: "samuel.picek@camunda.com"},
+		{Name: "Sam", Email: "samuel.picek@camunda.com"},
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:    "create",
-			Aliases: []string{"c"},
-			Usage:   "create a resource",
+			Name:    "create-task",
+			Aliases: []string{"t"},
+			Usage:   "create a new task using the given YAML file",
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:   "topic, t",
@@ -152,18 +185,86 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				createTask, err := loadCommandYaml(c.Args().First())
+				var task zbc.Task
+				err := loadCommandYaml(c.Args().First(), &task)
 				isFatal(err)
 
 				client, err := zbc.NewClient(conf.Broker.String())
 				isFatal(err)
 				log.Println("Connected to Zeebe.")
 
-				response, err := sendCreateTask(client, c.String("topic"), createTask)
+				response, err := sendTask(client, c.String("topic"), &task)
 				isFatal(err)
 
 				log.Println("Success. Received response:")
 				log.Println(*response.Data)
+				return nil
+			},
+		},
+		{
+			Name:    "create-workflow-instance",
+			Aliases: []string{"wf"},
+			Usage:   "create a new workflow instance using the given YAML file",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "topic, t",
+					Value:  "default-topic",
+					Usage:  "Executing command request on specific topic.",
+					EnvVar: "ZB_TOPIC_NAME",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				var workflowInstance zbc.WorkflowInstance
+				err := loadCommandYaml(c.Args().First(), &workflowInstance)
+				isFatal(err)
+
+				client, err := zbc.NewClient(conf.Broker.String())
+				isFatal(err)
+				log.Println("Connected to Zeebe.")
+
+				response, err := sendWorkflowInstance(client, c.String("topic"), &workflowInstance)
+				isFatal(err)
+
+				log.Println("Success. Received response:")
+				log.Println(*response.Data)
+				return nil
+			},
+		},
+		{
+			Name:    "deploy",
+			Aliases: []string{"d"},
+			Usage:   "deploy a workflow",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "topic, t",
+					Value:  "default-topic",
+					Usage:  "Executing command request on specific topic.",
+					EnvVar: "ZB_TOPIC_NAME",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				content, err := loadFile(c.Args().First())
+				isFatal(err)
+
+				var deployment = zbc.Deployment{
+					State:   "CREATE_DEPLOYMENT",
+					BpmnXml: content,
+				}
+
+				client, err := zbc.NewClient(conf.Broker.String())
+				isFatal(err)
+				log.Println("Connected to Zeebe.")
+
+				response, err := sendDeployment(client, c.String("topic"), &deployment)
+				isFatal(err)
+
+				if response.Data != nil {
+					if state, ok := (*response.Data)["state"]; ok {
+						log.Println(state)
+					}
+				} else {
+					log.Println("err: received nil response")
+				}
 				return nil
 			},
 		},

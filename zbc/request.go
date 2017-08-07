@@ -1,25 +1,70 @@
 package zbc
 
 import (
-	"github.com/jsam/zbc-go/zbc/protocol"
-	"github.com/jsam/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc/protocol"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
-// Task structure for creating workflow task.
 type Task struct {
-	EventType string                 `yaml:"eventType" msgpack:"eventType"`
-	Headers   map[string]interface{} `yaml:"headers" msgpack:"headers"`
-	Payload   []uint8                `yaml:"payload" msgpack:"payload"`
-	Retries   int                    `yaml:"retries" msgpack:"retries"`
-	Type      string                 `yaml:"type" msgpack:"type"`
+	State       string                 `yaml:"state" msgpack:"state"`
+	Headers     map[string]interface{} `yaml:"headers" msgpack:"headers"`
+	Retries     int                    `yaml:"retries" msgpack:"retries"`
+	Type        string                 `yaml:"type" msgpack:"type"`
+	Payload     []uint8                `yaml:"-" msgpack:"payload"`
+	PayloadJson map[string]interface{} `yaml:"payload" msgpack:"-"`
 }
 
-// NewTaskMessage is a constructor for Message which sends a Task to create.
-func NewTaskMessage(commandRequest *sbe.ExecuteCommandRequest, createTask *Task) *Message {
+type WorkflowInstance struct {
+	State         string                 `yaml:"state" msgpack:"state"`
+	BpmnProcessId string                 `yaml:"bpmnProcessId" msgpack:"bpmnProcessId"`
+	Version       int                    `yaml:"version" msgpack:"version"`
+	Payload       []uint8                `yaml:"-" msgpack:"payload"`
+	PayloadJson   map[string]interface{} `yaml:"payload" msgpack:"-"`
+}
+
+type Deployment struct {
+	State   string `yaml:"state" msgpack:"state"`
+	BpmnXml []byte `yaml:"bpmnXml" msgpack:"bpmnXml"`
+}
+
+func NewTaskMessage(commandRequest *sbe.ExecuteCommandRequest, task *Task) *Message {
+	commandRequest.EventType = sbe.EventTypeEnum(0)
+
+	if task.Payload == nil {
+		b, err := msgpack.Marshal(task.PayloadJson)
+		if err != nil {
+			return nil
+		}
+		task.Payload = b
+	}
+
+	return NewCommandRequestMessage(commandRequest, task)
+}
+
+func NewWorkflowMessage(commandRequest *sbe.ExecuteCommandRequest, wf *WorkflowInstance) *Message {
+	commandRequest.EventType = sbe.EventTypeEnum(5)
+
+	if wf.Payload == nil {
+		b, err := msgpack.Marshal(wf.PayloadJson)
+		if err != nil {
+			return nil
+		}
+		wf.Payload = b
+	}
+
+	return NewCommandRequestMessage(commandRequest, wf)
+}
+
+func NewDeploymentMessage(commandRequest *sbe.ExecuteCommandRequest, d *Deployment) *Message {
+	commandRequest.EventType = sbe.EventTypeEnum(4)
+	return NewCommandRequestMessage(commandRequest, d)
+}
+
+func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, command interface{}) *Message {
 	var msg Message
 
-	b, err := msgpack.Marshal(createTask)
+	b, err := msgpack.Marshal(command)
 	if err != nil {
 		return nil
 	}
@@ -27,44 +72,10 @@ func NewTaskMessage(commandRequest *sbe.ExecuteCommandRequest, createTask *Task)
 	msg.SetSbeMessage(commandRequest)
 
 	// We add +2 to every variable length attribute since all variable length attributes will have 2 bytes in front
-	// which will denote their size. Then we add 11 bytes which is size of non-variable length attributes of
+	// which will denote their size. Then we add 19 bytes which is size of non-variable length attributes of
 	// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
-	length := uint32(2+len(commandRequest.TopicName)) + uint32(2+len(commandRequest.Command)) + 11 + 26
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&sbe.MessageHeader{
-		BlockLength: commandRequest.SbeBlockLength(),
-		TemplateId:  commandRequest.SbeTemplateId(),
-		SchemaId:    commandRequest.SbeSchemaId(),
-		Version:     commandRequest.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(protocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(protocol.NewTransportHeader(protocol.RequestResponse))
-
-	// Writer will set FrameHeader after serialization to byte array.
-	headers.SetFrameHeader(protocol.NewFrameHeader(uint32(length), 0, 0, 0, 2))
-
-	msg.SetHeaders(&headers)
-	return &msg
-}
-
-// NewCommandRequestMessage generic way to send payload via ExecuteCommandRequest.
-func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, payload *map[string]interface{}) *Message {
-	var msg Message
-	msg.SetData(payload)
-
-	b, err := msgpack.Marshal(payload)
-	if err != nil {
-		return nil
-	}
-	commandRequest.Command = b
-	msg.SetSbeMessage(commandRequest)
-
-	// We add +2 to every variable length attribute since all variable length attributes will have 2 bytes in front
-	// which will denote their size. Then we add 11 bytes which is size of non-variable length attributes of
-	// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
-	length := uint32(2+len(commandRequest.TopicName)) + uint32(2+len(commandRequest.Command)) + 11 + 26
+	length := uint32(LengthFieldSize+len(commandRequest.TopicName)) + uint32(LengthFieldSize+len(commandRequest.Command))
+	length += uint32(commandRequest.SbeBlockLength()) +TotalHeaderSizeNoFrame
 
 	var headers Headers
 	headers.SetSbeMessageHeader(&sbe.MessageHeader{
@@ -109,7 +120,7 @@ func NewTaskSubscriptionMessage(ts *TaskSubscription) *Message {
 	}
 	msg.SetSbeMessage(controlRequest)
 
-	length := 1 + uint32(2+len(controlRequest.Data)) + 26
+	length := 1 + uint32(2+len(controlRequest.Data)) + 18
 
 	var headers Headers
 	headers.SetSbeMessageHeader(&sbe.MessageHeader{

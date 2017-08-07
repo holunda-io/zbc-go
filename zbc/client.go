@@ -8,7 +8,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/jsam/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 )
 
 // RequestTimeout specifies default timeout for Responder.
@@ -44,7 +44,7 @@ func (c *Client) sender(message *Message) error {
 
 func (c *Client) receiver() {
 	for {
-		buffer := bufio.NewReader(c.conn)
+		buffer := bufio.NewReaderSize(c.conn, 20000)
 		r := NewMessageReader(buffer)
 		headers, tail, err := r.ReadHeaders()
 

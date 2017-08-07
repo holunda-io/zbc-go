@@ -11,8 +11,7 @@ import (
 )
 
 type BrokerEventMetadata struct {
-	ReqChannelId    int32
-	ReqConnectionId uint64
+	ReqStreamId     int32
 	ReqRequestId    uint64
 	RaftTermId      int32
 	SubscriptionId  uint64
@@ -27,10 +26,7 @@ func (b BrokerEventMetadata) Encode(writer io.Writer, order binary.ByteOrder, do
 			return err
 		}
 	}
-	if err := binary.Write(writer, order, b.ReqChannelId); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, b.ReqConnectionId); err != nil {
+	if err := binary.Write(writer, order, b.ReqStreamId); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, b.ReqRequestId); err != nil {
@@ -56,16 +52,9 @@ func (b BrokerEventMetadata) Encode(writer io.Writer, order binary.ByteOrder, do
 
 func (b *BrokerEventMetadata) Decode(reader io.Reader, order binary.ByteOrder, actingVersion uint16, blockLength uint16, doRangeCheck bool) error {
 	if !b.ReqChannelIdInActingVersion(actingVersion) {
-		b.ReqChannelId = b.ReqChannelIdNullValue()
+		b.ReqStreamId = b.ReqChannelIdNullValue()
 	} else {
-		if err := binary.Read(reader, order, &b.ReqChannelId); err != nil {
-			return err
-		}
-	}
-	if !b.ReqConnectionIdInActingVersion(actingVersion) {
-		b.ReqConnectionId = b.ReqConnectionIdNullValue()
-	} else {
-		if err := binary.Read(reader, order, &b.ReqConnectionId); err != nil {
+		if err := binary.Read(reader, order, &b.ReqStreamId); err != nil {
 			return err
 		}
 	}
@@ -122,13 +111,8 @@ func (b *BrokerEventMetadata) Decode(reader io.Reader, order binary.ByteOrder, a
 
 func (b BrokerEventMetadata) RangeCheck(actingVersion uint16, schemaVersion uint16) error {
 	if b.ReqChannelIdInActingVersion(actingVersion) {
-		if b.ReqChannelId < b.ReqChannelIdMinValue() || b.ReqChannelId > b.ReqChannelIdMaxValue() {
-			return fmt.Errorf("Range check failed on b.ReqChannelId (%d < %d > %d)", b.ReqChannelIdMinValue(), b.ReqChannelId, b.ReqChannelIdMaxValue())
-		}
-	}
-	if b.ReqConnectionIdInActingVersion(actingVersion) {
-		if b.ReqConnectionId < b.ReqConnectionIdMinValue() || b.ReqConnectionId > b.ReqConnectionIdMaxValue() {
-			return fmt.Errorf("Range check failed on b.ReqConnectionId (%d < %d > %d)", b.ReqConnectionIdMinValue(), b.ReqConnectionId, b.ReqConnectionIdMaxValue())
+		if b.ReqStreamId < b.ReqChannelIdMinValue() || b.ReqStreamId > b.ReqChannelIdMaxValue() {
+			return fmt.Errorf("Range check failed on b.ReqStreamId (%d < %d > %d)", b.ReqChannelIdMinValue(), b.ReqStreamId, b.ReqChannelIdMaxValue())
 		}
 	}
 	if b.ReqRequestIdInActingVersion(actingVersion) {
@@ -224,46 +208,6 @@ func (b BrokerEventMetadata) ReqChannelIdMaxValue() int32 {
 
 func (b BrokerEventMetadata) ReqChannelIdNullValue() int32 {
 	return math.MinInt32
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdId() uint16 {
-	return 2
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdSinceVersion() uint16 {
-	return 0
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdInActingVersion(actingVersion uint16) bool {
-	return actingVersion >= b.ReqConnectionIdSinceVersion()
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdDeprecated() uint16 {
-	return 0
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdMetaAttribute(meta int) string {
-	switch meta {
-	case 1:
-		return "unix"
-	case 2:
-		return "nanosecond"
-	case 3:
-		return ""
-	}
-	return ""
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdMinValue() uint64 {
-	return 0
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdMaxValue() uint64 {
-	return math.MaxUint64 - 1
-}
-
-func (b BrokerEventMetadata) ReqConnectionIdNullValue() uint64 {
-	return math.MaxUint64
 }
 
 func (b BrokerEventMetadata) ReqRequestIdId() uint16 {
