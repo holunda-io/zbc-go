@@ -11,17 +11,19 @@ import (
 
 type EventTypeEnum uint8
 type EventTypeValues struct {
-	TASK_EVENT         EventTypeEnum
-	RAFT_EVENT         EventTypeEnum
-	SUBSCRIPTION_EVENT EventTypeEnum
-	SUBSCRIBER_EVENT   EventTypeEnum
-	DEPLOYMENT_EVENT   EventTypeEnum
-	WORKFLOW_EVENT     EventTypeEnum
-	INCIDENT_EVENT     EventTypeEnum
-	NullValue          EventTypeEnum
+	TASK_EVENT              EventTypeEnum
+	RAFT_EVENT              EventTypeEnum
+	SUBSCRIPTION_EVENT      EventTypeEnum
+	SUBSCRIBER_EVENT        EventTypeEnum
+	DEPLOYMENT_EVENT        EventTypeEnum
+	WORKFLOW_INSTANCE_EVENT EventTypeEnum
+	INCIDENT_EVENT          EventTypeEnum
+	WORKFLOW_EVENT          EventTypeEnum
+	NOOP_EVENT              EventTypeEnum
+	NullValue               EventTypeEnum
 }
 
-var EventType = EventTypeValues{0, 1, 2, 3, 4, 5, 6, 255}
+var EventType = EventTypeValues{0, 1, 2, 3, 4, 5, 6, 7,  8,255}
 
 func (e EventTypeEnum) Encode(writer io.Writer, order binary.ByteOrder) error {
 	if err := binary.Write(writer, order, e); err != nil {

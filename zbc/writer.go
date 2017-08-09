@@ -71,7 +71,6 @@ func (mw *MessageWriter) writeMessage(writer *bytes.Buffer) error {
 func (mw *MessageWriter) align(writer *bytes.Buffer) {
 	currentSize := len(writer.Bytes())
 	expectedSize := (currentSize + 7) & ^7
-
 	for currentSize < expectedSize {
 		writer.Write([]byte{0x00})
 		currentSize++

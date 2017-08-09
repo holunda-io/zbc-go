@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/jsam/zbc-go/zbc/protocol"
-	"github.com/jsam/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc/protocol"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 )
 
 const (
@@ -13,6 +13,16 @@ const (
 	templateIDExecuteCommandResponse = 21
 	templateIDControlMessageResponse = 11
 	templateIDSubscriptionEvent      = 30
+)
+
+const (
+	FrameHeaderSize = 12
+	TransportHeaderSize = 2
+	RequestResponseHeaderSize = 8
+	SBEMessageHeaderSize = 8
+
+	TotalHeaderSizeNoFrame = 18
+	LengthFieldSize = 2
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.

@@ -14,6 +14,7 @@ import (
 
 type ExecuteCommandResponse struct {
 	PartitionId uint16
+	Position    uint64
 	Key         uint64
 	TopicName   []uint8 // string and first byte is the length of string
 	Event       []uint8 // msgpack
@@ -30,6 +31,9 @@ func (e ExecuteCommandResponse) Encode(writer io.Writer, order binary.ByteOrder,
 		}
 	}
 	if err := binary.Write(writer, order, e.PartitionId); err != nil {
+		return err
+	}
+	if err := binary.Write(writer, order, e.Position); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, e.Key); err != nil {
@@ -55,6 +59,13 @@ func (e *ExecuteCommandResponse) Decode(reader io.Reader, order binary.ByteOrder
 		e.PartitionId = e.PartitionIdNullValue()
 	} else {
 		if err := binary.Read(reader, order, &e.PartitionId); err != nil {
+			return err
+		}
+	}
+	if !e.PositionInActingVersion(actingVersion) {
+		e.Position = e.PositionNullValue()
+	} else {
+		if err := binary.Read(reader, order, &e.Position); err != nil {
 			return err
 		}
 	}
@@ -109,6 +120,11 @@ func (e ExecuteCommandResponse) RangeCheck(actingVersion uint16, schemaVersion u
 			return fmt.Errorf("Range check failed on e.Key (%d < %d > %d)", e.KeyMinValue(), e.Key, e.KeyMaxValue())
 		}
 	}
+	if e.PositionInActingVersion(actingVersion) {
+		if e.Position < e.PositionMinValue() || e.Position > e.PositionMaxValue() {
+			return fmt.Errorf("Range check failed on e.Position (%d < %d > %d)", e.PositionMinValue(), e.Position, e.PositionMaxValue())
+		}
+	}
 	if !utf8.Valid(e.TopicName[:]) {
 		return errors.New("e.TopicName failed UTF-8 validation")
 	}
@@ -123,7 +139,7 @@ func ExecuteCommandResponseInit(e *ExecuteCommandResponse) {
 }
 
 func (e ExecuteCommandResponse) SbeBlockLength() (blockLength uint16) {
-	return 10
+	return 18
 }
 
 func (e ExecuteCommandResponse) SbeTemplateId() (templateId uint16) {
@@ -182,6 +198,18 @@ func (e ExecuteCommandResponse) PartitionIdNullValue() uint16 {
 	return math.MaxUint16
 }
 
+func (e ExecuteCommandResponse) PositionMinValue() uint64 {
+	return 0
+}
+
+func (e ExecuteCommandResponse) PositionMaxValue() uint64 {
+	return math.MaxInt64 - 1
+}
+
+func (e ExecuteCommandResponse) PositionNullValue() uint64 {
+	return math.MaxInt64
+}
+
 func (e ExecuteCommandResponse) KeyId() uint16 {
 	return 2
 }
@@ -190,8 +218,16 @@ func (e ExecuteCommandResponse) KeySinceVersion() uint16 {
 	return 0
 }
 
+func (e ExecuteCommandResponse) PositionSinceVersion() uint16 {
+	return 0
+}
+
 func (e ExecuteCommandResponse) KeyInActingVersion(actingVersion uint16) bool {
 	return actingVersion >= e.KeySinceVersion()
+}
+
+func (e ExecuteCommandResponse) PositionInActingVersion(actingVersion uint16) bool {
+	return actingVersion >= e.PositionSinceVersion()
 }
 
 func (e ExecuteCommandResponse) KeyDeprecated() uint16 {

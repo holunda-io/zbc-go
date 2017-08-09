@@ -15,10 +15,11 @@ type ControlMessageTypeValues struct {
 	REMOVE_TASK_SUBSCRIPTION           ControlMessageTypeEnum
 	INCREASE_TASK_SUBSCRIPTION_CREDITS ControlMessageTypeEnum
 	REMOVE_TOPIC_SUBSCRIPTION          ControlMessageTypeEnum
+	REQUEST_TOPOLOGY                   ControlMessageTypeEnum
 	NullValue                          ControlMessageTypeEnum
 }
 
-var ControlMessageType = ControlMessageTypeValues{0, 1, 2, 3, 255}
+var ControlMessageType = ControlMessageTypeValues{0, 1, 2, 3, 4, 255}
 
 func (c ControlMessageTypeEnum) Encode(writer io.Writer, order binary.ByteOrder) error {
 	if err := binary.Write(writer, order, c); err != nil {

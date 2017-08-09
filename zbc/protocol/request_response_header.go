@@ -9,7 +9,6 @@ import (
 
 // RequestResponseHeader is layer to represent Request-Response model of communication. With it we keep transaction house keeping.
 type RequestResponseHeader struct {
-	ConnectionID uint64 //
 	RequestID    uint64 // tid
 }
 
@@ -30,7 +29,6 @@ func NewRequestResponseHeader() *RequestResponseHeader {
 	var v float64 = 1000
 	zipf := rand.NewZipf(rand.New(rand.NewSource(time.Now().UnixNano())), s, v, max)
 	return &RequestResponseHeader{
-		zipf.Uint64(),
 		zipf.Uint64(),
 	}
 }

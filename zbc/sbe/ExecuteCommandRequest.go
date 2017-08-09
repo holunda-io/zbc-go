@@ -14,6 +14,7 @@ import (
 
 type ExecuteCommandRequest struct {
 	PartitionId uint16
+	Position    uint64
 	Key         uint64
 	EventType   EventTypeEnum // alias for uint8 or byte
 	TopicName   []uint8
@@ -27,6 +28,9 @@ func (e ExecuteCommandRequest) Encode(writer io.Writer, order binary.ByteOrder, 
 		}
 	}
 	if err := binary.Write(writer, order, e.PartitionId); err != nil {
+		return err
+	}
+	if err := binary.Write(writer, order, e.Position); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, e.Key); err != nil {
@@ -114,6 +118,11 @@ func (e ExecuteCommandRequest) RangeCheck(actingVersion uint16, schemaVersion ui
 			return fmt.Errorf("Range check failed on e.Key (%d < %d > %d)", e.KeyMinValue(), e.Key, e.KeyMaxValue())
 		}
 	}
+	if e.PositionInActingVersion(actingVersion) {
+		if e.Position < e.PositionMinValue() || e.Position > e.PositionMaxValue() {
+			return fmt.Errorf("Range check failed on e.Position (%d < %d > %d)", e.PositionMinValue(), e.Position, e.PositionMaxValue())
+		}
+	}
 	if err := e.EventType.RangeCheck(actingVersion, schemaVersion); err != nil {
 		return err
 	}
@@ -131,7 +140,7 @@ func ExecuteCommandRequestInit(e *ExecuteCommandRequest) {
 }
 
 func (e ExecuteCommandRequest) SbeBlockLength() (blockLength uint16) {
-	return 11
+	return 19
 }
 
 func (e ExecuteCommandRequest) SbeTemplateId() (templateId uint16) {
@@ -190,6 +199,18 @@ func (e ExecuteCommandRequest) PartitionIdNullValue() uint16 {
 	return math.MaxUint16
 }
 
+func (e ExecuteCommandRequest) PositionMinValue() uint64 {
+	return 0
+}
+
+func (e ExecuteCommandRequest) PositionMaxValue() uint64 {
+	return math.MaxInt64 - 1
+}
+
+func (e ExecuteCommandRequest) PositionNullValue() uint64 {
+	return math.MaxInt64
+}
+
 func (e ExecuteCommandRequest) KeyId() uint16 {
 	return 2
 }
@@ -198,8 +219,16 @@ func (e ExecuteCommandRequest) KeySinceVersion() uint16 {
 	return 0
 }
 
+func (e ExecuteCommandRequest) PositionSinceVersion() uint16 {
+	return 0
+}
+
 func (e ExecuteCommandRequest) KeyInActingVersion(actingVersion uint16) bool {
 	return actingVersion >= e.KeySinceVersion()
+}
+
+func (e ExecuteCommandRequest) PositionInActingVersion(actingVersion uint16) bool {
+	return actingVersion >= e.PositionSinceVersion()
 }
 
 func (e ExecuteCommandRequest) KeyDeprecated() uint16 {

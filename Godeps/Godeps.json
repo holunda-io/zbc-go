@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/jsam/zbc-go",
+	"ImportPath": "github.com/zeebe-io/zbc-go",
 	"GoVersion": "go1.7",
 	"GodepVersion": "v79",
 	"Packages": [

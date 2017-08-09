@@ -7,8 +7,8 @@ import (
 	"errors"
 	"io"
 
-	"github.com/jsam/zbc-go/zbc/protocol"
-	"github.com/jsam/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc/protocol"
+	"github.com/zeebe-io/zbc-go/zbc/sbe"
 	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
@@ -27,7 +27,6 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 	buffer := make([]byte, n)
 
 	numBytes, err := mr.Read(buffer)
-
 	if uint32(numBytes) != n || err != nil {
 		return nil, err
 	}
@@ -35,17 +34,17 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 	return buffer, nil
 }
 
-func (mr *MessageReader) readFrameHeader(data []byte) (*protocol.FrameHeader, error) {
+func (mr *MessageReader) readFrameHeader(data io.Reader) (*protocol.FrameHeader, error) {
 	var frameHeader protocol.FrameHeader
-	if frameHeader.Decode(bytes.NewReader(data[:12]), binary.LittleEndian, 0) != nil {
+	if frameHeader.Decode(data, binary.LittleEndian, 0) != nil {
 		return nil, errFrameHeaderDecode
 	}
 	return &frameHeader, nil
 }
 
-func (mr *MessageReader) readTransportHeader(data []byte) (*protocol.TransportHeader, error) {
+func (mr *MessageReader) readTransportHeader(data io.Reader) (*protocol.TransportHeader, error) {
 	var transport protocol.TransportHeader
-	err := transport.Decode(bytes.NewReader(data[:2]), binary.LittleEndian, 0)
+	err := transport.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -56,9 +55,9 @@ func (mr *MessageReader) readTransportHeader(data []byte) (*protocol.TransportHe
 	return nil, errProtocolIDNotFound
 }
 
-func (mr *MessageReader) readRequestResponseHeader(data []byte) (*protocol.RequestResponseHeader, error) {
+func (mr *MessageReader) readRequestResponseHeader(data io.Reader) (*protocol.RequestResponseHeader, error) {
 	var requestResponse protocol.RequestResponseHeader
-	err := requestResponse.Decode(bytes.NewReader(data[:16]), binary.LittleEndian, 0)
+	err := requestResponse.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +65,9 @@ func (mr *MessageReader) readRequestResponseHeader(data []byte) (*protocol.Reque
 	return &requestResponse, nil
 }
 
-func (mr *MessageReader) readSbeMessageHeader(data []byte) (*sbe.MessageHeader, error) {
+func (mr *MessageReader) readSbeMessageHeader(data io.Reader) (*sbe.MessageHeader, error) {
 	var sbeMessageHeader sbe.MessageHeader
-	err := sbeMessageHeader.Decode(bytes.NewReader(data[:8]), binary.LittleEndian, 0)
+	err := sbeMessageHeader.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +78,13 @@ func (mr *MessageReader) readSbeMessageHeader(data []byte) (*sbe.MessageHeader, 
 func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	var header Headers
 
-	headerByte, err := mr.readNext(12)
+	headerByte, err := mr.readNext(FrameHeaderSize)
 	if err != nil {
 		return nil, nil, errFrameHeaderRead
 	}
 
-	frameHeader, err := mr.readFrameHeader(headerByte)
+	frameHeaderReader := bytes.NewReader(headerByte)
+	frameHeader, err := mr.readFrameHeader(frameHeaderReader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -95,21 +95,23 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 		return nil, nil, err
 	}
 
-	transport, err := mr.readTransportHeader(message[:2])
+	transportReader := bytes.NewReader(message[:TransportHeaderSize])
+	transport, err := mr.readTransportHeader(transportReader)
 	if err != nil {
 		return nil, nil, err
 	}
 	header.SetTransportHeader(transport)
 
-	sbeIndex := 2
+	sbeIndex := TransportHeaderSize
 	switch transport.ProtocolID {
 	case protocol.RequestResponse:
-		requestResponse, errHeader := mr.readRequestResponseHeader(message[2:18])
+		reqRespReader := bytes.NewReader(message[TransportHeaderSize:TransportHeaderSize+RequestResponseHeaderSize])
+		requestResponse, errHeader := mr.readRequestResponseHeader(reqRespReader)
 		if errHeader != nil {
 			return nil, nil, err
 		}
 		header.SetRequestResponseHeader(requestResponse)
-		sbeIndex = 18
+		sbeIndex = TransportHeaderSize + RequestResponseHeaderSize
 		break
 
 	case protocol.FullDuplexSingleMessage:
@@ -117,21 +119,15 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 		break
 	}
 
-	sbeMessageHeader, err := mr.readSbeMessageHeader(message[sbeIndex : sbeIndex+8])
+	sbeHeaderReader := bytes.NewReader(message[sbeIndex : sbeIndex+SBEMessageHeaderSize])
+	sbeMessageHeader, err := mr.readSbeMessageHeader(sbeHeaderReader)
 	if err != nil {
 		return nil, nil, err
 	}
 	header.SetSbeMessageHeader(sbeMessageHeader)
 
-	// TODO: make client less reliable on garbage -> this should align the reader for the next message
-	mr.align()
-
 	body := message[sbeIndex+8:]
 	return &header, &body, nil
-}
-
-func (mr *MessageReader) align() {
-	// TODO:
 }
 
 func (mr *MessageReader) decodeCmdRequest(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.ExecuteCommandRequest, error) {
