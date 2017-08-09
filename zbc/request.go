@@ -28,6 +28,19 @@ type Deployment struct {
 	BpmnXml []byte `yaml:"bpmnXml" msgpack:"bpmnXml"`
 }
 
+func NewCompleteTaskMessage(taskMessage *Message) *Message {
+	payload := *taskMessage.Data
+	payload["state"] = "COMPLETE"
+	cmdReq := &sbe.ExecuteCommandRequest{
+		PartitionId: (*taskMessage.SbeMessage).(*sbe.SubscribedEvent).PartitionId,
+		Position:    (*taskMessage.SbeMessage).(*sbe.SubscribedEvent).Position,
+		Key:         (*taskMessage.SbeMessage).(*sbe.SubscribedEvent).Key,
+		TopicName:   (*taskMessage.SbeMessage).(*sbe.SubscribedEvent).TopicName,
+	}
+
+	return NewCommandRequestMessage(cmdReq, payload)
+}
+
 func NewTaskMessage(commandRequest *sbe.ExecuteCommandRequest, task *Task) *Message {
 	commandRequest.EventType = sbe.EventTypeEnum(0)
 
