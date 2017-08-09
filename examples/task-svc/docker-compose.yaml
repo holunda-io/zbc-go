@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+
+  zeebe:
+    image: camunda/zeebe:0.1.0
+    ports:
+      - 51015:51015
