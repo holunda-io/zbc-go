@@ -15,6 +15,8 @@ var (
 	ErrorCount           uint64
 )
 
+const BrokerAddr = "0.0.0.0:51015"
+
 type StopCh chan bool
 
 var workers map[string]StopCh
@@ -62,6 +64,14 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 
 		case stop := <-stopCh:
 			if stop {
+				log.Print("Stopping worker.")
+				_, err := client.Responder(zbc.NewCloseTaskSubscriptionMessage(taskSub))
+				if err != nil {
+					log.Println("Close task subscription request failed")
+					log.Println(err)
+				}
+				log.Println("Gracefully shutting down the client.")
+				client.Close()
 				return
 			}
 			break
@@ -71,7 +81,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 
 func startWorkerView(w http.ResponseWriter, r *http.Request) {
 	resp := make(map[string]interface{})
-	zbClient, err := zbc.NewClient("0.0.0.0:51015")
+	zbClient, err := zbc.NewClient(BrokerAddr)
 	if err != nil {
 		resp["status"] = http.StatusInternalServerError
 	}

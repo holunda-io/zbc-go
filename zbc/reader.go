@@ -15,7 +15,7 @@ import (
 var (
 	errFrameHeaderRead    = errors.New("Cannot read bytes for frame header")
 	errFrameHeaderDecode  = errors.New("Cannot decode bytes into frame header")
-	errProtocolIDNotFound = errors.New("ProtocolId not found")
+	errProtocolIDNotFound = errors.New("ProtocolID not found")
 )
 
 // MessageReader is builder which will read byte array and construct Message with all their parts.
@@ -24,14 +24,20 @@ type MessageReader struct {
 }
 
 func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
-	buffer := make([]byte, n)
+	data := make([]byte, n)
+	bytesRead, err := mr.Read(data)
 
-	numBytes, err := mr.Read(buffer)
-	if uint32(numBytes) != n || err != nil {
+	switch {
+	case bytesRead > 0:
+		return data, nil
+
+	case err != nil:
+		//log.Println("Found error .... backing off.")
+		//log.Println(err)
 		return nil, err
 	}
 
-	return buffer, nil
+	return nil, nil
 }
 
 func (mr *MessageReader) readFrameHeader(data io.Reader) (*protocol.FrameHeader, error) {
@@ -79,7 +85,11 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	var header Headers
 
 	headerByte, err := mr.readNext(FrameHeaderSize)
-	if err != nil {
+	switch {
+	case err == errTimeout:
+		return nil, nil, errTimeout
+
+	case err != nil:
 		return nil, nil, errFrameHeaderRead
 	}
 
@@ -105,7 +115,7 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	sbeIndex := TransportHeaderSize
 	switch transport.ProtocolID {
 	case protocol.RequestResponse:
-		reqRespReader := bytes.NewReader(message[TransportHeaderSize:TransportHeaderSize+RequestResponseHeaderSize])
+		reqRespReader := bytes.NewReader(message[TransportHeaderSize : TransportHeaderSize+RequestResponseHeaderSize])
 		requestResponse, errHeader := mr.readRequestResponseHeader(reqRespReader)
 		if errHeader != nil {
 			return nil, nil, err
@@ -203,7 +213,6 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		if err != nil {
 			return nil, err
 		}
-
 		msg.SetData(msgPackData)
 		break
 

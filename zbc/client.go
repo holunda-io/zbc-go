@@ -21,7 +21,8 @@ var (
 
 // Client for one Zeebe broker
 type Client struct {
-	conn          net.Conn
+	Connection    net.Conn
+	closeCh       chan bool
 	transactions  map[uint64]chan *Message
 	subscriptions map[uint64]chan *Message
 }
@@ -31,7 +32,7 @@ func (c *Client) sender(message *Message) error {
 	byteBuff := &bytes.Buffer{}
 	writer.Write(byteBuff)
 
-	n, err := c.conn.Write(byteBuff.Bytes())
+	n, err := c.Connection.Write(byteBuff.Bytes())
 	if err != nil {
 		return err
 	}
@@ -44,38 +45,45 @@ func (c *Client) sender(message *Message) error {
 
 func (c *Client) receiver() {
 	for {
-		buffer := bufio.NewReaderSize(c.conn, 20000)
-		r := NewMessageReader(buffer)
-		headers, tail, err := r.ReadHeaders()
+		select {
+		case <-c.closeCh:
+			log.Println("Closing client.")
+			c.Connection.Close()
+			return
 
-		if err != nil {
-			log.Printf("[R] Error %+#v\n", err)
-			continue
+		default:
+			c.Connection.SetReadDeadline(time.Now().Add(time.Millisecond * 50))
+			buffer := bufio.NewReaderSize(c.Connection, 20000)
+			r := NewMessageReader(buffer)
+
+			headers, tail, err := r.ReadHeaders()
+			if err != nil {
+				continue
+			}
+			message, err := r.ParseMessage(headers, tail)
+			log.Println("received message")
+			if err != nil && !headers.IsSingleMessage() {
+				delete(c.transactions, headers.RequestResponseHeader.RequestID)
+				continue
+			}
+
+			if !headers.IsSingleMessage() && message != nil {
+				c.transactions[headers.RequestResponseHeader.RequestID] <- message
+				continue
+			}
+
+			if err != nil && headers.IsSingleMessage() {
+				// TODO: close and delete subscription
+				continue
+			}
+
+			if headers.IsSingleMessage() && message != nil {
+				subscriberKey := (*message.SbeMessage).(*sbe.SubscribedEvent).SubscriberKey
+				c.subscriptions[subscriberKey] <- message
+				continue
+			}
+
 		}
-		message, err := r.ParseMessage(headers, tail)
-
-		if err != nil && !headers.IsSingleMessage() {
-			// TODO: Maybe we should panic here?
-			delete(c.transactions, headers.RequestResponseHeader.RequestID)
-			continue
-		}
-
-		if !headers.IsSingleMessage() && message != nil {
-			c.transactions[headers.RequestResponseHeader.RequestID] <- message
-			continue
-		}
-
-		if err != nil && headers.IsSingleMessage() {
-			// TODO: close and delete subscription
-			continue
-		}
-
-		if headers.IsSingleMessage() && message != nil {
-			subscriberKey := (*message.SbeMessage).(*sbe.SubscribedEvent).SubscriberKey
-			c.subscriptions[subscriberKey] <- message
-			continue
-		}
-
 	}
 }
 
@@ -108,14 +116,20 @@ func (c *Client) TaskConsumer(ts *TaskSubscription) (chan *Message, error) {
 		log.Println(err)
 		return nil, err
 	}
-	c.subscriptions[(*response.Data)["subscriberKey"].(uint64)] = subscriptionCh
+
+	subscriberKey := (*response.Data)["subscriberKey"].(uint64)
+	c.subscriptions[subscriberKey] = subscriptionCh
 
 	return subscriptionCh, nil
 }
 
-// Connect will spinoff receiver in goroutine, which will make client effectively ready to communicate with the broker.
-func (c *Client) Connect() {
+// Start will spinoff receiver in goroutine, which will make client effectively ready to communicate with the broker.
+func (c *Client) Start() {
 	go c.receiver()
+}
+
+func (c *Client) Close() {
+	close(c.closeCh)
 }
 
 // NewClient is constructor for Client structure. It will resolve IP address and dial the provided tcp address.
@@ -132,10 +146,11 @@ func NewClient(addr string) (*Client, error) {
 
 	c := &Client{
 		conn,
+		make(chan bool),
 		make(map[uint64]chan *Message),
 		make(map[uint64]chan *Message),
 	}
-	c.Connect()
+	c.Start()
 
 	return c, nil
 }
