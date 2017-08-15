@@ -65,13 +65,15 @@ func sendTask(client *zbc.Client, topic string, m *zbc.Task) (*zbc.Message, erro
 }
 
 func sendWorkflowInstance(client *zbc.Client, topic string, m *zbc.WorkflowInstance) (*zbc.Message, error) {
-	commandRequest := zbc.NewWorkflowMessage(&sbe.ExecuteCommandRequest{
+	cmdReq := &sbe.ExecuteCommandRequest{
 		PartitionId: 0,
 		Position:    0,
 		Key:         math.MaxUint64,
 		TopicName:   []uint8(topic),
 		Command:     []uint8{},
-	}, m)
+	}
+	cmdReq.Key = cmdReq.KeyNullValue()
+	commandRequest := zbc.NewWorkflowMessage(cmdReq, m)
 
 	return sendRequest(client, commandRequest)
 }
