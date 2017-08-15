@@ -88,7 +88,7 @@ func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, command
 	// which will denote their size. Then we add 19 bytes which is size of non-variable length attributes of
 	// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
 	length := uint32(LengthFieldSize+len(commandRequest.TopicName)) + uint32(LengthFieldSize+len(commandRequest.Command))
-	length += uint32(commandRequest.SbeBlockLength()) +TotalHeaderSizeNoFrame
+	length += uint32(commandRequest.SbeBlockLength()) + TotalHeaderSizeNoFrame
 
 	var headers Headers
 	headers.SetSbeMessageHeader(&sbe.MessageHeader{
@@ -102,6 +102,90 @@ func NewCommandRequestMessage(commandRequest *sbe.ExecuteCommandRequest, command
 	headers.SetTransportHeader(protocol.NewTransportHeader(protocol.RequestResponse))
 
 	// Writer will set FrameHeader after serialization to byte array.
+	headers.SetFrameHeader(protocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+
+	msg.SetHeaders(&headers)
+	return &msg
+}
+
+const (
+	TopicSubscriptionSubscribeState  = "SUBSCRIBE"
+	TopicSubscriptionSubscribedState = "SUBSCRIBED"
+)
+
+type TopicSubscription struct {
+	StartPosition    int64  `msgpack:"startPosition"`
+	PrefetchCapacity int32  `msgpack:"prefetchCapacity"`
+	Name             string `msgpack:"name"`
+
+	ForceStart bool   `msgpack:"forceStart"`
+	State      string `msgpack:"state"`
+}
+
+func NewTopicSubscriptionMessage(cmdReq *sbe.ExecuteCommandRequest, ts *TopicSubscription) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(ts)
+	if err != nil {
+		return nil
+	}
+	cmdReq.Command = b
+	msg.SetSbeMessage(cmdReq)
+
+	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
+	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
+
+	var headers Headers
+	headers.SetSbeMessageHeader(&sbe.MessageHeader{
+		BlockLength: cmdReq.SbeBlockLength(),
+		TemplateId:  cmdReq.SbeTemplateId(),
+		SchemaId:    cmdReq.SbeSchemaId(),
+		Version:     cmdReq.SbeSchemaVersion(),
+	})
+
+	headers.SetRequestResponseHeader(protocol.NewRequestResponseHeader())
+	headers.SetTransportHeader(protocol.NewTransportHeader(protocol.RequestResponse))
+	headers.SetFrameHeader(protocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+
+	msg.SetHeaders(&headers)
+	return &msg
+}
+
+
+const (
+	TopicSubscriptionAckState = "ACKNOWLEDGE"
+	TopicSubscriptionAcknowledgedState = "ACKNOWLEDGED"
+)
+
+type TopicSubscriptionAck struct {
+	Name        string `msgpack:"name"`
+	AckPosition uint64 `msgpack:"ackPosition"`
+	State       string `msgpack:"state"`
+}
+
+func NewTopicSubscriptionAck(cmdReq *sbe.ExecuteCommandRequest, tsa *TopicSubscriptionAck) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(tsa)
+	if err != nil {
+		return nil
+	}
+	cmdReq.Command = b
+	msg.SetSbeMessage(cmdReq)
+
+	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
+	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
+
+	var headers Headers
+	headers.SetSbeMessageHeader(&sbe.MessageHeader{
+		BlockLength: cmdReq.SbeBlockLength(),
+		TemplateId:  cmdReq.SbeTemplateId(),
+		SchemaId:    cmdReq.SbeSchemaId(),
+		Version:     cmdReq.SbeSchemaVersion(),
+	})
+
+	headers.SetRequestResponseHeader(protocol.NewRequestResponseHeader())
+	headers.SetTransportHeader(protocol.NewTransportHeader(protocol.RequestResponse))
 	headers.SetFrameHeader(protocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
 
 	msg.SetHeaders(&headers)

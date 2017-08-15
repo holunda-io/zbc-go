@@ -61,7 +61,6 @@ func (c *Client) receiver() {
 				continue
 			}
 			message, err := r.ParseMessage(headers, tail)
-			log.Println("received message")
 			if err != nil && !headers.IsSingleMessage() {
 				delete(c.transactions, headers.RequestResponseHeader.RequestID)
 				continue
@@ -122,6 +121,24 @@ func (c *Client) TaskConsumer(ts *TaskSubscription) (chan *Message, error) {
 
 	return subscriptionCh, nil
 }
+
+// TopicConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
+func (c *Client) TopicConsumer(cmdReq *sbe.ExecuteCommandRequest, ts *TopicSubscription) (chan *Message, error) {
+	subscriptionCh := make(chan *Message)
+	msg := NewTopicSubscriptionMessage(cmdReq, ts)
+
+	response, err := c.Responder(msg)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	subscriberKey := (*response.SbeMessage).(*sbe.ExecuteCommandResponse).Key
+	c.subscriptions[subscriberKey] = subscriptionCh
+
+	return subscriptionCh, nil
+}
+
 
 // Start will spinoff receiver in goroutine, which will make client effectively ready to communicate with the broker.
 func (c *Client) Start() {

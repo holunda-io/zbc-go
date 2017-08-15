@@ -99,7 +99,7 @@ func sendRequest(client *zbc.Client, commandRequest *zbc.Message) (*zbc.Message,
 	return response, nil
 }
 
-func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) {
+func openTaskSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) {
 	taskSub := &zbc.TaskSubscription{
 		TopicName:     topic,
 		PartitionID:   pid,
@@ -116,6 +116,34 @@ func openSubscription(client *zbc.Client, topic string, pid int32, lo string, tt
 	for {
 		message := <-subscriptionCh
 		fmt.Printf("%#v\n", *message.Data)
+		//
+	}
+}
+
+func openTopicSubscription(client *zbc.Client, topic string, subName string) {
+	topicSub := &zbc.TopicSubscription{
+		StartPosition:    -1,
+		Name:             subName,
+		PrefetchCapacity: 0,
+		ForceStart:       false,
+		State:            zbc.TopicSubscriptionSubscribeState,
+	}
+	execCommandRequest := &sbe.ExecuteCommandRequest{
+		PartitionId: 0,
+		Position:    0,
+		EventType:   sbe.EventType.SUBSCRIBER_EVENT,
+		TopicName:   []byte(topic),
+	}
+	execCommandRequest.Key = execCommandRequest.KeyNullValue()
+
+	subscriptionCh, err := client.TopicConsumer(execCommandRequest, topicSub)
+	isFatal(err)
+
+	log.Println("Waiting for events ....")
+	for {
+		message := <-subscriptionCh
+		fmt.Printf("%#v\n", *message.Data)
+
 		//
 	}
 }
@@ -272,7 +300,7 @@ func main() {
 			},
 		},
 		{
-			Name:    "open",
+			Name:    "tasksub",
 			Aliases: []string{"n"},
 			Usage:   "open a subscription",
 			Flags: []cli.Flag{
@@ -305,10 +333,36 @@ func main() {
 				client, err := zbc.NewClient(conf.Broker.String())
 				isFatal(err)
 				log.Println("Connected to Zeebe.")
-				openSubscription(client, c.String("topic"),
+				openTaskSubscription(client, c.String("topic"),
 					int32(c.Int64("partition-id")),
 					c.String("lock-owner"),
 					c.String("task-type"))
+				return nil
+			},
+		},
+		{
+			Name:    "topicsub",
+			Aliases: []string{"n"},
+			Usage:   "open a topic subscription",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "topic, t",
+					Value:  "default-topic",
+					Usage:  "",
+					EnvVar: "ZB_TOPIC_NAME",
+				},
+				cli.StringFlag{
+					Name:   "subscription-name, sn",
+					Value:  "default-name",
+					Usage:  "",
+					EnvVar: "ZB_TOPIC_NAME",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				client, err := zbc.NewClient(conf.Broker.String())
+				isFatal(err)
+				log.Println("Connected to Zeebe.")
+				openTopicSubscription(client, c.String("topic"), c.String("subscription-name"))
 				return nil
 			},
 		},
