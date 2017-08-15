@@ -342,7 +342,7 @@ func main() {
 		},
 		{
 			Name:    "topicsub",
-			Aliases: []string{"n"},
+			Aliases: []string{"s"},
 			Usage:   "open a topic subscription",
 			Flags: []cli.Flag{
 				cli.StringFlag{
