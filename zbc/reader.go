@@ -32,8 +32,6 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 		return data, nil
 
 	case err != nil:
-		//log.Println("Found error .... backing off.")
-		//log.Println(err)
 		return nil, err
 	}
 
@@ -57,7 +55,6 @@ func (mr *MessageReader) readTransportHeader(data io.Reader) (*protocol.Transpor
 	if transport.ProtocolID == protocol.RequestResponse || transport.ProtocolID == protocol.FullDuplexSingleMessage {
 		return &transport, nil
 	}
-
 	return nil, errProtocolIDNotFound
 }
 
@@ -67,7 +64,6 @@ func (mr *MessageReader) readRequestResponseHeader(data io.Reader) (*protocol.Re
 	if err != nil {
 		return nil, err
 	}
-
 	return &requestResponse, nil
 }
 

@@ -16,7 +16,7 @@ const (
 	CloseChannelFile          = "dumps/close-channel"               // TODO:
 	CloseSubscriptionRequest  = "dumps/close-subscription-request"  // TODO:
 	CloseSubscriptionResponse = "dumps/close-subscription-response" // TODO:
-	CreateTaskRequest         = "dumps/create-task-request"
+	CreateTaskRequest         = "dumps.old/create-task-request"
 	CreateTaskResponse        = "dumps/create-task-response" // TODO:
 	EndOfStream               = "dumps/end-of-stream"        // TODO:
 	Gossip                    = "dumps/gossip"               // TODO:
