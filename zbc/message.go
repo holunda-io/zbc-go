@@ -2,49 +2,33 @@ package zbc
 
 import (
 	"encoding/binary"
+	"fmt"
+	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
+	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"io"
-
-	"github.com/zeebe-io/zbc-go/zbc/protocol"
-	"github.com/zeebe-io/zbc-go/zbc/sbe"
-)
-
-const (
-	templateIDExecuteCommandRequest  = 20
-	templateIDExecuteCommandResponse = 21
-	templateIDControlMessageResponse = 11
-	templateIDSubscriptionEvent      = 30
-)
-
-const (
-	FrameHeaderSize = 12
-	TransportHeaderSize = 2
-	RequestResponseHeaderSize = 8
-	SBEMessageHeaderSize = 8
-
-	TotalHeaderSizeNoFrame = 18
-	LengthFieldSize = 2
+	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.
 type Headers struct {
-	FrameHeader           *protocol.FrameHeader
-	TransportHeader       *protocol.TransportHeader
-	RequestResponseHeader *protocol.RequestResponseHeader // If this is nil then struct is equal to SingleMessage
-	SbeMessageHeader      *sbe.MessageHeader
+	FrameHeader           *zbprotocol.FrameHeader
+	TransportHeader       *zbprotocol.TransportHeader
+	RequestResponseHeader *zbprotocol.RequestResponseHeader // If this is nil then struct is equal to SingleMessage
+	SbeMessageHeader      *zbsbe.MessageHeader
 }
 
 // SetFrameHeader is a setter for FrameHeader.
-func (h *Headers) SetFrameHeader(header *protocol.FrameHeader) {
+func (h *Headers) SetFrameHeader(header *zbprotocol.FrameHeader) {
 	h.FrameHeader = header
 }
 
 // SetTransportHeader is a setter for TransportHeader.
-func (h *Headers) SetTransportHeader(header *protocol.TransportHeader) {
+func (h *Headers) SetTransportHeader(header *zbprotocol.TransportHeader) {
 	h.TransportHeader = header
 }
 
 // SetRequestResponseHeader is a setting for RequestResponseHeader.
-func (h *Headers) SetRequestResponseHeader(header *protocol.RequestResponseHeader) {
+func (h *Headers) SetRequestResponseHeader(header *zbprotocol.RequestResponseHeader) {
 	h.RequestResponseHeader = header
 }
 
@@ -54,7 +38,7 @@ func (h *Headers) IsSingleMessage() bool {
 }
 
 // SetSbeMessageHeader is a setter for SBEMessageHeader.
-func (h *Headers) SetSbeMessageHeader(header *sbe.MessageHeader) {
+func (h *Headers) SetSbeMessageHeader(header *zbsbe.MessageHeader) {
 	h.SbeMessageHeader = header
 }
 
@@ -64,11 +48,11 @@ type SBE interface {
 	Decode(reader io.Reader, order binary.ByteOrder, actingVersion uint16, blockLength uint16, doRangeCheck bool) error
 }
 
-// Message is zeebe message which will contain pointers to all parts of the message. Data is Message Pack layer.
+// Message is Zeebe message which will contain pointers to all parts of the message. Data is Message Pack layer.
 type Message struct {
 	Headers    *Headers
 	SbeMessage *SBE
-	Data       *map[string]interface{}
+	Data       []byte
 }
 
 // SetHeaders is a setter for Headers attribute.
@@ -82,6 +66,22 @@ func (m *Message) SetSbeMessage(data SBE) {
 }
 
 // SetData is a setter for unmarshaled message pack data.
-func (m *Message) SetData(data *map[string]interface{}) {
+func (m *Message) SetData(data []byte) {
 	m.Data = data
+}
+
+func (m *Message) String() string {
+	var d map[string]interface{}
+	msgpack.Unmarshal(m.Data, &d)
+	return fmt.Sprintf("%+v", d)
+}
+
+func (m *Message) ParseToMap() (*map[string]interface{}, error) {
+	var item map[string]interface{}
+	err := msgpack.Unmarshal(m.Data, &item)
+
+	if err != nil {
+		return nil, err
+	}
+	return &item, nil
 }

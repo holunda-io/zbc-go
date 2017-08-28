@@ -7,9 +7,8 @@ import (
 	"errors"
 	"io"
 
-	"github.com/zeebe-io/zbc-go/zbc/protocol"
-	"github.com/zeebe-io/zbc-go/zbc/sbe"
-	"gopkg.in/vmihailenco/msgpack.v2"
+	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
+	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 )
 
 var (
@@ -40,29 +39,29 @@ func (mr *MessageReader) readNext(n uint32) ([]byte, error) {
 	return nil, nil
 }
 
-func (mr *MessageReader) readFrameHeader(data io.Reader) (*protocol.FrameHeader, error) {
-	var frameHeader protocol.FrameHeader
+func (mr *MessageReader) readFrameHeader(data io.Reader) (*zbprotocol.FrameHeader, error) {
+	var frameHeader zbprotocol.FrameHeader
 	if frameHeader.Decode(data, binary.LittleEndian, 0) != nil {
 		return nil, errFrameHeaderDecode
 	}
 	return &frameHeader, nil
 }
 
-func (mr *MessageReader) readTransportHeader(data io.Reader) (*protocol.TransportHeader, error) {
-	var transport protocol.TransportHeader
+func (mr *MessageReader) readTransportHeader(data io.Reader) (*zbprotocol.TransportHeader, error) {
+	var transport zbprotocol.TransportHeader
 	err := transport.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
 	}
-	if transport.ProtocolID == protocol.RequestResponse || transport.ProtocolID == protocol.FullDuplexSingleMessage {
+	if transport.ProtocolID == zbprotocol.RequestResponse || transport.ProtocolID == zbprotocol.FullDuplexSingleMessage {
 		return &transport, nil
 	}
 
 	return nil, errProtocolIDNotFound
 }
 
-func (mr *MessageReader) readRequestResponseHeader(data io.Reader) (*protocol.RequestResponseHeader, error) {
-	var requestResponse protocol.RequestResponseHeader
+func (mr *MessageReader) readRequestResponseHeader(data io.Reader) (*zbprotocol.RequestResponseHeader, error) {
+	var requestResponse zbprotocol.RequestResponseHeader
 	err := requestResponse.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
@@ -71,8 +70,8 @@ func (mr *MessageReader) readRequestResponseHeader(data io.Reader) (*protocol.Re
 	return &requestResponse, nil
 }
 
-func (mr *MessageReader) readSbeMessageHeader(data io.Reader) (*sbe.MessageHeader, error) {
-	var sbeMessageHeader sbe.MessageHeader
+func (mr *MessageReader) readSbeMessageHeader(data io.Reader) (*zbsbe.MessageHeader, error) {
+	var sbeMessageHeader zbsbe.MessageHeader
 	err := sbeMessageHeader.Decode(data, binary.LittleEndian, 0)
 	if err != nil {
 		return nil, err
@@ -114,7 +113,7 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 
 	sbeIndex := TransportHeaderSize
 	switch transport.ProtocolID {
-	case protocol.RequestResponse:
+	case zbprotocol.RequestResponse:
 		reqRespReader := bytes.NewReader(message[TransportHeaderSize : TransportHeaderSize+RequestResponseHeaderSize])
 		requestResponse, errHeader := mr.readRequestResponseHeader(reqRespReader)
 		if errHeader != nil {
@@ -124,7 +123,7 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 		sbeIndex = TransportHeaderSize + RequestResponseHeaderSize
 		break
 
-	case protocol.FullDuplexSingleMessage:
+	case zbprotocol.FullDuplexSingleMessage:
 		header.SetRequestResponseHeader(nil)
 		break
 	}
@@ -140,8 +139,8 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 	return &header, &body, nil
 }
 
-func (mr *MessageReader) decodeCmdRequest(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.ExecuteCommandRequest, error) {
-	var commandRequest sbe.ExecuteCommandRequest
+func (mr *MessageReader) decodeCmdRequest(reader *bytes.Reader, header *zbsbe.MessageHeader) (*zbsbe.ExecuteCommandRequest, error) {
+	var commandRequest zbsbe.ExecuteCommandRequest
 	err := commandRequest.Decode(reader,
 		binary.LittleEndian,
 		header.Version,
@@ -153,8 +152,8 @@ func (mr *MessageReader) decodeCmdRequest(reader *bytes.Reader, header *sbe.Mess
 	return &commandRequest, nil
 }
 
-func (mr *MessageReader) decodeCmdResponse(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.ExecuteCommandResponse, error) {
-	var commandResponse sbe.ExecuteCommandResponse
+func (mr *MessageReader) decodeCmdResponse(reader *bytes.Reader, header *zbsbe.MessageHeader) (*zbsbe.ExecuteCommandResponse, error) {
+	var commandResponse zbsbe.ExecuteCommandResponse
 	err := commandResponse.Decode(reader,
 		binary.LittleEndian,
 		header.Version,
@@ -166,8 +165,8 @@ func (mr *MessageReader) decodeCmdResponse(reader *bytes.Reader, header *sbe.Mes
 	return &commandResponse, nil
 }
 
-func (mr *MessageReader) decodeCtlResponse(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.ControlMessageResponse, error) {
-	var controlResponse sbe.ControlMessageResponse
+func (mr *MessageReader) decodeCtlResponse(reader *bytes.Reader, header *zbsbe.MessageHeader) (*zbsbe.ControlMessageResponse, error) {
+	var controlResponse zbsbe.ControlMessageResponse
 	err := controlResponse.Decode(reader, binary.LittleEndian, header.Version, header.BlockLength, true)
 	if err != nil {
 		return nil, err
@@ -175,8 +174,8 @@ func (mr *MessageReader) decodeCtlResponse(reader *bytes.Reader, header *sbe.Mes
 	return &controlResponse, nil
 }
 
-func (mr *MessageReader) decodeSubEvent(reader *bytes.Reader, header *sbe.MessageHeader) (*sbe.SubscribedEvent, error) {
-	var subEvent sbe.SubscribedEvent
+func (mr *MessageReader) decodeSubEvent(reader *bytes.Reader, header *zbsbe.MessageHeader) (*zbsbe.SubscribedEvent, error) {
+	var subEvent zbsbe.SubscribedEvent
 	err := subEvent.Decode(reader, binary.LittleEndian, header.Version, header.BlockLength, true)
 	if err != nil {
 		return nil, err
@@ -184,15 +183,25 @@ func (mr *MessageReader) decodeSubEvent(reader *bytes.Reader, header *sbe.Messag
 	return &subEvent, nil
 }
 
-func (mr *MessageReader) parseMessagePack(data *[]byte) (*map[string]interface{}, error) {
-	var item map[string]interface{}
-	err := msgpack.Unmarshal(*data, &item)
-
-	if err != nil {
-		return nil, err
-	}
-	return &item, nil
-}
+//func (mr *MessageReader) parseMessagePack(data *[]byte) (*map[string]interface{}, error) {
+//	var item map[string]interface{}
+//	err := zbmsgpack.Unmarshal(*data, &item)
+//
+//	if err != nil {
+//		return nil, err
+//	}
+//	return &item, nil
+//}
+//
+//
+//func (mr *MessageReader) parseMessagePackToType(data *[]byte, t interface{}) (interface{}, error) {
+//	err := zbmsgpack.Unmarshal(*data, &t)
+//
+//	if err != nil {
+//		return nil, err
+//	}
+//	return &t, nil
+//}
 
 // ParseMessage will take the headers and tail and construct Message.
 func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Message, error) {
@@ -208,12 +217,8 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 			return nil, err
 		}
 		msg.SetSbeMessage(commandRequest)
+		msg.SetData([]byte(commandRequest.Command))
 
-		msgPackData, err := mr.parseMessagePack(&commandRequest.Command)
-		if err != nil {
-			return nil, err
-		}
-		msg.SetData(msgPackData)
 		break
 
 	case templateIDExecuteCommandResponse: // Read response from the socket.
@@ -222,12 +227,7 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 			return nil, err
 		}
 		msg.SetSbeMessage(commandResponse)
-
-		msgPackData, err := mr.parseMessagePack(&commandResponse.Event)
-		if err != nil {
-			return nil, err
-		}
-		msg.SetData(msgPackData)
+		msg.SetData([]byte(commandResponse.Event))
 		break
 
 	case templateIDControlMessageResponse:
@@ -236,11 +236,8 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 			return nil, err
 		}
 		msg.SetSbeMessage(ctlResponse)
-		msgPackData, err := mr.parseMessagePack(&ctlResponse.Data)
-		if err != nil {
-			return nil, err
-		}
-		msg.SetData(msgPackData)
+		msg.SetData([]byte(ctlResponse.Data))
+
 		break
 
 	case templateIDSubscriptionEvent:
@@ -248,13 +245,9 @@ func (mr *MessageReader) ParseMessage(headers *Headers, message *[]byte) (*Messa
 		if err != nil {
 			return nil, err
 		}
-
 		msg.SetSbeMessage(subscribedEvent)
-		msgPackData, err := mr.parseMessagePack(&subscribedEvent.Event)
-		if err != nil {
-			return nil, err
-		}
-		msg.SetData(msgPackData)
+		msg.SetData([]byte(subscribedEvent.Event))
+
 		break
 	}
 	return &msg, nil

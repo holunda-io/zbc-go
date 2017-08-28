@@ -1,6 +1,6 @@
 // Generated SBE (Simple Binary Encoding) message codec
 
-package sbe
+package zbsbe
 
 import (
 	"encoding/binary"

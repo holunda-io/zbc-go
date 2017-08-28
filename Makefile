@@ -1,4 +1,4 @@
-VERSION=0.1.0-alpha1
+VERSION=0.2.0-alpha1
 BINARY_NAME=zbctl
 
 build:
@@ -26,7 +26,7 @@ test-client:
 	go test zbc/*.go -v
 
 test-protocol:
-	go test zbc/protocol/*.go -v
+	go test zbc/zbprotocol/*.go -v
 
 test-hexdump:
 	go test tests/test-zbdump/*.go -v

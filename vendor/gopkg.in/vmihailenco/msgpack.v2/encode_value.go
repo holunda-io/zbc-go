@@ -102,7 +102,7 @@ func ptrEncoderFunc(typ reflect.Type) encoderFunc {
 
 func encodeCustomValuePtr(e *Encoder, v reflect.Value) error {
 	if !v.CanAddr() {
-		return fmt.Errorf("msgpack: Encode(non-addressable %T)", v.Interface())
+		return fmt.Errorf("zbmsgpack: Encode(non-addressable %T)", v.Interface())
 	}
 	encoder := v.Addr().Interface().(CustomEncoder)
 	return encoder.EncodeMsgpack(e)
@@ -122,7 +122,7 @@ func encodeCustomValue(e *Encoder, v reflect.Value) error {
 
 func marshalValuePtr(e *Encoder, v reflect.Value) error {
 	if !v.CanAddr() {
-		return fmt.Errorf("msgpack: Encode(non-addressable %T)", v.Interface())
+		return fmt.Errorf("zbmsgpack: Encode(non-addressable %T)", v.Interface())
 	}
 	return marshalValue(e, v.Addr())
 }
@@ -163,5 +163,5 @@ func encodeErrorValue(e *Encoder, v reflect.Value) error {
 }
 
 func encodeUnsupportedValue(e *Encoder, v reflect.Value) error {
-	return fmt.Errorf("msgpack: Encode(unsupported %s)", v.Type())
+	return fmt.Errorf("zbmsgpack: Encode(unsupported %s)", v.Type())
 }

@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/zeebe-io/zbc-go/zbc"
-	"github.com/zeebe-io/zbc-go/zbc/sbe"
+	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 )
 
 const (
@@ -88,11 +88,11 @@ func TestCreateTaskRequest_CommandRequest(t *testing.T) {
 		t.Fatal(err)
 	}
 	executeCmdRequestI := *msg.SbeMessage
-	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
+	cmdReq := executeCmdRequestI.(*zbsbe.ExecuteCommandRequest)
 	size := int(cmdReq.SbeBlockLength()) + zbc.LengthFieldSize + len(cmdReq.TopicName) + zbc.LengthFieldSize + len(cmdReq.Command) + zbc.TotalHeaderSizeNoFrame
 
 	if uint32(size) != headers.FrameHeader.Length {
-		t.Fatalf("size of sbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)
+		t.Fatalf("size of zbsbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)
 	}
 }
 
@@ -116,11 +116,11 @@ func TestCreateTaskRequest_CommandRequest2(t *testing.T) {
 	}
 
 	executeCmdRequestI := *msg.SbeMessage
-	cmdReq := executeCmdRequestI.(*sbe.ExecuteCommandRequest)
+	cmdReq := executeCmdRequestI.(*zbsbe.ExecuteCommandRequest)
 	size := int(cmdReq.SbeBlockLength()) + 2 + len(cmdReq.TopicName) + 2 + len(cmdReq.Command) + zbc.TotalHeaderSizeNoFrame
 
 	if uint32(size) != headers.FrameHeader.Length {
-		t.Fatalf("size of sbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)
+		t.Fatalf("size of zbsbe.ExecuteCommandRequest is %d and FrameHeader.Length is %d", size, headers.FrameHeader.Length)
 	}
 
 	writer := zbc.NewMessageWriter(msg)

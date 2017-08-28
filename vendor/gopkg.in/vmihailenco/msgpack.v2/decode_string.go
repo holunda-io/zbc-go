@@ -24,7 +24,7 @@ func (d *Decoder) bytesLen(c byte) (int, error) {
 		n, err := d.uint32()
 		return int(n), err
 	}
-	return 0, fmt.Errorf("msgpack: invalid code %x decoding bytes length", c)
+	return 0, fmt.Errorf("zbmsgpack: invalid code %x decoding bytes length", c)
 }
 
 func (d *Decoder) DecodeString() (string, error) {
@@ -160,7 +160,7 @@ func decodeByteArrayValue(d *Decoder, v reflect.Value) error {
 		return nil
 	}
 	if n > v.Len() {
-		return fmt.Errorf("%s len is %d, but msgpack has %d elements", v.Type(), v.Len(), n)
+		return fmt.Errorf("%s len is %d, but zbmsgpack has %d elements", v.Type(), v.Len(), n)
 	}
 
 	b := v.Slice(0, n).Bytes()
