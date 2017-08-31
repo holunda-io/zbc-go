@@ -3,6 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/zeebe-io/zbc-go)](https://goreportcard.com/report/github.com/zeebe-io/zbc-go)
 [![Build Status](https://travis-ci.org/zeebe-io/zbc-go.svg?branch=master)](https://travis-ci.org/zeebe-io/zbc-go)
 [![GoDoc - Client](http://godoc.org/github.com/zeebe-io/zbc-go/zbc?status.svg)](https://godoc.org/github.com/zeebe-io/zbc-go/zbc)
+[![Slack](https://zeebe-slackin.herokuapp.com/badge.svg)](https://zeebe-slackin.herokuapp.com/)
 
 Beware of the little gnomes, flying cats and zebras with wings!
 
