@@ -29,7 +29,7 @@ type ClusterTopologyResponse struct {
 }
 
 type ClusterTopology struct {
-	TopicLeaders map[string]TopicLeader `msgpack:"topicLeaders"`
+	TopicLeaders map[string][]TopicLeader `msgpack:"topicLeaders"`
 	Brokers      []Broker               `msgpack:"brokers"`
 	UpdatedAt    time.Time              `msgpack:"-"`
 }

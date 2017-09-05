@@ -332,7 +332,9 @@ func main() {
 
 						fmt.Fprintln(w, "Topic Name\tBroker\tPartitionID")
 						for key, value := range (*topology).TopicLeaders {
-							fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%d", key, value.Addr(), value.PartitionID))
+							for _, leader := range value {
+								fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%d", key, leader.Addr(), leader.PartitionID))
+							}
 						}
 
 						fmt.Fprintln(w, "")

@@ -2,7 +2,7 @@ package zbc
 
 import "time"
 
-// RequestTimeout specifies default timeout for Responder.
+// RequestTimeout specifies default timeout for responder.
 const RequestTimeout = 5
 
 // TopologyRefreshInterval defines time to live of topology object.

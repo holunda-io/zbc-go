@@ -48,7 +48,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 			processTask(lo, message)
 
 			completeTaskMsg := zbc.NewCompleteTaskMessage(message)
-			response, err := client.Responder(completeTaskMsg)
+			response, err := client.responder(completeTaskMsg)
 
 			if err != nil {
 				log.Println("Completing a task went wrong.")
@@ -65,7 +65,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 		case stop := <-stopCh:
 			if stop {
 				log.Print("Stopping worker.")
-				_, err := client.Responder(zbc.NewCloseTaskSubscriptionMessage(taskSub))
+				_, err := client.responder(zbc.NewCloseTaskSubscriptionMessage(taskSub))
 				if err != nil {
 					log.Println("Close task subscription request failed")
 					log.Println(err)

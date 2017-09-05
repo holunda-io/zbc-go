@@ -10,11 +10,13 @@ import (
 
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
+	"math/rand"
 )
 
 var (
 	errTimeout     = errors.New("Request timeout")
 	errSocketWrite = errors.New("Tried to write more bytes to socket")
+	errTopicLeaderNotFound = errors.New("Topic leader not found")
 )
 
 // Client for Zeebe broker with support for clustered deployment.
@@ -27,6 +29,21 @@ type Client struct {
 	closeCh       chan bool
 	transactions  map[uint64]chan *Message
 	subscriptions map[uint64]chan *Message
+}
+
+func (c *Client) partitionID(topic string) (uint16, error) {
+	leaders, ok := c.Cluster.TopicLeaders[topic]
+	if !ok {
+		c.Topology()
+		leaders, ok = c.Cluster.TopicLeaders[topic]
+		if !ok {
+			return 0, errTopicLeaderNotFound
+		}
+	}
+
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	index := rnd.Intn(len(leaders))
+	return leaders[index].PartitionID, nil
 }
 
 func (c *Client) sender(message *Message) error {
@@ -93,8 +110,8 @@ func (c *Client) receiver() {
 	}
 }
 
-// Responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
-func (c *Client) Responder(message *Message) (*Message, error) {
+// responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
+func (c *Client) responder(message *Message) (*Message, error) {
 	respCh := make(chan *Message)
 	c.transactions[message.Headers.RequestResponseHeader.RequestID] = respCh
 
@@ -114,8 +131,13 @@ func (c *Client) Responder(message *Message) (*Message, error) {
 
 // CreateTask will create new task on specified topic.
 func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
 	commandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: c.Cluster.TopicLeaders[topic].PartitionID,
+		PartitionId: partitionID,
 		Position:    0,
 		TopicName:   []uint8(topic),
 		Command:     []uint8{},
@@ -124,14 +146,19 @@ func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*Message, error) {
 	message := c.createTaskRequest(commandRequest, m)
 
 	return MessageRetry(func() (*Message, error) {
-		return c.Responder(message)
+		return c.responder(message)
 	})
 }
 
 // CreateWorkflowInstance will create new workflow instance on the broker.
 func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInstance) (*Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
 	commandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: c.Cluster.TopicLeaders[topic].PartitionID,
+		PartitionId: partitionID,
 		Position:    0,
 		TopicName:   []uint8(topic),
 		Command:     []uint8{},
@@ -140,17 +167,22 @@ func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInsta
 	commandRequest.Key = commandRequest.KeyNullValue()
 
 	return MessageRetry(func() (*Message, error) {
-		return c.Responder(c.createWorkflowInstanceRequest(commandRequest, m))
+		return c.responder(c.createWorkflowInstanceRequest(commandRequest, m))
 	})
 }
 
 func (c *Client) Deploy(topic string, definition []byte) (*Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
 	deployment := zbmsgpack.Deployment{
 		State:   CreateDeployment,
 		BPMNXML: definition,
 	}
 	commandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: c.Cluster.TopicLeaders[topic].PartitionID,
+		PartitionId: partitionID,
 		Position:    0,
 		TopicName:   []uint8(topic),
 		Command:     []uint8{},
@@ -158,15 +190,20 @@ func (c *Client) Deploy(topic string, definition []byte) (*Message, error) {
 	commandRequest.Key = commandRequest.KeyNullValue()
 
 	return MessageRetry(func() (*Message, error) {
-		return c.Responder(c.newDeploymentRequest(commandRequest, &deployment))
+		return c.responder(c.newDeploymentRequest(commandRequest, &deployment))
 	})
 }
 
 // TaskConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
 func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
 	taskSub := &zbmsgpack.TaskSubscription{
 		TopicName:     topic,
-		PartitionID:   c.Cluster.TopicLeaders[topic].PartitionID,
+		PartitionID:   partitionID,
 		Credits:       32,
 		LockDuration:  300000,
 		LockOwner:     lockOwner,
@@ -177,7 +214,7 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Message,
 	subscriptionCh := make(chan *Message, taskSub.Credits)
 	msg := c.openTaskSubscriptionRequest(taskSub)
 
-	response, err := MessageRetry(func() (*Message, error) { return c.Responder(msg) })
+	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
 	if err != nil {
 		return nil, err
 	}
@@ -191,6 +228,11 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Message,
 
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
 func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
 	topicSub := &zbmsgpack.TopicSubscription{
 		StartPosition:    -1,
 		Name:             subName,
@@ -199,7 +241,7 @@ func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
 		State:            TopicSubscriptionSubscribeState,
 	}
 	execCommandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: c.Cluster.TopicLeaders[topic].PartitionID,
+		PartitionId: partitionID,
 		Position:    0,
 		EventType:   zbsbe.EventType.SUBSCRIBER_EVENT,
 		TopicName:   []byte(topic),
@@ -209,7 +251,7 @@ func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
 	subscriptionCh := make(chan *Message)
 	msg := c.openTopicSubscriptionRequest(execCommandRequest, topicSub)
 
-	response, err := MessageRetry(func() (*Message, error) { return c.Responder(msg) })
+	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
 	if err != nil {
 		return nil, err
 	}
@@ -222,18 +264,13 @@ func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
 
 // TopologyRequest will retrieve latest cluster topology information.
 func (c *Client) Topology() (*zbmsgpack.ClusterTopology, error) {
-	resp, err := MessageRetry(func() (*Message, error) { return c.Responder(c.topologyRequest()) })
+	resp, err := MessageRetry(func() (*Message, error) { return c.responder(c.topologyRequest()) })
 	if err != nil {
 		return nil, err
 	}
 	topology := c.newClusterTopologyResponse(resp)
 	c.Cluster = topology
 	return topology, nil
-}
-
-// Start will spinoff receiver in goroutine, which will make client effectively ready to communicate with the broker.
-func (c *Client) Start() {
-	go c.receiver()
 }
 
 func (c *Client) Close() {
@@ -261,7 +298,7 @@ func NewClient(addr string) (*Client, error) {
 		make(map[uint64]chan *Message),
 		make(map[uint64]chan *Message),
 	}
-	c.Start()
+	go c.receiver()
 
 	_, err = c.Topology()
 	if err != nil {
