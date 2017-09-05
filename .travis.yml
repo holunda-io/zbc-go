@@ -5,7 +5,11 @@ go:
   - 1.6
   - 1.7
   - 1.8
+  - 1.9
+  - tip
 
 script:
   - make test-zbprotocol
   - make test-hexdump
+  - make cov
+  - bash <(curl -s https://codecov.io/bash) -t 893fb9d0-19f6-49ed-a105-d5189d89dc4a

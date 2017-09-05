@@ -17,7 +17,7 @@ var (
 	errSocketWrite = errors.New("Tried to write more bytes to socket")
 )
 
-// Client for one Zeebe broker
+// Client for Zeebe broker with support for clustered deployment.
 type Client struct {
 	RequestHandler
 	ResponseHandler

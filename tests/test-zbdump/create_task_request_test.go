@@ -16,10 +16,8 @@ const (
 	CloseChannelFile          = "dumps/close-channel"               // TODO:
 	CloseSubscriptionRequest  = "dumps/close-subscription-request"  // TODO:
 	CloseSubscriptionResponse = "dumps/close-subscription-response" // TODO:
-	CreateTaskRequest         = "dumps/create-task-request"
+	CreateTaskRequest         = "dumps/create-task-request.bin"
 	CreateTaskResponse        = "dumps/create-task-response" // TODO:
-	EndOfStream               = "dumps/end-of-stream"        // TODO:
-	Gossip                    = "dumps/gossip"               // TODO:
 )
 
 func TestCreateTaskRequest(t *testing.T) {
@@ -47,13 +45,13 @@ func TestCreateTaskRequest(t *testing.T) {
 		t.Fatalf("Nothing got decoded. Something is wrong! %+#v", err)
 	}
 
-	msgpackItem := *msg.Data
-	if !reflect.DeepEqual([]byte(msgpackItem["eventType"].(string)), []byte("CREATE")) {
-		t.Fatalf("Wrong eventType. Expected CREATE, received %s", msgpackItem["eventType"].(string))
+	msgpackItem, _ := msg.ParseToMap()
+	if !reflect.DeepEqual([]byte((*msgpackItem)["state"].(string)), []byte("CREATE")) {
+		t.Fatalf("Wrong eventType. Expected CREATE, received %s", (*msgpackItem)["eventType"].(string))
 	}
 
-	if headers.FrameHeader.Length != 121 {
-		t.Fatalf("Wrong FrameHeader Length. Expected %+#v, received: %d", 121, headers.FrameHeader.Length)
+	if headers.FrameHeader.Length != 124 {
+		t.Fatalf("Wrong FrameHeader Length. Expected %+#v, received: %d", 124, headers.FrameHeader.Length)
 	}
 
 	if err != nil {

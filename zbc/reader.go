@@ -141,6 +141,7 @@ func (mr *MessageReader) ReadHeaders() (*Headers, *[]byte, error) {
 
 func (mr *MessageReader) decodeCmdRequest(reader *bytes.Reader, header *zbsbe.MessageHeader) (*zbsbe.ExecuteCommandRequest, error) {
 	var commandRequest zbsbe.ExecuteCommandRequest
+
 	err := commandRequest.Decode(reader,
 		binary.LittleEndian,
 		header.Version,

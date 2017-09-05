@@ -8,12 +8,15 @@ const RequestTimeout = 5
 // TopologyRefreshInterval defines time to live of topology object.
 const TopologyRefreshInterval = 30
 
-// MaxRetries specifies total number of retries for failed requests.
-const MaxRetries = 5
+// Retry constants
+const (
+	BackoffMin      = 1 * time.Millisecond
+	BackoffMax      = 100 * time.Millisecond
+	BackoffDeadline = 10 * time.Second
+)
 
-// RetryDeadline specified total number of seconds before we give up on retrying on requests.
-const RetryDeadline = 15
 
+// Sbe template ID constants
 const (
 	templateIDExecuteCommandRequest  = 20
 	templateIDExecuteCommandResponse = 21
@@ -21,6 +24,7 @@ const (
 	templateIDSubscriptionEvent      = 30
 )
 
+// Zeebe protocol constants
 const (
 	FrameHeaderSize           = 12
 	TransportHeaderSize       = 2
@@ -31,8 +35,11 @@ const (
 	LengthFieldSize        = 2
 )
 
-const CreateDeployment = "CREATE_DEPLOYMENT"
-const WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
+// Message pack states
+const (
+	CreateDeployment = "CREATE_DEPLOYMENT"
+	WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
+)
 
 const (
 	TopicSubscriptionSubscribeState  = "SUBSCRIBE"
@@ -44,8 +51,3 @@ const (
 	TopicSubscriptionAcknowledgedState = "ACKNOWLEDGED"
 )
 
-const (
-	BackoffMin      = 1 * time.Millisecond
-	BackoffMax      = 100 * time.Millisecond
-	BackoffDeadline = 10 * time.Second
-)

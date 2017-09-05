@@ -62,6 +62,14 @@ func (e *ExecuteCommandRequest) Decode(reader io.Reader, order binary.ByteOrder,
 			return err
 		}
 	}
+
+	if !e.PositionInActingVersion(actingVersion) {
+		e.Position = e.PositionNullValue()
+	} else {
+		if err := binary.Read(reader, order, &e.Position); err != nil {
+			return err
+		}
+	}
 	if !e.KeyInActingVersion(actingVersion) {
 		e.Key = e.KeyNullValue()
 	} else {

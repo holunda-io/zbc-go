@@ -11,7 +11,7 @@ import (
 
 type MessageHeader struct {
 	BlockLength uint16
-	TemplateId  uint16 // Type of message which we need -> decide which struct to use
+	TemplateId  uint16
 	SchemaId    uint16
 	Version     uint16
 }
