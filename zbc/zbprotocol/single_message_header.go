@@ -1,4 +1,4 @@
-package protocol
+package zbprotocol
 
 // SingleMessageHeader is used to represent Consumer model of communication.
 type SingleMessageHeader struct{} // 0 byte

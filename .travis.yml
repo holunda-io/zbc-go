@@ -7,5 +7,5 @@ go:
   - 1.8
 
 script:
-  - make test-protocol
+  - make test-zbprotocol
   - make test-hexdump

@@ -168,14 +168,14 @@ func (d *Decoder) decode(dst interface{}) error {
 
 	v := reflect.ValueOf(dst)
 	if !v.IsValid() {
-		return errors.New("msgpack: Decode(nil)")
+		return errors.New("zbmsgpack: Decode(nil)")
 	}
 	if v.Kind() != reflect.Ptr {
-		return fmt.Errorf("msgpack: Decode(nonsettable %T)", dst)
+		return fmt.Errorf("zbmsgpack: Decode(nonsettable %T)", dst)
 	}
 	v = v.Elem()
 	if !v.IsValid() {
-		return fmt.Errorf("msgpack: Decode(nonsettable %T)", dst)
+		return fmt.Errorf("zbmsgpack: Decode(nonsettable %T)", dst)
 	}
 	return d.DecodeValue(v)
 }
@@ -191,7 +191,7 @@ func (d *Decoder) DecodeNil() error {
 		return err
 	}
 	if c != codes.Nil {
-		return fmt.Errorf("msgpack: invalid code %x decoding nil", c)
+		return fmt.Errorf("zbmsgpack: invalid code %x decoding nil", c)
 	}
 	return nil
 }
@@ -211,7 +211,7 @@ func (d *Decoder) bool(c byte) (bool, error) {
 	if c == codes.True {
 		return true, nil
 	}
-	return false, fmt.Errorf("msgpack: invalid code %x decoding bool", c)
+	return false, fmt.Errorf("zbmsgpack: invalid code %x decoding bool", c)
 }
 
 func (d *Decoder) interfaceValue(v reflect.Value) error {
@@ -291,7 +291,7 @@ func (d *Decoder) DecodeInterface() (interface{}, error) {
 		return d.ext(c)
 	}
 
-	return 0, fmt.Errorf("msgpack: unknown code %x decoding interface{}", c)
+	return 0, fmt.Errorf("zbmsgpack: unknown code %x decoding interface{}", c)
 }
 
 // Skip skips next value.
@@ -334,7 +334,7 @@ func (d *Decoder) Skip() error {
 		return d.skipExt(c)
 	}
 
-	return fmt.Errorf("msgpack: unknown code %x", c)
+	return fmt.Errorf("zbmsgpack: unknown code %x", c)
 }
 
 // peekCode returns next MessagePack code. See

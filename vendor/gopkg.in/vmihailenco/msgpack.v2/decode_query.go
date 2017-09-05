@@ -27,7 +27,7 @@ func (q *queryResult) nextKey() {
 	q.query = q.query[ind+1:]
 }
 
-// Query extracts data specified by the query from the msgpack stream skipping
+// Query extracts data specified by the query from the zbmsgpack stream skipping
 // any other data. Query consists of map keys and array indexes separated with dot,
 // e.g. key1.0.key2.
 func (d *Decoder) Query(query string) ([]interface{}, error) {
@@ -62,7 +62,7 @@ func (d *Decoder) query(q *queryResult) error {
 	case code == codes.Array16 || code == codes.Array32 || codes.IsFixedArray(code):
 		err = d.queryArrayIndex(q)
 	default:
-		err = fmt.Errorf("msgpack: unsupported code=%x decoding key=%q", code, q.key)
+		err = fmt.Errorf("zbmsgpack: unsupported code=%x decoding key=%q", code, q.key)
 	}
 	return err
 }

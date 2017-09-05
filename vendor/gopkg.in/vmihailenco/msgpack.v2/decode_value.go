@@ -106,7 +106,7 @@ func ptrDecoderFunc(typ reflect.Type) decoderFunc {
 		}
 		if v.IsNil() {
 			if !v.CanSet() {
-				return fmt.Errorf("msgpack: Decode(nonsettable %T)", v.Interface())
+				return fmt.Errorf("zbmsgpack: Decode(nonsettable %T)", v.Interface())
 			}
 			v.Set(reflect.New(v.Type().Elem()))
 		}
@@ -116,7 +116,7 @@ func ptrDecoderFunc(typ reflect.Type) decoderFunc {
 
 func decodeCustomValueAddr(d *Decoder, v reflect.Value) error {
 	if !v.CanAddr() {
-		return fmt.Errorf("msgpack: Decode(nonsettable %T)", v.Interface())
+		return fmt.Errorf("zbmsgpack: Decode(nonsettable %T)", v.Interface())
 	}
 	return decodeCustomValue(d, v.Addr())
 }
@@ -164,7 +164,7 @@ func decodeCustomValue(d *Decoder, v reflect.Value) error {
 
 func unmarshalValueAddr(d *Decoder, v reflect.Value) error {
 	if !v.CanAddr() {
-		return fmt.Errorf("msgpack: Decode(nonsettable %T)", v.Interface())
+		return fmt.Errorf("zbmsgpack: Decode(nonsettable %T)", v.Interface())
 	}
 	return unmarshalValue(d, v.Addr())
 }
@@ -244,5 +244,5 @@ func decodeInterfaceValue(d *Decoder, v reflect.Value) error {
 }
 
 func decodeUnsupportedValue(d *Decoder, v reflect.Value) error {
-	return fmt.Errorf("msgpack: Decode(unsupported %s)", v.Type())
+	return fmt.Errorf("zbmsgpack: Decode(unsupported %s)", v.Type())
 }

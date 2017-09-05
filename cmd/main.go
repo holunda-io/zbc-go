@@ -7,14 +7,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"math"
 
 	yaml "gopkg.in/yaml.v2"
 
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli"
 	"github.com/zeebe-io/zbc-go/zbc"
-	"github.com/zeebe-io/zbc-go/zbc/sbe"
+	"text/tabwriter"
+	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 )
 
 const (
@@ -28,7 +28,7 @@ var (
 
 func isFatal(err error) {
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
@@ -50,102 +50,6 @@ type config struct {
 func (cf *config) String() string {
 	return fmt.Sprintf("version: %s\tBroker: %s", cf.Version, cf.Broker.String())
 
-}
-
-func sendTask(client *zbc.Client, topic string, m *zbc.Task) (*zbc.Message, error) {
-	commandRequest := zbc.NewTaskMessage(&sbe.ExecuteCommandRequest{
-		PartitionId: 0,
-		Position:    0,
-		Key:         0,
-		TopicName:   []uint8("default-topic"),
-		Command:     []uint8{},
-	}, m)
-
-	return sendRequest(client, commandRequest)
-}
-
-func sendWorkflowInstance(client *zbc.Client, topic string, m *zbc.WorkflowInstance) (*zbc.Message, error) {
-	cmdReq := &sbe.ExecuteCommandRequest{
-		PartitionId: 0,
-		Position:    0,
-		Key:         math.MaxUint64,
-		TopicName:   []uint8(topic),
-		Command:     []uint8{},
-	}
-	cmdReq.Key = cmdReq.KeyNullValue()
-	commandRequest := zbc.NewWorkflowMessage(cmdReq, m)
-
-	return sendRequest(client, commandRequest)
-}
-
-func sendDeployment(client *zbc.Client, topic string, m *zbc.Deployment) (*zbc.Message, error) {
-	commandRequest := zbc.NewDeploymentMessage(&sbe.ExecuteCommandRequest{
-		PartitionId: 0,
-		Position:    0,
-		Key:         0,
-		TopicName:   []uint8(topic),
-		Command:     []uint8{},
-	}, m)
-
-	return sendRequest(client, commandRequest)
-}
-
-func sendRequest(client *zbc.Client, commandRequest *zbc.Message) (*zbc.Message, error) {
-	response, err := client.Responder(commandRequest)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	return response, nil
-}
-
-func openTaskSubscription(client *zbc.Client, topic string, pid int32, lo string, tt string) {
-	taskSub := &zbc.TaskSubscription{
-		TopicName:     topic,
-		PartitionID:   pid,
-		Credits:       32,
-		LockDuration:  300000,
-		LockOwner:     lo,
-		SubscriberKey: 0,
-		TaskType:      tt,
-	}
-	subscriptionCh, err := client.TaskConsumer(taskSub)
-	isFatal(err)
-
-	log.Println("Waiting for events ....")
-	for {
-		message := <-subscriptionCh
-		fmt.Printf("%#v\n", *message.Data)
-		//
-	}
-}
-
-func openTopicSubscription(client *zbc.Client, topic string, subName string) {
-	topicSub := &zbc.TopicSubscription{
-		StartPosition:    -1,
-		Name:             subName,
-		PrefetchCapacity: 0,
-		ForceStart:       false,
-		State:            zbc.TopicSubscriptionSubscribeState,
-	}
-	execCommandRequest := &sbe.ExecuteCommandRequest{
-		PartitionId: 0,
-		Position:    0,
-		EventType:   sbe.EventType.SUBSCRIBER_EVENT,
-		TopicName:   []byte(topic),
-	}
-	execCommandRequest.Key = execCommandRequest.KeyNullValue()
-
-	subscriptionCh, err := client.TopicConsumer(execCommandRequest, topicSub)
-	isFatal(err)
-
-	log.Println("Waiting for events ....")
-	for {
-		message := <-subscriptionCh
-		fmt.Printf("%#v\n", *message.Data)
-
-		//
-	}
 }
 
 func loadCommandYaml(path string, command interface{}) error {
@@ -172,12 +76,18 @@ func loadConfig(path string, c *config) {
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		log.Printf("Reading configuration failed. Expecting to found configuration file at %s\n", path)
 		log.Printf("HINT: Configuration file is not in place. Try setting configuration path with:")
-		log.Fatalln(" zbctl --config <path to config.toml>")
+		log.Printf(" zbctl --config <path to config.toml>")
+		log.Printf("Using 0.0.0.0:51015 as default.")
+		c.Broker = contact{
+			Address: "0.0.0.0",
+			Port:    "51015",
+		}
 	}
 }
 
 func main() {
 	var conf config
+	log.SetOutput(ioutil.Discard)
 
 	app := cli.NewApp()
 	app.Usage = "Zeebe control client application"
@@ -197,173 +107,243 @@ func main() {
 	})
 
 	app.Authors = []cli.Author{
-		{Name: "Daniel Meyer", Email: ""},
-		{Name: "Sebastian Menski", Email: ""},
-		{Name: "Philipp Ossler", Email: ""},
-		{Name: "Sam", Email: "samuel.picek@camunda.com"},
+		{Name: "Zeebe Team", Email: "zeebe@camunda.com"},
 	}
+
 	app.Commands = []cli.Command{
 		{
-			Name:    "create-task",
-			Aliases: []string{"t"},
-			Usage:   "create a new task using the given YAML file",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:   "topic, t",
-					Value:  "default-topic",
-					Usage:  "Executing command request on specific topic.",
-					EnvVar: "ZB_TOPIC_NAME",
+			Name:    "create",
+			Aliases: []string{"c"},
+			Usage:   "create a resource",
+			Subcommands: []cli.Command{
+				{
+					Name:    "task",
+					Aliases: []string{"ts"},
+					Usage:   "Create a new task using the given YAML file",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "Executing command request on specific topic.",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						var task zbmsgpack.Task
+						err := loadCommandYaml(c.Args().First(), &task)
+						isFatal(err)
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+
+						response, err := client.CreateTask(c.String("topic"), &task)
+						isFatal(err)
+
+						if response.Data != nil {
+							m, _ := response.ParseToMap()
+							if state, ok := (*m)["state"]; ok {
+								fmt.Println(state)
+							}
+						} else {
+							fmt.Println("err: received nil response")
+						}
+
+						return nil
+					},
 				},
-			},
-			Action: func(c *cli.Context) error {
-				var task zbc.Task
-				err := loadCommandYaml(c.Args().First(), &task)
-				isFatal(err)
+				{
+					Name:    "workflow",
+					Aliases: []string{"wf"},
+					Usage:   "Create a new workflow using the given bpmn file",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "Executing command request on specific topic.",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						definition, err := loadFile(c.Args().First())
+						isFatal(err)
 
-				client, err := zbc.NewClient(conf.Broker.String())
-				isFatal(err)
-				log.Println("Connected to Zeebe.")
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
 
-				response, err := sendTask(client, c.String("topic"), &task)
-				isFatal(err)
+						response, err := client.Deploy(c.String("topic"), definition)
+						isFatal(err)
 
-				log.Println("Success. Received response:")
-				log.Println(*response.Data)
-				return nil
+						if response.Data != nil {
+							m, _ := response.ParseToMap()
+							if state, ok := (*m)["state"]; ok {
+								fmt.Println(state)
+							}
+						} else {
+							fmt.Println("err: received nil response")
+						}
+						return nil
+					},
+				},
+				{
+					Name:    "instance",
+					Aliases: []string{"wfi"},
+					Usage:   "Create a new workflow instance using the given YAML file",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "Executing command request on specific topic.",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						var workflowInstance zbmsgpack.WorkflowInstance
+						err := loadCommandYaml(c.Args().First(), &workflowInstance)
+						isFatal(err)
+
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+
+						response, err := client.CreateWorkflowInstance(c.String("topic"), &workflowInstance)
+						isFatal(err)
+
+						log.Println("Success. Received response:")
+
+						if response.Data != nil {
+							m, _ := response.ParseToMap()
+							state, ok := (*m)["state"]
+							if ok {
+								fmt.Println(state)
+							}
+							if state == zbc.WorkflowInstanceRejected {
+								fmt.Println("\nDid you deploy the workflow?")
+							}
+						} else {
+							fmt.Println("err: received nil response")
+						}
+						return nil
+					},
+				},
 			},
 		},
 		{
-			Name:    "create-workflow-instance",
-			Aliases: []string{"wf"},
-			Usage:   "create a new workflow instance using the given YAML file",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:   "topic, t",
-					Value:  "default-topic",
-					Usage:  "Executing command request on specific topic.",
-					EnvVar: "ZB_TOPIC_NAME",
+			Name:    "subscribe",
+			Aliases: []string{"sub"},
+			Usage:   "subscribe to a task or topic",
+			Subcommands: []cli.Command{
+				{
+					Name:    "task",
+					Aliases: []string{"ts"},
+					Usage:   "open a task subscription",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "Executing command request on specific topic.",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+						cli.StringFlag{
+							Name:   "lock-owner, l",
+							Value:  "zbc",
+							Usage:  "Specify lock owner.",
+							EnvVar: "ZB_LOCK_OWNER",
+						},
+						cli.StringFlag{
+							Name:   "task-type, tt",
+							Value:  "foo",
+							Usage:  "Specify task type.",
+							EnvVar: "ZB_TASK_TYPE",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+
+						subscriptionCh, err := client.TaskConsumer(c.String("topic"), c.String("lock-owner"), c.String("task-type"))
+						isFatal(err)
+
+						log.Println("Waiting for events ....")
+						for {
+							message := <-subscriptionCh
+							fmt.Println(message.String())
+						}
+
+						return nil
+					},
 				},
-			},
-			Action: func(c *cli.Context) error {
-				var workflowInstance zbc.WorkflowInstance
-				err := loadCommandYaml(c.Args().First(), &workflowInstance)
-				isFatal(err)
-
-				client, err := zbc.NewClient(conf.Broker.String())
-				isFatal(err)
-				log.Println("Connected to Zeebe.")
-
-				response, err := sendWorkflowInstance(client, c.String("topic"), &workflowInstance)
-				isFatal(err)
-
-				log.Println("Success. Received response:")
-				log.Println(*response.Data)
-				return nil
-			},
-		},
-		{
-			Name:    "deploy",
-			Aliases: []string{"d"},
-			Usage:   "deploy a workflow",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:   "topic, t",
-					Value:  "default-topic",
-					Usage:  "Executing command request on specific topic.",
-					EnvVar: "ZB_TOPIC_NAME",
+				{
+					Name:    "topic",
+					Aliases: []string{"tp"},
+					Usage:   "open a topic subscription",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+						cli.StringFlag{
+							Name:   "subscription-name, sn",
+							Value:  "default-name",
+							Usage:  "",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+						subscriptionCh, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"))
+						for {
+							message := <-subscriptionCh
+							fmt.Println(message.String())
+						}
+						return nil
+					},
 				},
-			},
-			Action: func(c *cli.Context) error {
-				content, err := loadFile(c.Args().First())
-				isFatal(err)
-
-				var deployment = zbc.Deployment{
-					State:   "CREATE_DEPLOYMENT",
-					BpmnXml: content,
-				}
-
-				client, err := zbc.NewClient(conf.Broker.String())
-				isFatal(err)
-				log.Println("Connected to Zeebe.")
-
-				response, err := sendDeployment(client, c.String("topic"), &deployment)
-				isFatal(err)
-
-				if response.Data != nil {
-					if state, ok := (*response.Data)["state"]; ok {
-						log.Println(state)
-					}
-				} else {
-					log.Println("err: received nil response")
-				}
-				return nil
-			},
-		},
-		{
-			Name:    "tasksub",
-			Aliases: []string{"n"},
-			Usage:   "open a subscription",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:   "topic, t",
-					Value:  "default-topic",
-					Usage:  "Executing command request on specific topic.",
-					EnvVar: "ZB_TOPIC_NAME",
-				},
-				cli.Int64Flag{
-					Name:   "partition-id, p",
-					Value:  0,
-					Usage:  "Specify partition on which we are opening subscription.",
-					EnvVar: "ZB_PARTITION_ID",
-				},
-				cli.StringFlag{
-					Name:   "lock-owner, l",
-					Value:  "zbc",
-					Usage:  "Specify lock owner.",
-					EnvVar: "ZB_LOCK_OWNER",
-				},
-				cli.StringFlag{
-					Name:   "task-type, tt",
-					Value:  "foo",
-					Usage:  "Specify task type.",
-					EnvVar: "ZB_TASK_TYPE",
-				},
-			},
-			Action: func(c *cli.Context) error {
-				client, err := zbc.NewClient(conf.Broker.String())
-				isFatal(err)
-				log.Println("Connected to Zeebe.")
-				openTaskSubscription(client, c.String("topic"),
-					int32(c.Int64("partition-id")),
-					c.String("lock-owner"),
-					c.String("task-type"))
-				return nil
 			},
 		},
 		{
-			Name:    "topicsub",
-			Aliases: []string{"s"},
-			Usage:   "open a topic subscription",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:   "topic, t",
-					Value:  "default-topic",
-					Usage:  "",
-					EnvVar: "ZB_TOPIC_NAME",
+			Name:    "describe",
+			Aliases: []string{"c"},
+			Usage:   "describe a resource",
+			Subcommands: []cli.Command{
+				{
+					Name:    "topology",
+					Aliases: []string{"ts"},
+					Usage:   "check cluster topology",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "topic, t",
+							Value:  "default-topic",
+							Usage:  "Executing command request on specific topic.",
+							EnvVar: "ZB_TOPIC_NAME",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+
+						topology, err := client.Topology()
+						w := tabwriter.NewWriter(os.Stdout, 0, 0, 10, ' ', tabwriter.TabIndent)
+
+						fmt.Fprintln(w, "Topic Name\tBroker\tPartitionID")
+						for key, value := range (*topology).TopicLeaders {
+							fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%d", key, value.Addr(), value.PartitionID))
+						}
+
+						fmt.Fprintln(w, "")
+						fmt.Fprintln(w, "Brokers")
+						for _, broker := range (*topology).Brokers {
+							fmt.Fprintln(w, broker.Addr())
+						}
+						w.Flush()
+						return nil
+					},
 				},
-				cli.StringFlag{
-					Name:   "subscription-name, sn",
-					Value:  "default-name",
-					Usage:  "",
-					EnvVar: "ZB_TOPIC_NAME",
-				},
-			},
-			Action: func(c *cli.Context) error {
-				client, err := zbc.NewClient(conf.Broker.String())
-				isFatal(err)
-				log.Println("Connected to Zeebe.")
-				openTopicSubscription(client, c.String("topic"), c.String("subscription-name"))
-				return nil
 			},
 		},
 	}

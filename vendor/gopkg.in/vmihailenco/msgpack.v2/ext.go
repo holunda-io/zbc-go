@@ -29,7 +29,7 @@ func RegisterExt(id int8, value interface{}) {
 	}
 
 	if extTypes[id] != nil {
-		panic(fmt.Errorf("msgpack: ext with id=%d is already registered", id))
+		panic(fmt.Errorf("zbmsgpack: ext with id=%d is already registered", id))
 	}
 
 	typ := reflect.TypeOf(value)
@@ -121,7 +121,7 @@ func (d *Decoder) parseExtLen(c byte) (int, error) {
 		n, err := d.uint32()
 		return int(n), err
 	default:
-		return 0, fmt.Errorf("msgpack: invalid code %x decoding ext length", c)
+		return 0, fmt.Errorf("zbmsgpack: invalid code %x decoding ext length", c)
 	}
 }
 
@@ -147,12 +147,12 @@ func (d *Decoder) ext(c byte) (interface{}, error) {
 	}
 
 	if int(extId) >= len(extTypes) {
-		return nil, fmt.Errorf("msgpack: unregistered ext id=%d", extId)
+		return nil, fmt.Errorf("zbmsgpack: unregistered ext id=%d", extId)
 	}
 
 	typ := extTypes[extId]
 	if typ == nil {
-		return nil, fmt.Errorf("msgpack: unregistered ext id=%d", extId)
+		return nil, fmt.Errorf("zbmsgpack: unregistered ext id=%d", extId)
 	}
 
 	v := reflect.New(typ).Elem()

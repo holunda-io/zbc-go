@@ -1,6 +1,6 @@
 // Generated SBE (Simple Binary Encoding) message codec
 
-package sbe
+package zbsbe
 
 import (
 	"encoding/binary"
@@ -17,7 +17,7 @@ type ExecuteCommandResponse struct {
 	Position    uint64
 	Key         uint64
 	TopicName   []uint8 // string and first byte is the length of string
-	Event       []uint8 // msgpack
+	Event       []uint8 // zbmsgpack
 }
 
 func (e ExecuteCommandResponse) ToString() string {
