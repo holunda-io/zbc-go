@@ -1,33 +1,34 @@
 package zbc
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 	"time"
-	"errors"
 )
 
 const maxInt64 = float64(math.MaxInt64 - 512)
 
+// RetryDeadlineReached is error which occurs when request failed multiple times unsuccessfully.
 var RetryDeadlineReached = errors.New("MessageRetry deadline reached. Operation failed")
 
-// Backoff is used to calculated backoffs for requests.
-type Backoff struct {
-	attempt float64
-	Factor float64
-	Jitter bool
+// backoff is used to calculated backoffs for requests.
+type backoff struct {
+	attempt  float64
+	Factor   float64
+	Jitter   bool
 	Min, Max time.Duration
 }
 
 // Duration returns the duration for the current attempt before incrementing.
-func (b *Backoff) Duration() time.Duration {
+func (b *backoff) Duration() time.Duration {
 	d := b.ForAttempt(b.attempt)
 	b.attempt++
 	return d
 }
 
 // ForAttempt returns the duration for a specific attempt.
-func (b *Backoff) ForAttempt(attempt float64) time.Duration {
+func (b *backoff) ForAttempt(attempt float64) time.Duration {
 	min := b.Min
 	if min <= 0 {
 		min = 100 * time.Millisecond
@@ -62,12 +63,12 @@ func (b *Backoff) ForAttempt(attempt float64) time.Duration {
 }
 
 // Reset restarts the current attempt counter at zero.
-func (b *Backoff) Reset() {
+func (b *backoff) Reset() {
 	b.attempt = 0
 }
 
 // Attempt returns the current attempt counter value.
-func (b *Backoff) Attempt() float64 {
+func (b *backoff) Attempt() float64 {
 	return b.attempt
 }
 
@@ -76,7 +77,7 @@ type Operation func() (*Message, error)
 
 // MessageRetry will try to execute operation and handle retrying under specified deadline.
 func MessageRetry(op Operation) (*Message, error) {
-	b := &Backoff{
+	b := &backoff{
 		Min:    BackoffMin,
 		Max:    BackoffMax,
 		Factor: 2,

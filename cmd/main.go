@@ -13,8 +13,8 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli"
 	"github.com/zeebe-io/zbc-go/zbc"
-	"text/tabwriter"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
+	"text/tabwriter"
 )
 
 const (
@@ -269,8 +269,6 @@ func main() {
 							message := <-subscriptionCh
 							fmt.Println(message.String())
 						}
-
-						return nil
 					},
 				},
 				{
@@ -296,11 +294,12 @@ func main() {
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
 						subscriptionCh, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"))
+						isFatal(err)
+						
 						for {
 							message := <-subscriptionCh
 							fmt.Println(message.String())
 						}
-						return nil
 					},
 				},
 			},
@@ -325,9 +324,10 @@ func main() {
 					Action: func(c *cli.Context) error {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
-						log.Println("Connected to Zeebe.")
 
 						topology, err := client.Topology()
+						isFatal(err)
+
 						w := tabwriter.NewWriter(os.Stdout, 0, 0, 10, ' ', tabwriter.TabIndent)
 
 						fmt.Fprintln(w, "Topic Name\tBroker\tPartitionID")

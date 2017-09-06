@@ -15,7 +15,6 @@ const (
 	BackoffDeadline = 10 * time.Second
 )
 
-
 // Sbe template ID constants
 const (
 	templateIDExecuteCommandRequest  = 20
@@ -37,17 +36,18 @@ const (
 
 // Message pack states
 const (
-	CreateDeployment = "CREATE_DEPLOYMENT"
+	CreateDeployment         = "CREATE_DEPLOYMENT"
 	WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
 )
 
+// TopicSubscription states
 const (
 	TopicSubscriptionSubscribeState  = "SUBSCRIBE"
 	TopicSubscriptionSubscribedState = "SUBSCRIBED"
 )
 
+// TopicSubscriptionAck states
 const (
 	TopicSubscriptionAckState          = "ACKNOWLEDGE"
 	TopicSubscriptionAcknowledgedState = "ACKNOWLEDGED"
 )
-

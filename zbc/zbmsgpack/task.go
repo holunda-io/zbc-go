@@ -1,5 +1,6 @@
 package zbmsgpack
 
+// Task structure is used when creating or read a task.
 type Task struct {
 	State       string                 `yaml:"state" zbmsgpack:"state"`
 	Headers     map[string]interface{} `yaml:"headers" zbmsgpack:"headers"`
@@ -9,10 +10,10 @@ type Task struct {
 	PayloadJSON map[string]interface{} `yaml:"payload" zbmsgpack:"-" json:"-"`
 }
 
-
+// NewTask is constructor for Task object. Function signature denotes mandatory fields.
 func NewTask(typeName string) *Task {
 	return &Task{
 		State: "CREATE",
-		Type: typeName,
+		Type:  typeName,
 	}
 }

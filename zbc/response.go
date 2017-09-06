@@ -1,21 +1,21 @@
 package zbc
 
 import (
-	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/vmihailenco/msgpack"
+	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"time"
 )
 
-type ResponseHandler struct {}
+type responseHandler struct{}
 
-func (rf *ResponseHandler) newClusterTopologyResponse(msg *Message) *zbmsgpack.ClusterTopology {
+func (rf *responseHandler) newClusterTopologyResponse(msg *Message) *zbmsgpack.ClusterTopology {
 	var resp zbmsgpack.ClusterTopologyResponse
 	msgpack.Unmarshal(msg.Data, &resp)
 
 	ct := &zbmsgpack.ClusterTopology{
-		Brokers: resp.Brokers,
+		Brokers:      resp.Brokers,
 		TopicLeaders: make(map[string][]zbmsgpack.TopicLeader),
-		UpdatedAt: time.Now(),
+		UpdatedAt:    time.Now(),
 	}
 
 	for _, leader := range resp.TopicLeaders {

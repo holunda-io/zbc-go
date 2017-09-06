@@ -7,9 +7,9 @@ import (
 	"gopkg.in/vmihailenco/msgpack.v2"
 )
 
-type RequestHandler struct{}
+type requestHandler struct{}
 
-func (rf *RequestHandler) newCommandMessage(commandRequest *zbsbe.ExecuteCommandRequest, command interface{}) *Message {
+func (rf *requestHandler) newCommandMessage(commandRequest *zbsbe.ExecuteCommandRequest, command interface{}) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(command)
@@ -43,7 +43,7 @@ func (rf *RequestHandler) newCommandMessage(commandRequest *zbsbe.ExecuteCommand
 	return &msg
 }
 
-func (rf *RequestHandler) newControlMessage(req *zbsbe.ControlMessageRequest, payload interface{}) *Message {
+func (rf *requestHandler) newControlMessage(req *zbsbe.ControlMessageRequest, payload interface{}) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(payload)
@@ -73,7 +73,7 @@ func (rf *RequestHandler) newControlMessage(req *zbsbe.ControlMessageRequest, pa
 	return &msg
 }
 
-func (rf *RequestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommandRequest, task *zbmsgpack.Task) *Message {
+func (rf *requestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommandRequest, task *zbmsgpack.Task) *Message {
 	commandRequest.EventType = zbsbe.EventTypeEnum(0)
 
 	if task.Payload == nil {
@@ -88,7 +88,7 @@ func (rf *RequestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommand
 
 }
 
-func (rf *RequestHandler) completeTaskRequest(taskMessage *Message) *Message {
+func (rf *requestHandler) completeTaskRequest(taskMessage *Message) *Message {
 	m, _ := taskMessage.ParseToMap()
 	payload := *m
 	payload["state"] = "COMPLETE"
@@ -102,7 +102,7 @@ func (rf *RequestHandler) completeTaskRequest(taskMessage *Message) *Message {
 	return rf.newCommandMessage(cmdReq, payload)
 }
 
-func (rf *RequestHandler) createWorkflowInstanceRequest(commandRequest *zbsbe.ExecuteCommandRequest, wf *zbmsgpack.WorkflowInstance) *Message {
+func (rf *requestHandler) createWorkflowInstanceRequest(commandRequest *zbsbe.ExecuteCommandRequest, wf *zbmsgpack.WorkflowInstance) *Message {
 	commandRequest.EventType = zbsbe.EventTypeEnum(5)
 
 	if wf.Payload == nil {
@@ -116,7 +116,7 @@ func (rf *RequestHandler) createWorkflowInstanceRequest(commandRequest *zbsbe.Ex
 	return rf.newCommandMessage(commandRequest, wf)
 }
 
-func (rf *RequestHandler) topologyRequest() *Message {
+func (rf *requestHandler) topologyRequest() *Message {
 	t := &zbmsgpack.TopologyRequest{}
 	cmr := &zbsbe.ControlMessageRequest{
 		MessageType: zbsbe.ControlMessageType.REQUEST_TOPOLOGY,
@@ -126,12 +126,12 @@ func (rf *RequestHandler) topologyRequest() *Message {
 	return rf.newControlMessage(cmr, t)
 }
 
-func (rf *RequestHandler) newDeploymentRequest(commandRequest *zbsbe.ExecuteCommandRequest, d *zbmsgpack.Deployment) *Message {
+func (rf *requestHandler) newDeploymentRequest(commandRequest *zbsbe.ExecuteCommandRequest, d *zbmsgpack.Deployment) *Message {
 	commandRequest.EventType = zbsbe.EventTypeEnum(4)
 	return rf.newCommandMessage(commandRequest, d)
 }
 
-func (rf *RequestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
+func (rf *requestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(ts)
@@ -162,7 +162,7 @@ func (rf *RequestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscrip
 	return &msg
 }
 
-func (rf *RequestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
+func (rf *requestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(ts)
@@ -193,7 +193,7 @@ func (rf *RequestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscri
 	return &msg
 }
 
-func (rf *RequestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteCommandRequest, ts *zbmsgpack.TopicSubscription) *Message {
+func (rf *requestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteCommandRequest, ts *zbmsgpack.TopicSubscription) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(ts)
@@ -222,7 +222,7 @@ func (rf *RequestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteComm
 	return &msg
 }
 
-func (rf *RequestHandler) topicSubscriptionAckRequest(cmdReq *zbsbe.ExecuteCommandRequest, tsa *zbmsgpack.TopicSubscriptionAck) *Message {
+func (rf *requestHandler) topicSubscriptionAckRequest(cmdReq *zbsbe.ExecuteCommandRequest, tsa *zbmsgpack.TopicSubscriptionAck) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(tsa)

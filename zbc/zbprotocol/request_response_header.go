@@ -9,7 +9,7 @@ import (
 
 // RequestResponseHeader is layer to represent Request-Response model of communication. With it we keep transaction house keeping.
 type RequestResponseHeader struct {
-	RequestID    uint64 // tid
+	RequestID uint64
 }
 
 // Encode is used to serialize structure to byte array.

@@ -2,13 +2,13 @@ package zbc
 
 import (
 	"encoding/binary"
+	"encoding/json"
+	"fmt"
+	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"io"
 	"gopkg.in/vmihailenco/msgpack.v2"
-	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
-	"fmt"
-	"encoding/json"
+	"io"
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.
@@ -95,7 +95,6 @@ func (m *Message) TaskSubscription() *zbmsgpack.TaskSubscription {
 	}
 	return nil
 }
-
 
 func (m *Message) String() string {
 

@@ -14,15 +14,15 @@ import (
 )
 
 var (
-	errTimeout     = errors.New("Request timeout")
-	errSocketWrite = errors.New("Tried to write more bytes to socket")
+	errTimeout             = errors.New("Request timeout")
+	errSocketWrite         = errors.New("Tried to write more bytes to socket")
 	errTopicLeaderNotFound = errors.New("Topic leader not found")
 )
 
 // Client for Zeebe broker with support for clustered deployment.
 type Client struct {
-	RequestHandler
-	ResponseHandler
+	requestHandler
+	responseHandler
 
 	Connection    net.Conn
 	Cluster       *zbmsgpack.ClusterTopology
@@ -48,7 +48,7 @@ func (c *Client) partitionID(topic string) (uint16, error) {
 
 func (c *Client) sender(message *Message) error {
 	if c.Cluster != nil {
-		if time.Since(c.Cluster.UpdatedAt)  > TopologyRefreshInterval * time.Second {
+		if time.Since(c.Cluster.UpdatedAt) > TopologyRefreshInterval*time.Second {
 			c.Topology()
 		}
 	}
@@ -290,8 +290,8 @@ func NewClient(addr string) (*Client, error) {
 	}
 
 	c := &Client{
-		RequestHandler{},
-		ResponseHandler{},
+		requestHandler{},
+		responseHandler{},
 		conn,
 		nil,
 		make(chan bool),
