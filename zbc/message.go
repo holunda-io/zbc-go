@@ -2,11 +2,13 @@ package zbc
 
 import (
 	"encoding/binary"
-	"fmt"
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"io"
 	"gopkg.in/vmihailenco/msgpack.v2"
+	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
+	"fmt"
+	"encoding/json"
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.
@@ -70,10 +72,51 @@ func (m *Message) SetData(data []byte) {
 	m.Data = data
 }
 
+func (m *Message) Task() *zbmsgpack.Task {
+	var d zbmsgpack.Task
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.Type) > 0 {
+		return &d
+	}
+	return nil
+}
+
+func (m *Message) TaskSubscription() *zbmsgpack.TaskSubscription {
+	var d zbmsgpack.TaskSubscription
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.TopicName) > 0 {
+		return &d
+	}
+	return nil
+}
+
+
 func (m *Message) String() string {
-	var d map[string]interface{}
-	msgpack.Unmarshal(m.Data, &d)
-	return fmt.Sprintf("%+v", d)
+
+	if task := m.Task(); task != nil {
+		b, err := json.MarshalIndent(task, "", "  ")
+		if err != nil {
+			return fmt.Sprintf("json marshaling failed\n")
+		}
+		return fmt.Sprintf("%+v", string(b))
+	}
+
+	if tasksub := m.TaskSubscription(); tasksub != nil {
+		b, err := json.MarshalIndent(tasksub, "", "  ")
+		if err != nil {
+			return fmt.Sprintf("json marshaling failed\n")
+		}
+		return fmt.Sprintf("%+v", string(b))
+	}
+
+	// TODO: implement missing msgpack structs
+	return "not found \n"
 }
 
 func (m *Message) ParseToMap() (*map[string]interface{}, error) {
