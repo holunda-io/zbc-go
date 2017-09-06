@@ -307,12 +307,12 @@ func main() {
 		},
 		{
 			Name:    "describe",
-			Aliases: []string{"c"},
+			Aliases: []string{"desc"},
 			Usage:   "describe a resource",
 			Subcommands: []cli.Command{
 				{
 					Name:    "topology",
-					Aliases: []string{"ts"},
+					Aliases: []string{"t"},
 					Usage:   "check cluster topology",
 					Flags: []cli.Flag{
 						cli.StringFlag{
