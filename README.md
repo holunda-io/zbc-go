@@ -15,6 +15,8 @@ This is a work in progress and **NOT** meant for any production use!
 
 ## Installation
 
+### Library
+
 To use as a library, the usual ...
 
 ```go get github.com/zeebe-io/zbc-go```
@@ -23,7 +25,13 @@ or
 
 ```git clone git@github.com:zeebe-io/zbc-go.git```
 
-### Building ```zbctl```
+### Command Line Interface ```zbctl```
+
+#### Releases
+
+Check out the [releases page](https://github.com/zeebe-io/zbc-go/releases) for the latest release of the `zbctl` command line tool for your platform.
+
+#### Building from Source
 
 ```
 cd $GOPATH/src/github.com/zeebe-io/zbc-go
