@@ -1,4 +1,4 @@
-VERSION=0.2.0-alpha1
+VERSION=0.2.0
 BINARY_NAME=zbctl
 ZBC_PATH=$(GOPATH)/src/github.com/zeebe-io/zbc-go
 
