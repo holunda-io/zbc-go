@@ -141,10 +141,8 @@ func main() {
 						isFatal(err)
 
 						if response.Data != nil {
-							m, _ := response.ParseToMap()
-							if state, ok := (*m)["state"]; ok {
-								fmt.Println(state)
-							}
+							task := response.Task()
+							fmt.Println(task.State)
 						} else {
 							fmt.Println("err: received nil response")
 						}
