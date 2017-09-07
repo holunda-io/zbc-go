@@ -1,5 +1,6 @@
 VERSION=0.2.0-alpha1
 BINARY_NAME=zbctl
+ZBC_PATH=$(GOPATH)/src/github.com/zeebe-io/zbc-go
 
 build:
 	@mkdir -p target/bin
@@ -15,11 +16,11 @@ run:
 	@go run cmd/main.go
 
 release:
-	@mkdir -p target/bin target/release
-	@CGO_ENABLED=0 go build -a -installsuffix cgo -o target/bin/$(BINARY_NAME) cmd/*
-	@cp cmd/config.toml target/bin/
+	@mkdir -p $(ZBC_PATH)/target/bin $(ZBC_PATH)/target/release
+	@CGO_ENABLED=0 go build -a -installsuffix cgo -o $(ZBC_PATH)/target/bin/$(BINARY_NAME) $(ZBC_PATH)/cmd/*.go
+	@cp $(ZBC_PATH)/cmd/config.toml $(ZBC_PATH)/target/bin/
 	@tar czf $(BINARY_NAME)-$(VERSION).tar.gz target/bin/
-	@mv *.tar.gz target/release/
+	@mv *.tar.gz $(ZBC_PATH)/target/release/
 	echo "Success. You can find release at target/release/!"
 
 cov:
