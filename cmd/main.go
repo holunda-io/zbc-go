@@ -15,6 +15,7 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"text/tabwriter"
+	"os/signal"
 )
 
 const (
@@ -170,7 +171,7 @@ func main() {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 
-						response, err := client.Deploy(c.String("topic"), definition)
+						response, err := client.CreateWorkflow(c.String("topic"), definition)
 						isFatal(err)
 
 						if response.Data != nil {
@@ -259,10 +260,23 @@ func main() {
 					Action: func(c *cli.Context) error {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
-						log.Println("Connected to Zeebe.")
 
-						subscriptionCh, err := client.TaskConsumer(c.String("topic"), c.String("lock-owner"), c.String("task-type"))
+						subscriptionCh, subscription, err := client.TaskConsumer(c.String("topic"), c.String("lock-owner"), c.String("task-type"))
 						isFatal(err)
+
+						osCh := make(chan os.Signal, 1)
+						signal.Notify(osCh, os.Interrupt)
+						go func() {
+							<-osCh
+							fmt.Println("Closing subscription.")
+							_, err := client.CloseTaskSubscription(subscription)
+							if err != nil {
+								fmt.Println("failed to close subscription: ", err)
+							} else {
+								fmt.Println("Subscription closed.")
+							}
+							os.Exit(0)
+						}()
 
 						log.Println("Waiting for events ....")
 						for {

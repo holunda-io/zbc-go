@@ -21,21 +21,12 @@ type StopCh chan bool
 
 var workers map[string]StopCh
 
-func processTask(lo string, msg *zbc.Message) {
+func processTask(lo string, msg *zbc.TaskEvent) {
 	log.Printf("[%s] Working on task.\n", lo)
 }
 
-func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic string, lo string, tt string) {
-	taskSub := &zbc.TaskSubscription{
-		TopicName:     topic,
-		PartitionID:   pid,
-		Credits:       32,
-		LockDuration:  300000,
-		LockOwner:     lo,
-		SubscriberKey: 0,
-		TaskType:      tt,
-	}
-	subscriptionCh, err := client.TaskConsumer(taskSub)
+func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo string, tt string) {
+	subscriptionCh, subInfo, err := client.TaskConsumer(topic, lo, tt)
 	if err != nil {
 		atomic.AddUint64(&ErrorCount, 1)
 	}
@@ -46,26 +37,26 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 		select {
 		case message := <-subscriptionCh:
 			processTask(lo, message)
-
-			completeTaskMsg := zbc.NewCompleteTaskMessage(message)
-			response, err := client.responder(completeTaskMsg)
+			response, err := client.CompleteTask(message)
 
 			if err != nil {
 				log.Println("Completing a task went wrong.")
 				log.Println(err)
 			}
-			if (*response.Data)["state"] == "COMPLETED" {
+
+			if response.State == zbc.TaskCompleted {
 				atomic.AddUint64(&ProcessedEventsCount, 1)
 				log.Println("Task completed successfully.")
 			} else {
 				log.Println("Task not completed.")
 			}
+
 			break
 
 		case stop := <-stopCh:
 			if stop {
 				log.Print("Stopping worker.")
-				_, err := client.responder(zbc.NewCloseTaskSubscriptionMessage(taskSub))
+				_, err := client.CloseTaskSubscription(subInfo)
 				if err != nil {
 					log.Println("Close task subscription request failed")
 					log.Println(err)
@@ -81,6 +72,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, pid int32, topic str
 
 func startWorkerView(w http.ResponseWriter, r *http.Request) {
 	resp := make(map[string]interface{})
+	// TODO: fix multiple clients ...
 	zbClient, err := zbc.NewClient(BrokerAddr)
 	if err != nil {
 		resp["status"] = http.StatusInternalServerError
@@ -90,7 +82,7 @@ func startWorkerView(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Starting worker with ID: %s\n", lockOwner)
 	workers[lockOwner] = make(chan bool)
-	go openSubscription(zbClient, workers[lockOwner], 0, "default-topic", lockOwner, "foo")
+	go openSubscription(zbClient, workers[lockOwner], "default-topic", lockOwner, "foo")
 
 	resp["workerID"] = lockOwner
 	jsonResp, err := json.Marshal(resp)

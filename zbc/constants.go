@@ -10,9 +10,9 @@ const TopologyRefreshInterval = 30
 
 // Retry constants
 const (
-	BackoffMin      = 1 * time.Millisecond
-	BackoffMax      = 100 * time.Millisecond
-	BackoffDeadline = 10 * time.Second
+	BackoffMin      = 20 * time.Millisecond
+	BackoffMax      = 1000 * time.Millisecond
+	BackoffDeadline = 5 * time.Second
 )
 
 // Sbe template ID constants
@@ -36,7 +36,11 @@ const (
 
 // Message pack states
 const (
+	TaskCreate               = "CREATE"
+	TaskComplete             = "COMPLETE"
+	TaskCompleted            = "COMPLETED"
 	CreateDeployment         = "CREATE_DEPLOYMENT"
+	CreateWorkflowInstance   = "CREATE_WORKFLOW_INSTANCE"
 	WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
 )
 

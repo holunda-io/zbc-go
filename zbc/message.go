@@ -7,8 +7,8 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"gopkg.in/vmihailenco/msgpack.v2"
 	"io"
+	"github.com/vmihailenco/msgpack"
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.

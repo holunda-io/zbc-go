@@ -4,7 +4,7 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"gopkg.in/vmihailenco/msgpack.v2"
+	"github.com/vmihailenco/msgpack"
 )
 
 type requestHandler struct{}
@@ -88,18 +88,15 @@ func (rf *requestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommand
 
 }
 
-func (rf *requestHandler) completeTaskRequest(taskMessage *Message) *Message {
-	m, _ := taskMessage.ParseToMap()
-	payload := *m
-	payload["state"] = "COMPLETE"
-
+func (rf *requestHandler) completeTaskRequest(taskMessage *TaskEvent) *Message {
+	taskMessage.State = TaskComplete
 	cmdReq := &zbsbe.ExecuteCommandRequest{
-		PartitionId: (*taskMessage.SbeMessage).(*zbsbe.SubscribedEvent).PartitionId,
-		Position:    (*taskMessage.SbeMessage).(*zbsbe.SubscribedEvent).Position,
-		Key:         (*taskMessage.SbeMessage).(*zbsbe.SubscribedEvent).Key,
-		TopicName:   (*taskMessage.SbeMessage).(*zbsbe.SubscribedEvent).TopicName,
+		PartitionId: taskMessage.Event.PartitionId,
+		Position:    taskMessage.Event.Position,
+		Key:         taskMessage.Event.Key,
+		TopicName:   taskMessage.Event.TopicName,
 	}
-	return rf.newCommandMessage(cmdReq, payload)
+	return rf.newCommandMessage(cmdReq, taskMessage.Task)
 }
 
 func (rf *requestHandler) createWorkflowInstanceRequest(commandRequest *zbsbe.ExecuteCommandRequest, wf *zbmsgpack.WorkflowInstance) *Message {
@@ -126,7 +123,7 @@ func (rf *requestHandler) topologyRequest() *Message {
 	return rf.newControlMessage(cmr, t)
 }
 
-func (rf *requestHandler) newDeploymentRequest(commandRequest *zbsbe.ExecuteCommandRequest, d *zbmsgpack.Deployment) *Message {
+func (rf *requestHandler) newWorkflowRequest(commandRequest *zbsbe.ExecuteCommandRequest, d *zbmsgpack.Workflow) *Message {
 	commandRequest.EventType = zbsbe.EventTypeEnum(4)
 	return rf.newCommandMessage(commandRequest, d)
 }

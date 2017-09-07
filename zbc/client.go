@@ -24,11 +24,12 @@ type Client struct {
 	requestHandler
 	responseHandler
 
-	Connection    net.Conn
-	Cluster       *zbmsgpack.ClusterTopology
-	closeCh       chan bool
-	transactions  map[uint64]chan *Message
-	subscriptions map[uint64]chan *Message
+	Connection         net.Conn
+	Cluster            *zbmsgpack.ClusterTopology
+	closeCh            chan bool
+	transactions       map[uint64]chan *Message
+	topicSubscriptions map[uint64]chan *Message
+	taskSubscriptions  map[uint64]chan *TaskEvent
 }
 
 func (c *Client) partitionID(topic string) (uint16, error) {
@@ -97,13 +98,19 @@ func (c *Client) receiver() {
 			}
 
 			if err != nil && headers.IsSingleMessage() {
-				// TODO: close and delete subscription
 				continue
 			}
 
 			if headers.IsSingleMessage() && message != nil {
-				subscriberKey := (*message.SbeMessage).(*zbsbe.SubscribedEvent).SubscriberKey
-				c.subscriptions[subscriberKey] <- message
+				event := (*message.SbeMessage).(*zbsbe.SubscribedEvent)
+
+				if event.EventType == zbsbe.EventType.TASK_EVENT {
+					taskEvent := &TaskEvent{Task: message.Task(), Event: event}
+					c.taskSubscriptions[event.SubscriberKey] <- taskEvent
+					continue
+				}
+
+				c.topicSubscriptions[event.SubscriberKey] <- message
 				continue
 			}
 		}
@@ -150,6 +157,30 @@ func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*Message, error) {
 	})
 }
 
+// CreateWorkflow will deploy BPMN defined process to the broker.
+func (c *Client) CreateWorkflow(topic string, definition []byte) (*Message, error) {
+	partitionID, err := c.partitionID(topic)
+	if err != nil {
+		return nil, err
+	}
+
+	deployment := zbmsgpack.Workflow{
+		State:   CreateDeployment,
+		BPMNXML: definition,
+	}
+	commandRequest := &zbsbe.ExecuteCommandRequest{
+		PartitionId: partitionID,
+		Position:    0,
+		TopicName:   []uint8(topic),
+		Command:     []uint8{},
+	}
+	commandRequest.Key = commandRequest.KeyNullValue()
+
+	return MessageRetry(func() (*Message, error) {
+		return c.responder(c.newWorkflowRequest(commandRequest, &deployment))
+	})
+}
+
 // CreateWorkflowInstance will create new workflow instance on the broker.
 func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInstance) (*Message, error) {
 	partitionID, err := c.partitionID(topic)
@@ -171,34 +202,11 @@ func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInsta
 	})
 }
 
-func (c *Client) Deploy(topic string, definition []byte) (*Message, error) {
-	partitionID, err := c.partitionID(topic)
-	if err != nil {
-		return nil, err
-	}
-
-	deployment := zbmsgpack.Deployment{
-		State:   CreateDeployment,
-		BPMNXML: definition,
-	}
-	commandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: partitionID,
-		Position:    0,
-		TopicName:   []uint8(topic),
-		Command:     []uint8{},
-	}
-	commandRequest.Key = commandRequest.KeyNullValue()
-
-	return MessageRetry(func() (*Message, error) {
-		return c.responder(c.newDeploymentRequest(commandRequest, &deployment))
-	})
-}
-
 // TaskConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
-func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Message, error) {
+func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *TaskEvent, *zbmsgpack.TaskSubscription, error) {
 	partitionID, err := c.partitionID(topic)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	taskSub := &zbmsgpack.TaskSubscription{
@@ -211,19 +219,31 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Message,
 		TaskType:      taskType,
 	}
 
-	subscriptionCh := make(chan *Message, taskSub.Credits)
-	msg := c.openTaskSubscriptionRequest(taskSub)
+	subscriptionCh := make(chan *TaskEvent, taskSub.Credits)
 
+	msg := c.openTaskSubscriptionRequest(taskSub)
 	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
+
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	d, _ := response.ParseToMap()
-	subscriberKey := (*d)["subscriberKey"].(uint64) //t.(zbsbe.SubscribedEvent).SubscriberKey
-	c.subscriptions[subscriberKey] = subscriptionCh
+	d := response.TaskSubscription()
+	subscriberKey := d.SubscriberKey
+	c.taskSubscriptions[subscriberKey] = subscriptionCh
 
-	return subscriptionCh, nil
+	return subscriptionCh, taskSub, nil
+}
+
+// CompleteTask will notify broker about finished task.
+func (c *Client) CompleteTask(task *TaskEvent) (*zbmsgpack.Task, error) {
+	msg, err := MessageRetry(func() (*Message, error) { return c.responder(c.completeTaskRequest(task)) })
+	return msg.Task(), err
+}
+
+// CloseTaskSubscription will close currently active task subscription.
+func (c *Client) CloseTaskSubscription(task *zbmsgpack.TaskSubscription) (*Message, error) {
+	return MessageRetry(func() (*Message, error) { return c.responder(c.closeTaskSubscriptionRequest(task)) })
 }
 
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
@@ -257,7 +277,7 @@ func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
 	}
 
 	subscriberKey := (*response.SbeMessage).(*zbsbe.ExecuteCommandResponse).Key
-	c.subscriptions[subscriberKey] = subscriptionCh
+	c.topicSubscriptions[subscriberKey] = subscriptionCh
 
 	return subscriptionCh, nil
 }
@@ -297,6 +317,7 @@ func NewClient(addr string) (*Client, error) {
 		make(chan bool),
 		make(map[uint64]chan *Message),
 		make(map[uint64]chan *Message),
+		make(map[uint64]chan *TaskEvent),
 	}
 	go c.receiver()
 
@@ -307,4 +328,22 @@ func NewClient(addr string) (*Client, error) {
 	}
 
 	return c, nil
+}
+
+// NewTask is constructor for Task object. Function signature denotes mandatory fields.
+func NewTask(typeName string) *zbmsgpack.Task {
+	return &zbmsgpack.Task{
+		State: TaskCreate,
+		Type:  typeName,
+		Retries: 3,
+	}
+}
+
+func NewWorkflowInstance(bpmnProcessId string, version int, payload []uint8) *zbmsgpack.WorkflowInstance {
+	return &zbmsgpack.WorkflowInstance{
+		State: CreateWorkflowInstance,
+		BPMNProcessID: bpmnProcessId,
+		Version: version,
+		Payload: payload,
+	}
 }

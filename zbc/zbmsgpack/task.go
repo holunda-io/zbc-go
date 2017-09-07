@@ -1,19 +1,24 @@
 package zbmsgpack
 
+import "encoding/json"
+
 // Task structure is used when creating or read a task.
 type Task struct {
-	State       string                 `yaml:"state" zbmsgpack:"state"`
-	Headers     map[string]interface{} `yaml:"headers" zbmsgpack:"headers"`
-	Retries     int                    `yaml:"retries" zbmsgpack:"retries"`
-	Type        string                 `yaml:"type" zbmsgpack:"type"`
-	Payload     []uint8                `yaml:"-" zbmsgpack:"payload"`
-	PayloadJSON map[string]interface{} `yaml:"payload" zbmsgpack:"-" json:"-"`
+	State        string                 `yaml:"state" msgpack:"state"`
+	LockTime     uint64                 `yaml:"lockTime" msgpack:"lockTime"`
+	LockOwner    string                 `yaml:"lockOwner" msgpack:"lockOwner"`
+	Headers      map[string]interface{} `yaml:"headers" msgpack:"headers"`
+	CustomHeader map[string]interface{} `yaml:"customHeaders" msgpack:"customHeaders"`
+	Retries      int                    `yaml:"retries" msgpack:"retries"`
+	Type         string                 `yaml:"type" msgpack:"type"`
+	Payload      []uint8                `yaml:"-" msgpack:"payload"`
+	PayloadJSON  map[string]interface{} `yaml:"payload" msgpack:"-" json:"-"`
 }
 
-// NewTask is constructor for Task object. Function signature denotes mandatory fields.
-func NewTask(typeName string) *Task {
-	return &Task{
-		State: "CREATE",
-		Type:  typeName,
+func (t *Task) String() string {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return "marshal err"
 	}
+	return string(b)
 }
