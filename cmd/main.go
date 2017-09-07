@@ -108,7 +108,7 @@ func main() {
 	})
 
 	app.Authors = []cli.Author{
-		{Name: "Zeebe Team", Email: "zeebe@camunda.com"},
+		{Name: "Zeebe Team", Email: "info@zeebe.io"},
 	}
 
 	app.Commands = []cli.Command{
