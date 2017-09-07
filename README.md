@@ -43,10 +43,52 @@ sudo make install
 
 ## Usage
 
-To execute a command, first describe a resource as a yaml file (look at examples folder for examples) and then:
+```
+NAME:
+   zbctl - Zeebe control client application
+
+USAGE:
+   zbctl [global options] command [command options] [arguments...]
+
+VERSION:
+   0.2.0
+
+AUTHOR:
+   Zeebe Team <info@zeebe.io>
+
+COMMANDS:
+     create, c       create a resource
+     subscribe, sub  subscribe to a task or topic
+     describe, desc  describe a resource
+     help, h         Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --config value, --cfg value  Location of the configuration file. (default: "/etc/zeebe/config.toml") [$ZBC_CONFIG]
+   --help, -h                   show help
+   --version, -v                print the version
+```
+
+To execute a command, first describe a resource as a yaml file (look at examples folder for examples).
+
+To create a task:
 
 ```
-zbctl create-task --topic default-topic examples/create-task.yaml
+$ zbctl create task examples/create-task.yaml
+CREATED
+```
+
+To deploy a workflow:
+
+```
+$ zbctl create workflow examples/demoProcess.bpmn
+DEPLOYMENT_CREATED
+```
+
+To create a workflow instance:
+
+```
+$ zbctl create instance --topic default-topic examples/create-workflow-instance.yaml
+WORKFLOW_INSTANCE_CREATED
 ```
 
 To point your ```zbctl``` to some other broker edit ```config.toml``` which can be find in the ```/etc/zeebe/config.toml```.
