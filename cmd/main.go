@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	version              = "0.2.0-alpha1"
+	version              = "0.2.0"
 	defaultConfiguration = "/etc/zeebe/config.toml"
 )
 
@@ -307,7 +307,7 @@ func main() {
 						log.Println("Connected to Zeebe.")
 						subscriptionCh, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"))
 						isFatal(err)
-						
+
 						for {
 							message := <-subscriptionCh
 							fmt.Println(message.String())
