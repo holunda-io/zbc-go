@@ -15,23 +15,6 @@ install:
 run:
 	@go run cmd/main.go
 
-release:
-	@mkdir -p $(ZBC_PATH)/target/bin $(ZBC_PATH)/target/release
-	@for os in windows linux darwin; do \
-		for arch in amd64 386; do \
-			echo "Building release for $$os $$arch"; \
-			CGO_ENABLED=0 GOOS=$$os GOARCH=$$arch go build -a -installsuffix cgo -o $(ZBC_PATH)/target/bin/$(BINARY_NAME) $(ZBC_PATH)/cmd/*.go; \
-			cp $(ZBC_PATH)/cmd/config.toml $(ZBC_PATH)/target/bin/; \
-			tar czf $(BINARY_NAME)-$(VERSION)-$$os-$$arch.tar.gz -C target/bin/ .; \
-			sha1sum $(BINARY_NAME)-$(VERSION)-$$os-$$arch.tar.gz > $(BINARY_NAME)-$(VERSION)-$$os-$$arch.tar.gz.sha1; \
-		done \
-	done
-	@mv *.tar.gz $(ZBC_PATH)/target/release/
-	@mv *.sha1 $(ZBC_PATH)/target/release/
-	echo "Success. You can find release at target/release/!"
-
-lol:
-
 cov:
 	cat coverage_protocol.txt coverage_dumps.txt > coverage.txt
 	rm coverage_*.txt

@@ -14,17 +14,18 @@ import (
 	"github.com/urfave/cli"
 	"github.com/zeebe-io/zbc-go/zbc"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
-	"text/tabwriter"
 	"os/signal"
+	"text/tabwriter"
 )
 
 const (
-	version              = "0.2.0"
 	defaultConfiguration = "/etc/zeebe/config.toml"
 )
 
 var (
 	errResourceNotFound = errors.New("Resource at the given path not found")
+	version             = "dev"
+	commit              = "none"
 )
 
 func isFatal(err error) {
@@ -92,7 +93,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Usage = "Zeebe control client application"
-	app.Version = version
+	app.Version = fmt.Sprintf("%s (%s)", version, commit)
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "config, cfg",

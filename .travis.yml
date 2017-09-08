@@ -12,4 +12,12 @@ script:
   - make test-protocol
   - make test-hexdump
   - make cov
-  - bash <(curl -s https://codecov.io/bash) -t 893fb9d0-19f6-49ed-a105-d5189d89dc4a
+  - bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: curl -sL http://git.io/goreleaser | bash || exit 1
+    on:
+      tags: true
+      condition: $TRAVIS_GO_VERSION =~ ^1\.9\.?[0-9]*$

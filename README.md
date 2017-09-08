@@ -1,5 +1,6 @@
 # ZBC
 
+[![GitHub release](https://img.shields.io/github/release/zeebe-io/zbc-go.svg)](https://github.com/zeebe-io/zbc-go/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zeebe-io/zbc-go)](https://goreportcard.com/report/github.com/zeebe-io/zbc-go)
 [![codecov](https://codecov.io/gh/zeebe-io/zbc-go/branch/master/graph/badge.svg)](https://codecov.io/gh/zeebe-io/zbc-go)
 [![Build Status](https://travis-ci.org/zeebe-io/zbc-go.svg?branch=master)](https://travis-ci.org/zeebe-io/zbc-go)
