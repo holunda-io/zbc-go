@@ -21,6 +21,8 @@ builds:
         main: ./cmd/main.go
         ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
         binary: zbctl
+        hooks:
+            pre: cp -f cmd/config.toml config.toml
 archive:
     format: tar.gz
     name_template: 'zbctl-{{ .Version }}-{{ .Os }}_{{ .Arch }}'
@@ -32,6 +34,8 @@ archive:
     format_overrides:
         - goos: windows
           format: zip
+    files:
+        - config.toml
 snapshot:
     name_template: SNAPSHOT-{{ .Commit }}
 checksum:

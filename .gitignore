@@ -2,3 +2,4 @@
 target/*
 coverage*
 dist/
+./config.toml
