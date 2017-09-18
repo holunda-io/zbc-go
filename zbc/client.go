@@ -232,13 +232,26 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *TaskEven
 	subscriberKey := d.SubscriberKey
 	c.taskSubscriptions[subscriberKey] = subscriptionCh
 
-	return subscriptionCh, taskSub, nil
+	return subscriptionCh, d, nil
 }
 
 // CompleteTask will notify broker about finished task.
 func (c *Client) CompleteTask(task *TaskEvent) (*zbmsgpack.Task, error) {
 	msg, err := MessageRetry(func() (*Message, error) { return c.responder(c.completeTaskRequest(task)) })
 	return msg.Task(), err
+}
+
+//  IncreaseTaskSubscriptionCredits will increase the current credits of the task subscription.
+func (c *Client) IncreaseTaskSubscriptionCredits(task *zbmsgpack.TaskSubscription) (*zbmsgpack.TaskSubscription, error) {
+	msg := c.increaseTaskSubscriptionCreditsRequest(task)
+	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
+	if err != nil {
+		return nil, err
+	}
+
+	d := response.TaskSubscription()
+
+	return d, nil
 }
 
 // CloseTaskSubscription will close currently active task subscription.

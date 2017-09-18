@@ -31,11 +31,15 @@ func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo str
 		atomic.AddUint64(&ErrorCount, 1)
 	}
 
-	log.Println("Subscription opened.")
+	credits := subInfo.Credits
+
+	log.Println("Subscription opened with", credits, "Credits")
 	log.Println("Waiting for events ....")
 	for {
 		select {
 		case message := <-subscriptionCh:
+			credits--;
+
 			processTask(lo, message)
 			response, err := client.CompleteTask(message)
 
@@ -49,6 +53,19 @@ func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo str
 				log.Println("Task completed successfully.")
 			} else {
 				log.Println("Task not completed.")
+			}
+
+			if credits < 1 {
+				response, err := client.IncreaseTaskSubscriptionCredits(subInfo);
+
+				if err != nil {
+					log.Println("Increasing task credits went wrong.")
+					log.Println(err)
+
+				} else {
+					credits = response.Credits
+					log.Println("Increased task credits to", credits)
+				}
 			}
 
 			break

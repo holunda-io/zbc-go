@@ -159,6 +159,37 @@ func (rf *requestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscrip
 	return &msg
 }
 
+func (rf *requestHandler) increaseTaskSubscriptionCreditsRequest(ts *zbmsgpack.TaskSubscription) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(ts)
+	if err != nil {
+		return nil
+	}
+	controlRequest := &zbsbe.ControlMessageRequest{
+		MessageType: zbsbe.ControlMessageType.INCREASE_TASK_SUBSCRIPTION_CREDITS,
+		Data:        b,
+	}
+	msg.SetSbeMessage(controlRequest)
+
+	length := 1 + uint32(LengthFieldSize+len(controlRequest.Data)) + TotalHeaderSizeNoFrame
+
+	var headers Headers
+	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
+		BlockLength: controlRequest.SbeBlockLength(),
+		TemplateId:  controlRequest.SbeTemplateId(),
+		SchemaId:    controlRequest.SbeSchemaId(),
+		Version:     controlRequest.SbeSchemaVersion(),
+	})
+
+	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
+	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
+	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+
+	msg.SetHeaders(&headers)
+	return &msg
+}
+
 func (rf *requestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
 	var msg Message
 
