@@ -56,7 +56,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo str
 			}
 
 			if credits < 1 {
-				response, err := client.IncreaseTaskSubscriptionCredits(subInfo);
+				response, err := client.IncreaseTaskSubscriptionCredits(subInfo)
 
 				if err != nil {
 					log.Println("Increasing task credits went wrong.")
@@ -158,7 +158,6 @@ func main() {
 	http.HandleFunc("/start", startWorkerView)
 	http.HandleFunc("/stop", stopWorkersView)
 	http.HandleFunc("/stats", statsView)
-	// TODO: implement increase credits
 
 	http.ListenAndServe(":3000", nil)
 }
