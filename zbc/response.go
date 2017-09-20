@@ -23,3 +23,10 @@ func (rf *responseHandler) newClusterTopologyResponse(msg *Message) *zbmsgpack.C
 	}
 	return ct
 }
+
+func (rf *responseHandler) newCreateTopicResponse(msg *Message) *zbmsgpack.Topic {
+	var topic zbmsgpack.Topic
+	msgpack.Unmarshal(msg.Data, &topic)
+
+	return &topic
+}

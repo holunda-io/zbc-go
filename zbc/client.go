@@ -46,7 +46,7 @@ func (c *Client) partitionID(topic string) (uint16, error) {
 		c.Lock()
 		leaders, ok = c.Cluster.TopicLeaders[topic]
 		c.Unlock()
-		
+
 		if !ok {
 			return 0, errTopicLeaderNotFound
 		}
@@ -324,6 +324,30 @@ func (c *Client) manageTopology() {
 			break
 		}
 	}
+}
+
+func (c *Client) CreateTopic(name string, partitionNum int) (*zbmsgpack.Topic, error) {
+
+	execCommandRequest := &zbsbe.ExecuteCommandRequest{
+		PartitionId: 0,
+		Position:    0,
+		EventType:   zbsbe.EventType.TOPIC_EVENT,
+		TopicName:   []byte(SystemTopic),
+	}
+	execCommandRequest.Key = execCommandRequest.KeyNullValue()
+
+	topic := &zbmsgpack.Topic{
+		name,
+		TopicCreate,
+		partitionNum,
+	}
+
+	resp, err := MessageRetry(func() (*Message, error) { return c.responder(c.createTopicRequest(execCommandRequest, topic))})
+	if err != nil {
+		return nil, err
+	}
+
+	return c.newCreateTopicResponse(resp), nil
 }
 
 func (c *Client) Close() {

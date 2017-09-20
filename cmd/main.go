@@ -119,6 +119,36 @@ func main() {
 			Usage:   "create a resource",
 			Subcommands: []cli.Command{
 				{
+					Name: "topic",
+					Aliases: []string{"tp"},
+					Usage:   "Create a new topic",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:   "partitions, p",
+							Value:  "1",
+							Usage:  "Specify the number of partitions for new topic",
+							EnvVar: "",
+						},
+						cli.StringFlag{
+							Name:   "name, n",
+							Value:  "",
+							Usage:  "Specify the name of the new topic",
+							EnvVar: "",
+						},
+					},
+					Action: func(c *cli.Context) error {
+						client, err := zbc.NewClient(conf.Broker.String())
+						isFatal(err)
+						log.Println("Connected to Zeebe.")
+						// TODO: check if there is any value of those flags
+						topic, err := client.CreateTopic(c.String("name"), c.Int("partitions"))
+						isFatal(err)
+
+						fmt.Println(topic.State)
+						return nil
+					},
+				},
+				{
 					Name:    "task",
 					Aliases: []string{"ts"},
 					Usage:   "Create a new task using the given YAML file",

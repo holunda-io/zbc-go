@@ -20,10 +20,11 @@ type EventTypeValues struct {
 	INCIDENT_EVENT          EventTypeEnum
 	WORKFLOW_EVENT          EventTypeEnum
 	NOOP_EVENT              EventTypeEnum
+	TOPIC_EVENT             EventTypeEnum
 	NullValue               EventTypeEnum
 }
 
-var EventType = EventTypeValues{0, 1, 2, 3, 4, 5, 6, 7,  8,255}
+var EventType = EventTypeValues{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 255}
 
 func (e EventTypeEnum) Encode(writer io.Writer, order binary.ByteOrder) error {
 	if err := binary.Write(writer, order, e); err != nil {

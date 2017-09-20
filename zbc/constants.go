@@ -44,6 +44,13 @@ const (
 	WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
 )
 
+//
+const (
+	TopicCreate = "CREATE"
+	TopicCreated = "CREATED"
+	TopicRejected = "CREATE_REJECTED"
+)
+
 // TopicSubscription states
 const (
 	TopicSubscriptionSubscribeState  = "SUBSCRIBE"
@@ -54,4 +61,8 @@ const (
 const (
 	TopicSubscriptionAckState          = "ACKNOWLEDGE"
 	TopicSubscriptionAcknowledgedState = "ACKNOWLEDGED"
+)
+
+const (
+	SystemTopic = "internal-system"
 )

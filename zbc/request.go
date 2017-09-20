@@ -278,3 +278,32 @@ func (rf *requestHandler) topicSubscriptionAckRequest(cmdReq *zbsbe.ExecuteComma
 	msg.SetHeaders(&headers)
 	return &msg
 }
+
+func (rf *requestHandler) createTopicRequest(cmdReq *zbsbe.ExecuteCommandRequest, t *zbmsgpack.Topic) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(t)
+	if err != nil {
+		return nil
+	}
+	cmdReq.Command = b
+	msg.SetSbeMessage(cmdReq)
+	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
+	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
+
+	var headers Headers
+	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
+		BlockLength: cmdReq.SbeBlockLength(),
+		TemplateId:  cmdReq.SbeTemplateId(),
+		SchemaId:    cmdReq.SbeSchemaId(),
+		Version:     cmdReq.SbeSchemaVersion(),
+	})
+
+	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
+	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
+	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+
+	msg.SetHeaders(&headers)
+	return &msg
+
+}
