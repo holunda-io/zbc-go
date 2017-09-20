@@ -11,6 +11,7 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"math/rand"
+	"sync"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 
 // Client for Zeebe broker with support for clustered deployment.
 type Client struct {
+	*sync.Mutex
+
 	requestHandler
 	responseHandler
 
@@ -33,10 +36,17 @@ type Client struct {
 }
 
 func (c *Client) partitionID(topic string) (uint16, error) {
+	c.Lock()
 	leaders, ok := c.Cluster.TopicLeaders[topic]
+	c.Unlock()
+
 	if !ok {
 		c.Topology()
+
+		c.Lock()
 		leaders, ok = c.Cluster.TopicLeaders[topic]
+		c.Unlock()
+		
 		if !ok {
 			return 0, errTopicLeaderNotFound
 		}
@@ -48,12 +58,6 @@ func (c *Client) partitionID(topic string) (uint16, error) {
 }
 
 func (c *Client) sender(message *Message) error {
-	if c.Cluster != nil {
-		if time.Since(c.Cluster.UpdatedAt) > TopologyRefreshInterval*time.Second {
-			c.Topology()
-		}
-	}
-
 	writer := NewMessageWriter(message)
 	byteBuff := &bytes.Buffer{}
 	writer.Write(byteBuff)
@@ -302,8 +306,24 @@ func (c *Client) Topology() (*zbmsgpack.ClusterTopology, error) {
 		return nil, err
 	}
 	topology := c.newClusterTopologyResponse(resp)
+	c.Lock()
 	c.Cluster = topology
+	c.Unlock()
 	return topology, nil
+}
+
+
+func (c *Client) manageTopology() {
+	for {
+		select {
+		case <-time.After(TopologyRefreshInterval * time.Second):
+			if time.Since(c.Cluster.UpdatedAt) > TopologyRefreshInterval*time.Second {
+				c.Topology()
+			}
+
+			break
+		}
+	}
 }
 
 func (c *Client) Close() {
@@ -323,6 +343,7 @@ func NewClient(addr string) (*Client, error) {
 	}
 
 	c := &Client{
+		&sync.Mutex{},
 		requestHandler{},
 		responseHandler{},
 		conn,
@@ -333,8 +354,10 @@ func NewClient(addr string) (*Client, error) {
 		make(map[uint64]chan *TaskEvent),
 	}
 	go c.receiver()
+	go c.manageTopology()
 
 	_, err = c.Topology()
+
 	if err != nil {
 		log.Printf("TopologyRequest err: %+v\n", err)
 		return nil, err
@@ -346,17 +369,17 @@ func NewClient(addr string) (*Client, error) {
 // NewTask is constructor for Task object. Function signature denotes mandatory fields.
 func NewTask(typeName string) *zbmsgpack.Task {
 	return &zbmsgpack.Task{
-		State: TaskCreate,
-		Type:  typeName,
+		State:   TaskCreate,
+		Type:    typeName,
 		Retries: 3,
 	}
 }
 
 func NewWorkflowInstance(bpmnProcessId string, version int, payload []uint8) *zbmsgpack.WorkflowInstance {
 	return &zbmsgpack.WorkflowInstance{
-		State: CreateWorkflowInstance,
+		State:         CreateWorkflowInstance,
 		BPMNProcessID: bpmnProcessId,
-		Version: version,
-		Payload: payload,
+		Version:       version,
+		Payload:       payload,
 	}
 }
