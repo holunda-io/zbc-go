@@ -9,6 +9,53 @@ import (
 
 type requestHandler struct{}
 
+func (rf *requestHandler) headers(t interface{}) *Headers {
+	switch v := t.(type) {
+
+	case *zbsbe.ExecuteCommandRequest:
+		// We add +2 to every variable length attribute since all variable length attributes will have 2 bytes in front
+		// which will denote their size. Then we add 19 bytes which is size of non-variable length attributes of
+		// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
+		length := uint32(LengthFieldSize+len(v.TopicName)) + uint32(LengthFieldSize+len(v.Command))
+		length += uint32(v.SbeBlockLength()) + TotalHeaderSizeNoFrame
+
+		var headers Headers
+		headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
+			BlockLength: v.SbeBlockLength(),
+			TemplateId:  v.SbeTemplateId(),
+			SchemaId:    v.SbeSchemaId(),
+			Version:     v.SbeSchemaVersion(),
+		})
+
+		headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
+		headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
+
+		// Writer will set FrameHeader after serialization to byte array.
+		headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+		return &headers
+
+	case *zbsbe.ControlMessageRequest:
+		length := uint32(LengthFieldSize + len(v.Data))
+		length += uint32(v.SbeBlockLength()) + TotalHeaderSizeNoFrame
+
+		var headers Headers
+		headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
+			BlockLength: v.SbeBlockLength(),
+			TemplateId:  v.SbeTemplateId(),
+			SchemaId:    v.SbeSchemaId(),
+			Version:     v.SbeSchemaVersion(),
+		})
+		headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
+		headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
+
+		// Writer will set FrameHeader after serialization to byte array.
+		headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
+		return &headers
+ 	}
+
+	return nil
+}
+
 func (rf *requestHandler) newCommandMessage(commandRequest *zbsbe.ExecuteCommandRequest, command interface{}) *Message {
 	var msg Message
 
@@ -18,28 +65,8 @@ func (rf *requestHandler) newCommandMessage(commandRequest *zbsbe.ExecuteCommand
 	}
 	commandRequest.Command = b
 	msg.SetSbeMessage(commandRequest)
+	msg.SetHeaders(rf.headers(commandRequest))
 
-	// We add +2 to every variable length attribute since all variable length attributes will have 2 bytes in front
-	// which will denote their size. Then we add 19 bytes which is size of non-variable length attributes of
-	// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
-	length := uint32(LengthFieldSize+len(commandRequest.TopicName)) + uint32(LengthFieldSize+len(commandRequest.Command))
-	length += uint32(commandRequest.SbeBlockLength()) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: commandRequest.SbeBlockLength(),
-		TemplateId:  commandRequest.SbeTemplateId(),
-		SchemaId:    commandRequest.SbeSchemaId(),
-		Version:     commandRequest.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-
-	// Writer will set FrameHeader after serialization to byte array.
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
 	return &msg
 }
 
@@ -52,23 +79,7 @@ func (rf *requestHandler) newControlMessage(req *zbsbe.ControlMessageRequest, pa
 	}
 	req.Data = b
 	msg.SetSbeMessage(req)
-
-	length := uint32(LengthFieldSize + len(req.Data))
-	length += uint32(req.SbeBlockLength()) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: req.SbeBlockLength(),
-		TemplateId:  req.SbeTemplateId(),
-		SchemaId:    req.SbeSchemaId(),
-		Version:     req.SbeSchemaVersion(),
-	})
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-
-	// Writer will set FrameHeader after serialization to byte array.
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(req))
 
 	return &msg
 }
@@ -140,22 +151,7 @@ func (rf *requestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscrip
 		Data:        b,
 	}
 	msg.SetSbeMessage(controlRequest)
-
-	length := 1 + uint32(LengthFieldSize+len(controlRequest.Data)) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: controlRequest.SbeBlockLength(),
-		TemplateId:  controlRequest.SbeTemplateId(),
-		SchemaId:    controlRequest.SbeSchemaId(),
-		Version:     controlRequest.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(controlRequest))
 	return &msg
 }
 
@@ -171,22 +167,7 @@ func (rf *requestHandler) increaseTaskSubscriptionCreditsRequest(ts *zbmsgpack.T
 		Data:        b,
 	}
 	msg.SetSbeMessage(controlRequest)
-
-	length := 1 + uint32(LengthFieldSize+len(controlRequest.Data)) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: controlRequest.SbeBlockLength(),
-		TemplateId:  controlRequest.SbeTemplateId(),
-		SchemaId:    controlRequest.SbeSchemaId(),
-		Version:     controlRequest.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(controlRequest))
 	return &msg
 }
 
@@ -202,22 +183,7 @@ func (rf *requestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscri
 		Data:        b,
 	}
 	msg.SetSbeMessage(controlRequest)
-
-	length := 1 + uint32(LengthFieldSize+len(controlRequest.Data)) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: controlRequest.SbeBlockLength(),
-		TemplateId:  controlRequest.SbeTemplateId(),
-		SchemaId:    controlRequest.SbeSchemaId(),
-		Version:     controlRequest.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(controlRequest))
 	return &msg
 }
 
@@ -230,23 +196,7 @@ func (rf *requestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteComm
 	}
 	cmdReq.Command = b
 	msg.SetSbeMessage(cmdReq)
-
-	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
-	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: cmdReq.SbeBlockLength(),
-		TemplateId:  cmdReq.SbeTemplateId(),
-		SchemaId:    cmdReq.SbeSchemaId(),
-		Version:     cmdReq.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(cmdReq))
 	return &msg
 }
 
@@ -259,23 +209,7 @@ func (rf *requestHandler) topicSubscriptionAckRequest(cmdReq *zbsbe.ExecuteComma
 	}
 	cmdReq.Command = b
 	msg.SetSbeMessage(cmdReq)
-
-	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
-	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: cmdReq.SbeBlockLength(),
-		TemplateId:  cmdReq.SbeTemplateId(),
-		SchemaId:    cmdReq.SbeSchemaId(),
-		Version:     cmdReq.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(cmdReq))
 	return &msg
 }
 
@@ -288,22 +222,7 @@ func (rf *requestHandler) createTopicRequest(cmdReq *zbsbe.ExecuteCommandRequest
 	}
 	cmdReq.Command = b
 	msg.SetSbeMessage(cmdReq)
-	length := uint32(LengthFieldSize+len(cmdReq.TopicName)) + uint32(LengthFieldSize+len(cmdReq.Command))
-	length += uint32(cmdReq.SbeBlockLength()) + TotalHeaderSizeNoFrame
-
-	var headers Headers
-	headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
-		BlockLength: cmdReq.SbeBlockLength(),
-		TemplateId:  cmdReq.SbeTemplateId(),
-		SchemaId:    cmdReq.SbeSchemaId(),
-		Version:     cmdReq.SbeSchemaVersion(),
-	})
-
-	headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
-	headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
-	headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
-
-	msg.SetHeaders(&headers)
+	msg.SetHeaders(rf.headers(cmdReq))
 	return &msg
 
 }
