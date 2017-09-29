@@ -66,3 +66,9 @@ const (
 const (
 	SystemTopic = "internal-system"
 )
+
+// Workflow resource types
+const (
+	BpmnXml = "BPMN_XML"
+	YamlWorkflow = "YAML_WORKFLOW"
+)

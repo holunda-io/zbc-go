@@ -194,13 +194,22 @@ func main() {
 						},
 					},
 					Action: func(c *cli.Context) error {
-						definition, err := loadFile(c.Args().First())
+						filename := c.Args().First()
+						definition, err := loadFile(filename)
 						isFatal(err)
+
+						var resourceType string
+						switch filepath.Ext(filename) {
+						case ".yaml", ".yml":
+							resourceType = zbc.YamlWorkflow
+						default:
+							resourceType = zbc.BpmnXml
+						}
 
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 
-						response, err := client.CreateWorkflow(c.String("topic"), definition)
+						response, err := client.CreateWorkflow(c.String("topic"), resourceType, definition)
 						isFatal(err)
 
 						if response.Data != nil {
