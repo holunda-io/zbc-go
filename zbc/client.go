@@ -161,8 +161,8 @@ func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*Message, error) {
 	})
 }
 
-// CreateWorkflow will deploy BPMN defined process to the broker.
-func (c *Client) CreateWorkflow(topic string, definition []byte) (*Message, error) {
+// CreateWorkflow will deploy process to the broker.
+func (c *Client) CreateWorkflow(topic string, resourceType string, resource []byte) (*Message, error) {
 	partitionID, err := c.partitionID(topic)
 	if err != nil {
 		return nil, err
@@ -170,7 +170,8 @@ func (c *Client) CreateWorkflow(topic string, definition []byte) (*Message, erro
 
 	deployment := zbmsgpack.Workflow{
 		State:   CreateDeployment,
-		BPMNXML: definition,
+		ResourceType: resourceType,
+		Resource: resource,
 	}
 	commandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: partitionID,
