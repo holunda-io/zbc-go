@@ -1,16 +1,24 @@
 VERSION=0.2.0
 BINARY_NAME=zbctl
 ZBC_PATH=$(GOPATH)/src/github.com/zeebe-io/zbc-go
+PREFIX=/usr/local
 
 build:
 	@mkdir -p target/bin
 	@go build -o target/bin/$(BINARY_NAME) ./cmd/*.go
 	@cp cmd/config.toml target/bin/
 
+.PHONY: install
 install:
-	@mkdir -p /etc/zeebe/
-	@cp target/bin/config.toml /etc/zeebe/
-	@cp target/bin/zbctl /usr/local/bin
+	mkdir -p $(PREFIX)/zeebe
+	install -m 644 target/bin/config.toml $(PREFIX)/zeebe/
+	install -m 755 target/bin/zbctl $(PREFIX)/zeebe/
+	ln -s $(PREFIX)/zeebe/zbctl $(PREFIX)/bin/zbctl
+
+.PHONY: uninstall
+uninstall:
+	rm -rf $(PREFIX)/bin/zbctl
+	rm -rf $(PREFIX)/zeebe
 
 run:
 	@go run cmd/main.go

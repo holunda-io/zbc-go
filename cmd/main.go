@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	defaultConfiguration = "/etc/zeebe/config.toml"
+	defaultConfiguration = "config.toml"
 )
 
 var (
