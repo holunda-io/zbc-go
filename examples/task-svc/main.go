@@ -21,7 +21,7 @@ type StopCh chan bool
 
 var workers map[string]StopCh
 
-func processTask(lo string, msg *zbc.TaskEvent) {
+func processTask(lo string, msg *zbc.SubscriptionEvent) {
 	log.Printf("[%s] Working on task.\n", lo)
 }
 

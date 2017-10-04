@@ -99,7 +99,7 @@ func (rf *requestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommand
 
 }
 
-func (rf *requestHandler) completeTaskRequest(taskMessage *TaskEvent) *Message {
+func (rf *requestHandler) completeTaskRequest(taskMessage *SubscriptionEvent) *Message {
 	taskMessage.State = TaskComplete
 	cmdReq := &zbsbe.ExecuteCommandRequest{
 		PartitionId: taskMessage.Event.PartitionId,

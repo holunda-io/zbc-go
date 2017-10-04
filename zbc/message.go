@@ -127,3 +127,9 @@ func (m *Message) ParseToMap() (*map[string]interface{}, error) {
 	}
 	return &item, nil
 }
+
+// SubscriptionEvent is used on task and topic subscription.
+type SubscriptionEvent struct {
+	*zbmsgpack.Task
+	Event *zbsbe.SubscribedEvent
+}

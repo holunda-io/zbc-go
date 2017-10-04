@@ -13,7 +13,7 @@ install:
 	mkdir -p $(PREFIX)/zeebe
 	install -m 644 target/bin/config.toml $(PREFIX)/zeebe/
 	install -m 755 target/bin/zbctl $(PREFIX)/zeebe/
-	ln -s $(PREFIX)/zeebe/zbctl $(PREFIX)/bin/zbctl
+	ln -sf $(PREFIX)/zeebe/zbctl $(PREFIX)/bin/zbctl
 
 .PHONY: uninstall
 uninstall:

@@ -119,7 +119,7 @@ func main() {
 			Usage:   "create a resource",
 			Subcommands: []cli.Command{
 				{
-					Name: "topic",
+					Name:    "topic",
 					Aliases: []string{"tp"},
 					Usage:   "Create a new topic",
 					Flags: []cli.Flag{
@@ -340,18 +340,25 @@ func main() {
 							Usage:  "",
 							EnvVar: "ZB_TOPIC_NAME",
 						},
+						cli.Int64Flag{
+							Name:   "start-position, sp",
+							Value:  -1,
+							Usage:  "",
+							EnvVar: "ZB_TOPIC_SUB_START_POSITION",
+						},
 					},
 					Action: func(c *cli.Context) error {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
-						subscriptionCh, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"))
+						subscriptionCh, _, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"), c.Int64("start-position"))
 						isFatal(err)
 
 						for {
 							message := <-subscriptionCh
 							fmt.Println(message.String())
 						}
+
 					},
 				},
 			},

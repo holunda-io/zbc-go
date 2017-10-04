@@ -31,8 +31,9 @@ type Client struct {
 	Cluster            *zbmsgpack.ClusterTopology
 	closeCh            chan bool
 	transactions       map[uint64]chan *Message
-	topicSubscriptions map[uint64]chan *Message
-	taskSubscriptions  map[uint64]chan *TaskEvent
+	//topicSubscriptions map[uint64]chan *TopicEvent
+	//taskSubscriptions  map[uint64]chan *TaskEvent
+	subscriptions map[uint64]chan *SubscriptionEvent
 }
 
 func (c *Client) partitionID(topic string) (uint16, error) {
@@ -107,15 +108,7 @@ func (c *Client) receiver() {
 
 			if headers.IsSingleMessage() && message != nil {
 				event := (*message.SbeMessage).(*zbsbe.SubscribedEvent)
-
-				if event.EventType == zbsbe.EventType.TASK_EVENT {
-					taskEvent := &TaskEvent{Task: message.Task(), Event: event}
-					c.taskSubscriptions[event.SubscriberKey] <- taskEvent
-					continue
-				}
-
-				c.topicSubscriptions[event.SubscriberKey] <- message
-				continue
+				c.subscriptions[event.SubscriberKey] <- &SubscriptionEvent{Task: message.Task(), Event: event}
 			}
 		}
 	}
@@ -169,9 +162,9 @@ func (c *Client) CreateWorkflow(topic string, resourceType string, resource []by
 	}
 
 	deployment := zbmsgpack.Workflow{
-		State:   CreateDeployment,
+		State:        CreateDeployment,
 		ResourceType: resourceType,
-		Resource: resource,
+		Resource:     resource,
 	}
 	commandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: partitionID,
@@ -208,7 +201,7 @@ func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInsta
 }
 
 // TaskConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
-func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *TaskEvent, *zbmsgpack.TaskSubscription, error) {
+func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *SubscriptionEvent, *zbmsgpack.TaskSubscription, error) {
 	partitionID, err := c.partitionID(topic)
 	if err != nil {
 		return nil, nil, err
@@ -224,7 +217,7 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *TaskEven
 		TaskType:      taskType,
 	}
 
-	subscriptionCh := make(chan *TaskEvent, taskSub.Credits)
+	subscriptionCh := make(chan *SubscriptionEvent, taskSub.Credits)
 
 	msg := c.openTaskSubscriptionRequest(taskSub)
 	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
@@ -235,13 +228,13 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *TaskEven
 
 	d := response.TaskSubscription()
 	subscriberKey := d.SubscriberKey
-	c.taskSubscriptions[subscriberKey] = subscriptionCh
+	c.subscriptions[subscriberKey] = subscriptionCh
 
 	return subscriptionCh, d, nil
 }
 
 // CompleteTask will notify broker about finished task.
-func (c *Client) CompleteTask(task *TaskEvent) (*zbmsgpack.Task, error) {
+func (c *Client) CompleteTask(task *SubscriptionEvent) (*zbmsgpack.Task, error) {
 	msg, err := MessageRetry(func() (*Message, error) { return c.responder(c.completeTaskRequest(task)) })
 	return msg.Task(), err
 }
@@ -265,14 +258,14 @@ func (c *Client) CloseTaskSubscription(task *zbmsgpack.TaskSubscription) (*Messa
 }
 
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
-func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
+func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscription, error) {
 	partitionID, err := c.partitionID(topic)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	topicSub := &zbmsgpack.TopicSubscription{
-		StartPosition:    -1,
+		StartPosition:    startPosition,
 		Name:             subName,
 		PrefetchCapacity: 0,
 		ForceStart:       false,
@@ -286,18 +279,18 @@ func (c *Client) TopicConsumer(topic, subName string) (chan *Message, error) {
 	}
 	execCommandRequest.Key = execCommandRequest.KeyNullValue()
 
-	subscriptionCh := make(chan *Message)
+	subscriptionCh := make(chan *SubscriptionEvent)
 	msg := c.openTopicSubscriptionRequest(execCommandRequest, topicSub)
 
 	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	subscriberKey := (*response.SbeMessage).(*zbsbe.ExecuteCommandResponse).Key
-	c.topicSubscriptions[subscriberKey] = subscriptionCh
+	c.subscriptions[subscriberKey] = subscriptionCh
 
-	return subscriptionCh, nil
+	return subscriptionCh, topicSub, nil
 }
 
 // TopologyRequest will retrieve latest cluster topology information.
@@ -313,7 +306,6 @@ func (c *Client) Topology() (*zbmsgpack.ClusterTopology, error) {
 	return topology, nil
 }
 
-
 func (c *Client) manageTopology() {
 	for {
 		select {
@@ -328,7 +320,6 @@ func (c *Client) manageTopology() {
 }
 
 func (c *Client) CreateTopic(name string, partitionNum int) (*zbmsgpack.Topic, error) {
-
 	execCommandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: 0,
 		Position:    0,
@@ -343,7 +334,7 @@ func (c *Client) CreateTopic(name string, partitionNum int) (*zbmsgpack.Topic, e
 		partitionNum,
 	}
 
-	resp, err := MessageRetry(func() (*Message, error) { return c.responder(c.createTopicRequest(execCommandRequest, topic))})
+	resp, err := MessageRetry(func() (*Message, error) { return c.responder(c.createTopicRequest(execCommandRequest, topic)) })
 	if err != nil {
 		return nil, err
 	}
@@ -375,8 +366,7 @@ func NewClient(addr string) (*Client, error) {
 		nil,
 		make(chan bool),
 		make(map[uint64]chan *Message),
-		make(map[uint64]chan *Message),
-		make(map[uint64]chan *TaskEvent),
+		make(map[uint64]chan *SubscriptionEvent),
 	}
 	go c.receiver()
 	go c.manageTopology()
