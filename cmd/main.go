@@ -351,8 +351,22 @@ func main() {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
-						subscriptionCh, _, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"), c.Int64("start-position"))
+						subscriptionCh, sub, err := client.TopicConsumer(c.String("topic"), c.String("subscription-name"), c.Int64("start-position"))
 						isFatal(err)
+
+						osCh := make(chan os.Signal, 1)
+						signal.Notify(osCh, os.Interrupt)
+						go func() {
+							<-osCh
+							fmt.Println("Closing subscription.")
+							_, err := client.CloseTopicSubscription(sub)
+							if err != nil {
+								fmt.Println("failed to close subscription: ", err)
+							} else {
+								fmt.Println("Subscription closed.")
+							}
+							os.Exit(0)
+						}()
 
 						for {
 							message := <-subscriptionCh

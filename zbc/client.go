@@ -27,12 +27,10 @@ type Client struct {
 	requestHandler
 	responseHandler
 
-	Connection         net.Conn
-	Cluster            *zbmsgpack.ClusterTopology
-	closeCh            chan bool
-	transactions       map[uint64]chan *Message
-	//topicSubscriptions map[uint64]chan *TopicEvent
-	//taskSubscriptions  map[uint64]chan *TaskEvent
+	Connection   net.Conn
+	Cluster      *zbmsgpack.ClusterTopology
+	closeCh      chan bool
+	transactions map[uint64]chan *Message
 	subscriptions map[uint64]chan *SubscriptionEvent
 }
 
@@ -257,6 +255,11 @@ func (c *Client) CloseTaskSubscription(task *zbmsgpack.TaskSubscription) (*Messa
 	return MessageRetry(func() (*Message, error) { return c.responder(c.closeTaskSubscriptionRequest(task)) })
 }
 
+// CloseTopicSubscription will close currently active topic subscription.
+func (c *Client) CloseTopicSubscription(task *zbmsgpack.TopicSubscription) (*Message, error) {
+	return MessageRetry(func() (*Message, error) { return c.responder(c.closeTopicSubscriptionRequest(task)) })
+}
+
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
 func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscription, error) {
 	partitionID, err := c.partitionID(topic)
@@ -264,7 +267,7 @@ func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan
 		return nil, nil, err
 	}
 
-	topicSub := &zbmsgpack.TopicSubscription{
+	topicSub := &zbmsgpack.OpenTopicSubscription{
 		StartPosition:    startPosition,
 		Name:             subName,
 		PrefetchCapacity: 0,
@@ -290,7 +293,12 @@ func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan
 	subscriberKey := (*response.SbeMessage).(*zbsbe.ExecuteCommandResponse).Key
 	c.subscriptions[subscriberKey] = subscriptionCh
 
-	return subscriptionCh, topicSub, nil
+	subscriptionInfo := &zbmsgpack.TopicSubscription{
+		TopicName:     topic,
+		PartitionID:   partitionID,
+		SubscriberKey: subscriberKey,
+	}
+	return subscriptionCh, subscriptionInfo, nil
 }
 
 // TopologyRequest will retrieve latest cluster topology information.

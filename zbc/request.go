@@ -96,7 +96,6 @@ func (rf *requestHandler) createTaskRequest(commandRequest *zbsbe.ExecuteCommand
 	}
 
 	return rf.newCommandMessage(commandRequest, task)
-
 }
 
 func (rf *requestHandler) completeTaskRequest(taskMessage *SubscriptionEvent) *Message {
@@ -187,7 +186,23 @@ func (rf *requestHandler) closeTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscri
 	return &msg
 }
 
-func (rf *requestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteCommandRequest, ts *zbmsgpack.TopicSubscription) *Message {
+func (rf *requestHandler) closeTopicSubscriptionRequest(ts *zbmsgpack.TopicSubscription) *Message {
+	var msg Message
+
+	b, err := msgpack.Marshal(ts)
+	if err != nil {
+		return nil
+	}
+	controlRequest := &zbsbe.ControlMessageRequest{
+		MessageType: zbsbe.ControlMessageType.REMOVE_TOPIC_SUBSCRIPTION,
+		Data:        b,
+	}
+	msg.SetSbeMessage(controlRequest)
+	msg.SetHeaders(rf.headers(controlRequest))
+	return &msg
+}
+
+func (rf *requestHandler) openTopicSubscriptionRequest(cmdReq *zbsbe.ExecuteCommandRequest, ts *zbmsgpack.OpenTopicSubscription) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(ts)
@@ -224,5 +239,4 @@ func (rf *requestHandler) createTopicRequest(cmdReq *zbsbe.ExecuteCommandRequest
 	msg.SetSbeMessage(cmdReq)
 	msg.SetHeaders(rf.headers(cmdReq))
 	return &msg
-
 }
