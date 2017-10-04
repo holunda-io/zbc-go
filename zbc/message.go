@@ -130,6 +130,11 @@ func (m *Message) ParseToMap() (*map[string]interface{}, error) {
 
 // SubscriptionEvent is used on task and topic subscription.
 type SubscriptionEvent struct {
-	*zbmsgpack.Task
+	Task *zbmsgpack.Task
 	Event *zbsbe.SubscribedEvent
+}
+
+func (se *SubscriptionEvent) String() string {
+	b, _ := json.MarshalIndent(se, "", "  ")
+	return fmt.Sprintf("%+v", string(b))
 }
