@@ -59,9 +59,6 @@ NAME:
 USAGE:
    zbctl [global options] command [command options] [arguments...]
 
-VERSION:
-   0.2.0
-
 AUTHOR:
    Zeebe Team <info@zeebe.io>
 
