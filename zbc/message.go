@@ -96,6 +96,18 @@ func (m *Message) TaskSubscription() *zbmsgpack.TaskSubscription {
 	return nil
 }
 
+func (m *Message) Workflow() *zbmsgpack.Workflow {
+	var d zbmsgpack.Workflow
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.State) > 0 {
+		return &d
+	}
+	return nil
+}
+
 func (m *Message) WorkflowInstance() *zbmsgpack.WorkflowInstance {
 	var d zbmsgpack.WorkflowInstance
 	err := msgpack.Unmarshal(m.Data, &d)
@@ -108,30 +120,30 @@ func (m *Message) WorkflowInstance() *zbmsgpack.WorkflowInstance {
 	return nil
 }
 
+func (m *Message) jsonString(data interface{}) string {
+	b, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("json marshaling failed\n")
+	}
+	return fmt.Sprintf("%+v", string(b))
+}
+
 func (m *Message) String() string {
 
 	if task := m.Task(); task != nil {
-		b, err := json.MarshalIndent(task, "", "  ")
-		if err != nil {
-			return fmt.Sprintf("json marshaling failed\n")
-		}
-		return fmt.Sprintf("%+v", string(b))
+		return m.jsonString(task)
 	}
 
 	if tasksub := m.TaskSubscription(); tasksub != nil {
-		b, err := json.MarshalIndent(tasksub, "", "  ")
-		if err != nil {
-			return fmt.Sprintf("json marshaling failed\n")
-		}
-		return fmt.Sprintf("%+v", string(b))
+		return m.jsonString(tasksub)
+	}
+
+	if workflow := m.Workflow(); workflow != nil {
+		return m.jsonString(workflow)
 	}
 
 	if instance := m.WorkflowInstance(); instance != nil {
-		b, err := json.MarshalIndent(instance, "", "  ")
-		if err != nil {
-			return fmt.Sprintf("json marshaling failed\n")
-		}
-		return fmt.Sprintf("%+v", string(b))
+		return m.jsonString(instance)
 	}
 
 	// TODO: implement missing msgpack structs
