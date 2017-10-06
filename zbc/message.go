@@ -96,6 +96,18 @@ func (m *Message) TaskSubscription() *zbmsgpack.TaskSubscription {
 	return nil
 }
 
+func (m *Message) WorkflowInstance() *zbmsgpack.WorkflowInstance {
+	var d zbmsgpack.WorkflowInstance
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.BPMNProcessID) > 0 {
+		return &d
+	}
+	return nil
+}
+
 func (m *Message) String() string {
 
 	if task := m.Task(); task != nil {
@@ -108,6 +120,14 @@ func (m *Message) String() string {
 
 	if tasksub := m.TaskSubscription(); tasksub != nil {
 		b, err := json.MarshalIndent(tasksub, "", "  ")
+		if err != nil {
+			return fmt.Sprintf("json marshaling failed\n")
+		}
+		return fmt.Sprintf("%+v", string(b))
+	}
+
+	if instance := m.WorkflowInstance(); instance != nil {
+		b, err := json.MarshalIndent(instance, "", "  ")
 		if err != nil {
 			return fmt.Sprintf("json marshaling failed\n")
 		}
