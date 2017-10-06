@@ -4,20 +4,24 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"io/ioutil"
 	"log"
 	"net"
+	"path/filepath"
 	"time"
+
+	"math/rand"
+	"sync"
 
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"math/rand"
-	"sync"
 )
 
 var (
 	errTimeout             = errors.New("Request timeout")
 	errSocketWrite         = errors.New("Tried to write more bytes to socket")
 	errTopicLeaderNotFound = errors.New("Topic leader not found")
+	errResourceNotFound    = errors.New("resource not found")
 )
 
 // Client for Zeebe broker with support for clustered deployment.
@@ -27,10 +31,10 @@ type Client struct {
 	requestHandler
 	responseHandler
 
-	Connection   net.Conn
-	Cluster      *zbmsgpack.ClusterTopology
-	closeCh      chan bool
-	transactions map[uint64]chan *Message
+	Connection    net.Conn
+	Cluster       *zbmsgpack.ClusterTopology
+	closeCh       chan bool
+	transactions  map[uint64]chan *Message
 	subscriptions map[uint64]chan *SubscriptionEvent
 }
 
@@ -175,6 +179,19 @@ func (c *Client) CreateWorkflow(topic string, resourceType string, resource []by
 	return MessageRetry(func() (*Message, error) {
 		return c.responder(c.newWorkflowRequest(commandRequest, &deployment))
 	})
+}
+
+func (c *Client) CreateWorkflowFromFile(topic, resourceType, path string) (*Message, error) {
+	if len(path) == 0 {
+		return nil, errResourceNotFound
+	}
+
+	filename, _ := filepath.Abs(path)
+	definition, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, errResourceNotFound
+	}
+	return c.CreateWorkflow(topic, resourceType, definition)
 }
 
 // CreateWorkflowInstance will create new workflow instance on the broker.

@@ -195,8 +195,6 @@ func main() {
 					},
 					Action: func(c *cli.Context) error {
 						filename := c.Args().First()
-						definition, err := loadFile(filename)
-						isFatal(err)
 
 						var resourceType string
 						switch filepath.Ext(filename) {
@@ -209,7 +207,7 @@ func main() {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 
-						response, err := client.CreateWorkflow(c.String("topic"), resourceType, definition)
+						response, err := client.CreateWorkflowFromFile(c.String("topic"), resourceType, filename)
 						isFatal(err)
 
 						if response.Data != nil {
