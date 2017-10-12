@@ -2,6 +2,13 @@
 
 Contributions are always welcome, both reporting issues and submitting pull requests!
 
+### Code of Conduct
+
+This project adheres to the Contributor Covenant [Code of
+Conduct](/CODE_OF_CONDUCT.md). By participating, you are expected to uphold
+this code. Please report unacceptable behavior to
+code-of-conduct@zeebe.io.
+
 ### Reporting issues
 
 Please make sure to include any potentially useful information in the issue, so we can pinpoint the issue faster without going back and forth.

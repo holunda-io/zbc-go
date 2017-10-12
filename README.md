@@ -96,7 +96,6 @@ To create a workflow instance:
 $ zbctl create instance --topic default-topic examples/create-workflow-instance.yaml
 WORKFLOW_INSTANCE_CREATED
 ```
-
 To point your ```zbctl``` to some other broker edit ```config.toml``` which can be find in the ```/etc/zeebe/config.toml```.
 
 
@@ -114,3 +113,9 @@ To point your ```zbctl``` to some other broker edit ```config.toml``` which can 
 ## Credits
 * Special thanks to Sebastian Menski and Daniel Meyer.
 * Big thanks to everyone involved in Zeebe.
+
+## Code of Conduct
+
+This project adheres to the Contributor Covenant [Code of
+Conduct](/CODE_OF_CONDUCT.md). By participating, you are expected to uphold
+this code. Please report unacceptable behavior to code-of-conduct@zeebe.io.
