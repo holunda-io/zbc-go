@@ -1,5 +1,10 @@
 package zbmsgpack
 
+import (
+	"fmt"
+	"encoding/json"
+)
+
 // TaskSubscription is structure which we use to handle a subscription on a task.
 type TaskSubscription struct {
 	SubscriberKey uint64 `msgpack:"subscriberKey" json:"subscriberKey"`
@@ -9,4 +14,12 @@ type TaskSubscription struct {
 	LockDuration  uint64 `msgpack:"lockDuration" json:"lockDuration"`
 	LockOwner     string `msgpack:"lockOwner" json:"lockOwner"`
 	Credits       int32  `msgpack:"credits" json:"credits"`
+}
+
+func (t *TaskSubscription) String() string {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("json marshaling failed\n")
+	}
+	return fmt.Sprintf("%+v", string(b))
 }

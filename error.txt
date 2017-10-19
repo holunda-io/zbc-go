@@ -1,0 +1,1317 @@
+11:46:15.368 [main] INFO  io.zeebe.broker.system - Using config file /usr/local/zeebe/bin/../conf/zeebe.cfg.toml
+11:46:15.442 [main] INFO  io.zeebe.broker.system - Using data directory: /usr/local/zeebe/bin/data/
+11:46:15.642 [service-container-action-0] INFO  io.zeebe.broker.services - Using /usr/local/zeebe/bin/data/metrics/metrics.zeebe for counters
+11:46:16.029 [actor-runner-service-container] INFO  io.zeebe.broker.transport - Bound replicationApi.server to /172.17.0.2:51017
+11:46:16.032 [actor-runner-service-container] INFO  io.zeebe.broker.transport - Bound managementApi.server to /172.17.0.2:51016
+11:46:16.129 [actor-runner-service-container] INFO  io.zeebe.transport - Bound clientApi.server to /172.17.0.2:51015
+11:46:20.830 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition qRRBDzFtNuVktOSwJtxboEzfQ/0 at 172.17.0.2:51016
+11:46:20.849 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition qRRBDzFtNuVktOSwJtxboEzfQ/1 at 172.17.0.2:51016
+11:46:20.854 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition qRRBDzFtNuVktOSwJtxboEzfQ/2 at 172.17.0.2:51016
+11:46:34.746 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition xhmjZclwoiBEKxfZseKrvzpui/0 at 172.17.0.2:51016
+11:46:34.752 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition xhmjZclwoiBEKxfZseKrvzpui/1 at 172.17.0.2:51016
+11:46:34.757 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition xhmjZclwoiBEKxfZseKrvzpui/2 at 172.17.0.2:51016
+11:46:39.927 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition pIACdSiOatNdrvVgfQrnhCOBr/0 at 172.17.0.2:51016
+11:46:39.938 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition pIACdSiOatNdrvVgfQrnhCOBr/1 at 172.17.0.2:51016
+11:46:39.945 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition pIACdSiOatNdrvVgfQrnhCOBr/2 at 172.17.0.2:51016
+11:46:45.035 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition hMeFoYuzaNIFLcQWWRrVLxRVW/0 at 172.17.0.2:51016
+11:46:45.075 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition hMeFoYuzaNIFLcQWWRrVLxRVW/1 at 172.17.0.2:51016
+11:46:45.081 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition hMeFoYuzaNIFLcQWWRrVLxRVW/2 at 172.17.0.2:51016
+11:46:49.955 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition RcvSRvzZsTZvsGFgoTCTtJLGV/0 at 172.17.0.2:51016
+11:46:49.965 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition RcvSRvzZsTZvsGFgoTCTtJLGV/1 at 172.17.0.2:51016
+11:46:49.970 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition RcvSRvzZsTZvsGFgoTCTtJLGV/2 at 172.17.0.2:51016
+11:46:54.842 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition JogFODWARFvfTJESriEwJOXzR/0 at 172.17.0.2:51016
+11:46:54.853 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition JogFODWARFvfTJESriEwJOXzR/1 at 172.17.0.2:51016
+11:46:54.858 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition JogFODWARFvfTJESriEwJOXzR/2 at 172.17.0.2:51016
+11:47:05.800 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLomirdQ/0 at 172.17.0.2:51016
+11:47:05.815 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLomirdQ/1 at 172.17.0.2:51016
+11:47:05.820 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLomirdQ/2 at 172.17.0.2:51016
+11:47:07.682 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:08.419 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:09.037 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:09.655 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:10.294 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:10.929 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:11.597 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:12.266 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:12.965 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:13.622 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:14.231 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:14.878 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:15.504 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:16.113 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:16.843 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:17.486 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:18.100 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:18.700 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:19.340 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:19.973 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:20.583 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:21.216 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:21.827 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:22.455 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:23.084 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:23.684 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:24.308 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:24.905 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:25.554 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:26.189 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:26.784 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:27.381 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:27.980 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:28.603 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:29.204 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:29.795 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:30.394 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:31.022 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:31.641 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:32.245 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:32.847 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:33.450 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:34.053 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:34.654 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:35.250 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:35.867 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:36.489 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:37.087 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:37.697 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:38.342 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:38.863 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /115 at 172.17.0.2:51016
+11:47:38.970 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:39.598 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:40.118 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:47:40.134 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /37 at 172.17.0.2:51016
+11:47:40.235 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:40.764 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /89 at 172.17.0.2:51016
+11:47:40.891 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:41.415 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:47:41.523 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:42.043 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:47:42.125 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:42.768 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:43.362 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:43.977 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:44.575 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:45.169 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:45.760 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:46.391 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:46.993 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:47.588 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:48.216 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:48.810 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:49.404 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:49.998 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:50.647 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:51.288 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:51.934 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:52.533 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:53.170 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:53.795 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:54.437 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:55.033 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:55.631 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:56.229 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:56.829 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:57.425 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:58.030 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:58.628 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:59.220 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:47:59.854 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:00.449 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:01.038 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:01.629 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:02.270 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:02.928 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:03.546 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:04.150 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:04.752 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:05.372 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:05.983 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:06.649 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:07.293 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:07.900 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:08.512 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:09.114 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:09.715 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:10.317 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:10.945 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:11.477 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /234 at 172.17.0.2:51016
+11:48:11.574 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:12.223 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:12.756 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:12.835 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:13.437 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:13.966 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /80 at 172.17.0.2:51016
+11:48:14.034 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:14.638 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:15.164 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:15.172 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /166 at 172.17.0.2:51016
+11:48:15.295 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:15.889 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:16.417 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:16.500 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:17.115 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:17.767 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:18.373 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:18.997 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:19.590 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:20.216 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:20.811 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:21.412 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:22.031 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:22.627 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:23.223 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:23.823 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:24.421 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:25.015 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:25.630 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:26.276 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:26.877 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:27.473 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:28.113 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:28.750 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:29.353 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:29.970 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:30.587 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:31.182 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:31.805 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:32.400 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:32.992 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:33.594 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:34.232 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:34.835 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:35.435 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:36.035 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:36.671 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:37.326 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:37.953 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:38.600 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:39.195 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:39.794 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:40.406 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:41.009 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:41.605 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:42.210 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:42.802 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:43.405 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:43.932 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /119 at 172.17.0.2:51016
+11:48:44.007 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:44.612 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:45.138 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:45.258 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:45.859 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:46.464 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:47.000 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /241 at 172.17.0.2:51016
+11:48:47.077 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:47.681 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:48.208 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:48.324 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:48.955 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:49.486 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /186 at 172.17.0.2:51016
+11:48:49.553 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:50.195 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:50.725 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:48:50.802 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:51.440 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:52.032 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:52.631 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:53.228 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:53.828 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:54.445 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:55.034 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:55.684 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:56.275 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:56.904 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:57.553 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:58.160 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:58.756 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:59.385 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:48:59.986 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:00.582 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:01.173 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:01.771 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:02.377 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:02.984 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:03.597 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:04.236 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:04.825 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:05.418 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:06.011 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:06.605 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:07.207 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:07.808 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:08.444 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:09.045 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:09.642 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:10.244 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:10.880 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:11.486 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:12.088 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:12.720 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:13.332 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:13.933 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:14.525 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:15.118 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:15.714 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:16.312 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:16.849 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /97 at 172.17.0.2:51016
+11:49:16.919 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:17.535 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:18.056 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:18.129 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:18.731 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:19.333 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:19.861 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /209 at 172.17.0.2:51016
+11:49:19.932 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:20.532 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:21.055 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:21.179 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:21.770 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:22.303 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /39 at 172.17.0.2:51016
+11:49:22.396 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:22.995 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:23.518 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:23.637 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:24.237 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:24.875 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:25.474 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:26.083 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:26.693 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:27.294 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:27.937 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:28.533 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:29.136 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:29.736 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:30.335 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:30.986 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:31.592 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:32.189 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:32.784 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:33.381 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:33.971 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:34.568 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:35.162 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:35.797 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:36.395 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:37.050 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:37.693 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:38.312 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:38.946 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:39.598 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:40.252 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:40.898 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:41.524 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:42.151 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:42.744 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:43.354 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:43.956 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:44.558 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:45.167 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:45.763 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:46.362 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:46.982 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:47.591 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:48.236 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:48.853 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:49.379 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /121 at 172.17.0.2:51016
+11:49:49.481 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:50.129 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:50.661 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:50.736 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:51.330 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:51.928 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:52.463 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /91 at 172.17.0.2:51016
+11:49:52.560 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:53.210 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:53.740 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:53.843 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:54.451 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:54.979 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /83 at 172.17.0.2:51016
+11:49:55.069 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:55.662 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:56.190 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:49:56.262 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:56.857 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:57.465 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:58.081 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:58.732 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:59.364 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:49:59.980 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:00.585 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:01.200 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:01.801 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:02.400 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:02.995 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:03.595 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:04.224 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:04.822 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:05.435 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:06.035 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:06.630 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:07.231 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:07.867 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:08.486 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:09.132 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:09.731 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:10.378 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:10.979 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:11.575 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:12.175 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:12.822 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:13.420 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:14.040 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:14.682 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:15.337 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:15.969 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:16.573 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:17.217 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:17.864 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:18.480 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:19.130 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:19.727 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:20.322 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:20.916 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:21.520 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:22.057 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /53 at 172.17.0.2:51016
+11:50:22.124 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:22.730 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:23.255 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:50:23.327 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:23.955 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:24.554 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:25.087 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /28 at 172.17.0.2:51016
+11:50:25.210 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:25.858 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:26.389 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:50:26.478 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:27.124 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:27.659 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /206 at 172.17.0.2:51016
+11:50:27.726 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:28.327 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:28.848 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:50:28.935 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:29.531 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:30.205 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:30.859 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:31.482 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:32.083 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:32.680 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:33.297 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:33.907 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:34.510 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:35.147 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:35.746 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:36.349 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:36.954 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:37.606 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:38.269 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:38.919 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:39.522 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:40.136 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:40.745 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:41.344 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:41.939 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:42.544 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:43.194 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:43.811 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:44.434 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:45.073 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:45.670 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:46.342 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:46.950 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:47.554 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:48.162 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:48.757 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:49.358 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:49.957 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:50.566 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:51.198 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:51.792 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:52.410 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:53.033 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:53.629 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:54.232 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:54.770 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /20 at 172.17.0.2:51016
+11:50:54.846 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:55.474 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:56.000 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:50:56.074 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:56.669 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:57.268 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:57.803 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /27 at 172.17.0.2:51016
+11:50:57.871 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:58.483 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:59.009 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:50:59.084 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:50:59.689 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:00.213 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /212 at 172.17.0.2:51016
+11:51:00.280 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:00.911 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:01.434 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:51:01.508 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:02.108 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:02.711 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:03.318 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:03.919 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:04.545 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:05.141 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:05.780 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:06.386 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:06.982 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:07.581 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:08.181 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:08.829 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:09.429 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:10.024 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:10.624 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:11.222 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:11.824 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:12.424 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:13.179 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:13.773 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:14.419 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:15.017 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:15.667 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:16.273 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:16.906 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:17.501 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:18.157 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:18.765 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:19.364 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:19.967 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:20.597 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:21.203 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:21.849 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:22.473 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:23.070 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:23.728 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:24.332 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:24.968 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:25.567 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:26.179 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:26.786 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:27.312 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /62 at 172.17.0.2:51016
+11:51:27.390 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:28.009 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:28.537 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:51:28.647 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:29.275 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:29.873 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:30.407 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /219 at 172.17.0.2:51016
+11:51:30.503 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:31.129 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:31.650 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:51:31.769 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:32.394 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:32.931 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /100 at 172.17.0.2:51016
+11:51:33.004 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:33.648 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:34.180 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:51:34.252 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:34.850 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:35.482 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:36.127 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:36.722 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:37.323 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:37.918 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:38.526 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:39.123 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:39.726 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:40.351 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:40.947 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:41.552 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:42.151 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:42.804 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:43.404 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:44.012 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:44.616 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:45.229 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:45.824 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:46.420 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:47.022 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:47.650 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:48.243 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:48.841 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:49.441 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:50.073 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:50.687 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:51.287 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:51.903 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:52.500 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:53.119 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:53.745 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:54.400 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:55.044 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:55.661 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:56.262 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:56.872 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:57.477 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:58.075 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:58.672 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:59.327 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:51:59.863 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /159 at 172.17.0.2:51016
+11:51:59.935 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:00.590 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:01.114 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:01.220 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:01.821 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:02.422 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:02.956 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /201 at 172.17.0.2:51016
+11:52:03.077 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:03.718 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:04.243 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:04.347 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:04.945 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:05.475 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /228 at 172.17.0.2:51016
+11:52:05.550 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:06.152 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:06.676 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:06.759 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:07.380 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:07.988 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:08.583 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:09.181 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:09.781 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:10.380 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:10.981 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:11.579 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:12.173 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:12.771 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:13.416 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:14.054 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:14.685 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:15.318 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:15.954 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:16.568 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:17.166 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:17.770 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:18.419 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:19.063 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:19.661 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:20.307 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:20.931 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:21.587 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:22.177 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:22.818 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:23.453 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:24.101 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:24.696 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:25.291 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:25.881 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:26.483 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:27.118 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:27.738 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:28.390 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:28.991 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:29.593 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:30.226 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:30.868 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:31.481 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:32.077 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:32.612 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /154 at 172.17.0.2:51016
+11:52:32.872 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:33.485 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:34.012 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:34.111 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:34.715 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:35.365 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:35.902 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /168 at 172.17.0.2:51016
+11:52:35.973 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:36.616 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:37.144 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:37.215 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:37.865 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:38.401 [actor-runner-broker] INFO  io.zeebe.broker.system - Creating partition iTeiPwNkiCXGCyybBOLom    /195 at 172.17.0.2:51016
+11:52:38.483 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:39.086 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.
+11:52:39.615 [actor-runner-broker] ERROR io.zeebe.dispatcher - Failed to handle fragment
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203) ~[?:1.8.0_131]
+	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813) ~[?:1.8.0_131]
+	at java.util.Arrays.asList(Arrays.java:3800) ~[?:1.8.0_131]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.deleteBackupFilesIfExist(FsLogStorage.java:366) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.log.fs.FsLogStorage.open(FsLogStorage.java:272) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.fs.FsLogStreamBuilder.initLogStorage(FsLogStreamBuilder.java:53) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.getLogStorage(LogStreamImpl.java:550) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.logstreams.impl.LogStreamImpl$LogStreamBuilder.build(LogStreamImpl.java:662) ~[zb-logstreams-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.logstreams.LogStreamsManager.createLogStream(LogStreamsManager.java:113) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.createPartition(ClusterManager.java:324) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.onCreatePartitionMessage(ClusterManager.java:372) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.handler.ClusterManagerFragmentHandler.onMessage(ClusterManagerFragmentHandler.java:88) ~[zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.impl.ServerReceiveHandler.onFragment(ServerReceiveHandler.java:84) ~[zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.pollFragments(Subscription.java:141) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.dispatcher.Subscription.poll(Subscription.java:85) [zb-dispatcher-0.3.0.jar:0.3.0]
+	at io.zeebe.transport.BufferingServerTransport$ServerInputSubscriptionImpl.poll(BufferingServerTransport.java:63) [zb-transport-0.3.0.jar:0.3.0]
+	at io.zeebe.broker.clustering.management.ClusterManager.doWork(ClusterManager.java:181) [zeebe-broker-core-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.tryRunActor(ActorRunner.java:165) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.runActor(ActorRunner.java:138) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.doWork(ActorRunner.java:114) [zb-util-0.3.0.jar:0.3.0]
+	at io.zeebe.util.actor.ActorRunner.run(ActorRunner.java:71) [zb-util-0.3.0.jar:0.3.0]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+11:52:39.688 [Finalizer] WARN  io.zeebe.util.allocation - Allocated 32768 bytes direct, which are not released. Releasing bytes.

@@ -1,6 +1,9 @@
 package zbmsgpack
 
-import "encoding/json"
+import (
+	"fmt"
+	"encoding/json"
+)
 
 // Task structure is used when creating or read a task.
 type Task struct {
@@ -18,7 +21,7 @@ type Task struct {
 func (t *Task) String() string {
 	b, err := json.MarshalIndent(t, "", "  ")
 	if err != nil {
-		return "marshal err"
+		return fmt.Sprintf("json marshaling failed\n")
 	}
-	return string(b)
+	return fmt.Sprintf("%+v", string(b))
 }

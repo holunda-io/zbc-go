@@ -8,7 +8,7 @@ import (
 
 type responseHandler struct{}
 
-func (rf *responseHandler) newClusterTopologyResponse(msg *Message) *zbmsgpack.ClusterTopology {
+func (rf *responseHandler) unmarshalTopology(msg *Message) *zbmsgpack.ClusterTopology {
 	var resp zbmsgpack.ClusterTopologyResponse
 	msgpack.Unmarshal(msg.Data, &resp)
 
@@ -24,9 +24,57 @@ func (rf *responseHandler) newClusterTopologyResponse(msg *Message) *zbmsgpack.C
 	return ct
 }
 
-func (rf *responseHandler) newCreateTopicResponse(msg *Message) *zbmsgpack.Topic {
+func (rf *responseHandler) unmarshalTopic(msg *Message) *zbmsgpack.Topic {
 	var topic zbmsgpack.Topic
 	msgpack.Unmarshal(msg.Data, &topic)
 
 	return &topic
+}
+
+func (rf *responseHandler) unmarshalTask(m *Message) *zbmsgpack.Task {
+	var d zbmsgpack.Task
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.Type) > 0 {
+		return &d
+	}
+	return nil
+}
+
+func (rf *responseHandler) unmarshalTaskSubscription(m *Message) *zbmsgpack.TaskSubscription {
+	var d zbmsgpack.TaskSubscription
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.TopicName) > 0 {
+		return &d
+	}
+	return nil
+}
+
+func (rf *responseHandler) unmarshalWorkflow(m *Message) *zbmsgpack.Workflow {
+	var d zbmsgpack.Workflow
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.State) > 0 && len(d.ResourceType) > 0 {
+		return &d
+	}
+	return nil
+}
+
+func (rf *responseHandler) unmarshalWorkflowInstance(m *Message) *zbmsgpack.WorkflowInstance {
+	var d zbmsgpack.WorkflowInstance
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if len(d.BPMNProcessID) > 0 {
+		return &d
+	}
+	return nil
 }

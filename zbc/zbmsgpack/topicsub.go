@@ -1,5 +1,10 @@
 package zbmsgpack
 
+import (
+	"fmt"
+	"encoding/json"
+)
+
 // OpenTopicSubscription is used to open a topic subscription.
 type OpenTopicSubscription struct {
 	StartPosition    int64  `msgpack:"startPosition"`
@@ -10,6 +15,14 @@ type OpenTopicSubscription struct {
 	State      string `msgpack:"state"`
 }
 
+func (t *OpenTopicSubscription) String() string {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("json marshaling failed\n")
+	}
+	return fmt.Sprintf("%+v", string(b))
+}
+
 // TopicSubscriptionAck is used to acknowledge receiving of an event.
 type TopicSubscriptionAck struct {
 	Name        string `msgpack:"name"`
@@ -17,8 +30,24 @@ type TopicSubscriptionAck struct {
 	State       string `msgpack:"state"`
 }
 
+func (t *TopicSubscriptionAck) String() string {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("json marshaling failed\n")
+	}
+	return fmt.Sprintf("%+v", string(b))
+}
+
 type TopicSubscription struct {
 	TopicName     string `msgpack:"topicName"`
 	PartitionID   uint16 `msgpack:"partitionId"`
 	SubscriberKey uint64 `msgpack:"subscriberKey"`
+}
+
+func (t *TopicSubscription) String() string {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("json marshaling failed\n")
+	}
+	return fmt.Sprintf("%+v", string(b))
 }

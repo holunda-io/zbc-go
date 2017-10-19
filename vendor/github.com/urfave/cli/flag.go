@@ -150,7 +150,7 @@ func (f *StringSlice) Value() []string {
 	return *f
 }
 
-// Get returns the slice of strings set by this flag
+// GetBytes returns the slice of strings set by this flag
 func (f *StringSlice) Get() interface{} {
 	return *f
 }
@@ -213,7 +213,7 @@ func (f *IntSlice) Value() []int {
 	return *f
 }
 
-// Get returns the slice of ints set by this flag
+// GetBytes returns the slice of ints set by this flag
 func (f *IntSlice) Get() interface{} {
 	return *f
 }
@@ -276,7 +276,7 @@ func (f *Int64Slice) Value() []int64 {
 	return *f
 }
 
-// Get returns the slice of ints set by this flag
+// GetBytes returns the slice of ints set by this flag
 func (f *Int64Slice) Get() interface{} {
 	return *f
 }

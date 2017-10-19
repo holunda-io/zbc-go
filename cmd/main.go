@@ -168,16 +168,10 @@ func main() {
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
 
-						response, err := client.CreateTask(c.String("topic"), &task)
+						createdTask, err := client.CreateTask(c.String("topic"), &task)
 						isFatal(err)
 
-						if response.Data != nil {
-							task := response.Task()
-							fmt.Println(task.State)
-						} else {
-							fmt.Println("err: received nil response")
-						}
-
+						fmt.Println(createdTask.State)
 						return nil
 					},
 				},
@@ -207,17 +201,10 @@ func main() {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 
-						response, err := client.CreateWorkflowFromFile(c.String("topic"), resourceType, filename)
+						workflow, err := client.CreateWorkflowFromFile(c.String("topic"), resourceType, filename)
 						isFatal(err)
 
-						if response.Data != nil {
-							m, _ := response.ParseToMap()
-							if state, ok := (*m)["state"]; ok {
-								fmt.Println(state)
-							}
-						} else {
-							fmt.Println("err: received nil response")
-						}
+						fmt.Println(workflow.State)
 						return nil
 					},
 				},
@@ -242,23 +229,14 @@ func main() {
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
 
-						response, err := client.CreateWorkflowInstance(c.String("topic"), &workflowInstance)
+						createdInstance, err := client.CreateWorkflowInstance(c.String("topic"), &workflowInstance)
 						isFatal(err)
 
-						log.Println("Success. Received response:")
-
-						if response.Data != nil {
-							m, _ := response.ParseToMap()
-							state, ok := (*m)["state"]
-							if ok {
-								fmt.Println(state)
-							}
-							if state == zbc.WorkflowInstanceRejected {
-								fmt.Println("\nDid you deploy the workflow?")
-							}
-						} else {
-							fmt.Println("err: received nil response")
+						fmt.Println(createdInstance.State)
+						if createdInstance.State == zbc.WorkflowInstanceRejected {
+							fmt.Println("\nDid you deploy the workflow?")
 						}
+
 						return nil
 					},
 				},

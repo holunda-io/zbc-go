@@ -12,7 +12,7 @@ const TopologyRefreshInterval = 30
 const (
 	BackoffMin      = 20 * time.Millisecond
 	BackoffMax      = 1000 * time.Millisecond
-	BackoffDeadline = 5 * time.Second
+	BackoffDeadline = 30 * time.Second
 )
 
 // Sbe template ID constants
@@ -34,20 +34,26 @@ const (
 	LengthFieldSize        = 2
 )
 
-// Message pack states
+// Message pack states for Task, Deployment and WorkflowInstance
 const (
 	TaskCreate               = "CREATE"
+	TaskCreated              = "CREATED"
+
 	TaskComplete             = "COMPLETE"
 	TaskCompleted            = "COMPLETED"
+
 	CreateDeployment         = "CREATE_DEPLOYMENT"
+	DeployementCreated       = "DEPLOYMENT_CREATED"
+
 	CreateWorkflowInstance   = "CREATE_WORKFLOW_INSTANCE"
+	WorkflowInstanceCreated  = "WORKFLOW_INSTANCE_CREATED"
 	WorkflowInstanceRejected = "WORKFLOW_INSTANCE_REJECTED"
 )
 
 //
 const (
-	TopicCreate = "CREATE"
-	TopicCreated = "CREATED"
+	TopicCreate   = "CREATE"
+	TopicCreated  = "CREATED"
 	TopicRejected = "CREATE_REJECTED"
 )
 
@@ -69,6 +75,10 @@ const (
 
 // Workflow resource types
 const (
-	BpmnXml = "BPMN_XML"
+	BpmnXml      = "BPMN_XML"
 	YamlWorkflow = "YAML_WORKFLOW"
+)
+
+const (
+	SocketChunkSize = 4096
 )

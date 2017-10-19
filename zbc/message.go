@@ -8,7 +8,6 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"io"
-	"github.com/vmihailenco/msgpack"
 )
 
 // Headers is aggregator for all headers. It holds pointer to every layer. If RequestResponseHeader is nil, then IsSingleMessage will always return true.
@@ -44,7 +43,7 @@ func (h *Headers) SetSbeMessageHeader(header *zbsbe.MessageHeader) {
 	h.SbeMessageHeader = header
 }
 
-// SBE interface is apstraction over all SBE Messages.
+// SBE interface is abstraction over all SBE Messages.
 type SBE interface {
 	Encode(writer io.Writer, order binary.ByteOrder, doRangeCheck bool) error
 	Decode(reader io.Reader, order binary.ByteOrder, actingVersion uint16, blockLength uint16, doRangeCheck bool) error
@@ -72,92 +71,12 @@ func (m *Message) SetData(data []byte) {
 	m.Data = data
 }
 
-func (m *Message) Task() *zbmsgpack.Task {
-	var d zbmsgpack.Task
-	err := msgpack.Unmarshal(m.Data, &d)
-	if err != nil {
-		return nil
-	}
-	if len(d.Type) > 0 {
-		return &d
-	}
-	return nil
-}
-
-func (m *Message) TaskSubscription() *zbmsgpack.TaskSubscription {
-	var d zbmsgpack.TaskSubscription
-	err := msgpack.Unmarshal(m.Data, &d)
-	if err != nil {
-		return nil
-	}
-	if len(d.TopicName) > 0 {
-		return &d
-	}
-	return nil
-}
-
-func (m *Message) Workflow() *zbmsgpack.Workflow {
-	var d zbmsgpack.Workflow
-	err := msgpack.Unmarshal(m.Data, &d)
-	if err != nil {
-		return nil
-	}
-	if len(d.State) > 0 {
-		return &d
-	}
-	return nil
-}
-
-func (m *Message) WorkflowInstance() *zbmsgpack.WorkflowInstance {
-	var d zbmsgpack.WorkflowInstance
-	err := msgpack.Unmarshal(m.Data, &d)
-	if err != nil {
-		return nil
-	}
-	if len(d.BPMNProcessID) > 0 {
-		return &d
-	}
-	return nil
-}
-
 func (m *Message) jsonString(data interface{}) string {
 	b, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return fmt.Sprintf("json marshaling failed\n")
 	}
 	return fmt.Sprintf("%+v", string(b))
-}
-
-func (m *Message) String() string {
-
-	if task := m.Task(); task != nil {
-		return m.jsonString(task)
-	}
-
-	if tasksub := m.TaskSubscription(); tasksub != nil {
-		return m.jsonString(tasksub)
-	}
-
-	if workflow := m.Workflow(); workflow != nil {
-		return m.jsonString(workflow)
-	}
-
-	if instance := m.WorkflowInstance(); instance != nil {
-		return m.jsonString(instance)
-	}
-
-	// TODO: implement missing msgpack structs
-	return "not found \n"
-}
-
-func (m *Message) ParseToMap() (*map[string]interface{}, error) {
-	var item map[string]interface{}
-	err := msgpack.Unmarshal(m.Data, &item)
-
-	if err != nil {
-		return nil, err
-	}
-	return &item, nil
 }
 
 // SubscriptionEvent is used on task and topic subscription.

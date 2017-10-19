@@ -567,7 +567,7 @@ func read_line(parser *yaml_parser_t, s []byte) []byte {
 	return s
 }
 
-// Get the next token.
+// getBytes the next token.
 func yaml_parser_scan(parser *yaml_parser_t, token *yaml_token_t) bool {
 	// Erase the token object.
 	*token = yaml_token_t{} // [Go] Is this necessary?
@@ -960,7 +960,7 @@ func yaml_parser_roll_indent(parser *yaml_parser_t, column, number int, typ yaml
 	return true
 }
 
-// Pop indentation levels from the indents stack until the current level
+// PopBytes indentation levels from the indents stack until the current level
 // becomes less or equal to the column.  For each indentation level, append
 // the BLOCK-END token.
 func yaml_parser_unroll_indent(parser *yaml_parser_t, column int) bool {
@@ -979,7 +979,7 @@ func yaml_parser_unroll_indent(parser *yaml_parser_t, column int) bool {
 		}
 		yaml_insert_token(parser, -1, &token)
 
-		// Pop the indentation level.
+		// PopBytes the indentation level.
 		parser.indent = parser.indents[len(parser.indents)-1]
 		parser.indents = parser.indents[:len(parser.indents)-1]
 	}
@@ -2030,7 +2030,7 @@ func yaml_parser_scan_uri_escapes(parser *yaml_parser_t, directive bool, start_m
 				start_mark, "did not find URI escaped octet")
 		}
 
-		// Get the octet.
+		// getBytes the octet.
 		octet := byte((as_hex(parser.buffer, parser.buffer_pos+1) << 4) + as_hex(parser.buffer, parser.buffer_pos+2))
 
 		// If it is the leading octet, determine the length of the UTF-8 sequence.
@@ -2092,7 +2092,7 @@ func yaml_parser_scan_block_scalar(parser *yaml_parser_t, token *yaml_token_t, l
 				return false
 			}
 
-			// Get the indentation level and eat the indicator.
+			// getBytes the indentation level and eat the indicator.
 			increment = as_digit(parser.buffer, parser.buffer_pos)
 			skip(parser)
 		}
