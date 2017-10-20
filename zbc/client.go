@@ -15,7 +15,6 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"github.com/vmihailenco/msgpack"
-	"fmt"
 )
 
 var (
@@ -31,12 +30,11 @@ type Client struct {
 
 	requestHandler
 	responseHandler
+	dispatcher
 
 	Connection    net.Conn
 	Cluster       *zbmsgpack.ClusterTopology
 	closeCh       chan bool
-	transactions  SafeMap //map[uint64]chan *Message
-	subscriptions SafeMap //map[uint64]chan *SubscriptionEvent
 }
 
 func (c *Client) partitionID(topic string) (uint16, error) {
@@ -95,17 +93,12 @@ func (c *Client) receiver() {
 			message, err := reader.parseMessage(headers, tail)
 
 			if err != nil && !headers.IsSingleMessage() {
-				c.transactions.Remove(fmt.Sprintf("%d", headers.RequestResponseHeader.RequestID))
+				c.removeTransaction(headers.RequestResponseHeader.RequestID)
 				continue
 			}
 
 			if !headers.IsSingleMessage() && message != nil && len(message.Data) > 0 {
-				transactionKey := fmt.Sprintf("%d", headers.RequestResponseHeader.RequestID)
-				if ch, ok := c.transactions.Get(transactionKey); ok {
-					requestCh := ch.(chan *Message)
-					requestCh <- message
-				}
-
+				c.dispatchTransaction(headers.RequestResponseHeader.RequestID, message)
 				continue
 			}
 
@@ -115,31 +108,32 @@ func (c *Client) receiver() {
 
 			if headers.IsSingleMessage() && message != nil && len(message.Data) > 0 {
 				event := (*message.SbeMessage).(*zbsbe.SubscribedEvent)
-				subscriberKey := fmt.Sprintf("%d", event.SubscriberKey)
-				if ch, ok := c.subscriptions.Get(subscriberKey); ok {
-					requestCh := ch.(chan *SubscriptionEvent)
-					requestCh <- &SubscriptionEvent{Task: c.unmarshalTask(message), Event: event}
+				if task := c.unmarshalTask(message); task != nil {
+					c.dispatchTaskEvent(event.SubscriberKey, event, task)
+				} else {
+					c.dispatchTopicEvent(event.SubscriberKey, event)
 				}
+
 			}
 		}
 	}
-	fmt.Println("omg receiver died. help me!!!!!")
 }
 
 // responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
 func (c *Client) responder(message *Message) (*Message, error) {
 	respCh := make(chan *Message, 10)
-	c.transactions.Set(fmt.Sprintf("%d", message.Headers.RequestResponseHeader.RequestID), respCh)
+
+	c.addTransaction(message.Headers.RequestResponseHeader.RequestID, respCh)
 	if err := c.sender(message); err != nil {
 		return nil, err
 	}
 
 	select {
 	case resp := <-respCh:
-		c.transactions.Remove(fmt.Sprintf("%d", message.Headers.RequestResponseHeader.RequestID))
+		c.removeTransaction(message.Headers.RequestResponseHeader.RequestID)
 		return resp, nil
 	case <-time.After(time.Second * RequestTimeout):
-		c.transactions.Remove(fmt.Sprintf("%d", message.Headers.RequestResponseHeader.RequestID))
+		c.removeTransaction(message.Headers.RequestResponseHeader.RequestID)
 		return nil, errTimeout
 	}
 }
@@ -254,7 +248,7 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Subscrip
 	}
 
 	d := c.unmarshalTaskSubscription(response)
-	c.subscriptions.Set(fmt.Sprintf("%d", d.SubscriberKey), subscriptionCh)
+	c.addSubscription(d.SubscriberKey, subscriptionCh)
 
 	return subscriptionCh, d, nil
 }
@@ -322,7 +316,7 @@ func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan
 
 	cmdResponse := (*response.SbeMessage).(*zbsbe.ExecuteCommandResponse)
 	subscriberKey := cmdResponse.Key
-	c.subscriptions.Set(fmt.Sprintf("%d", subscriberKey), subscriptionCh)
+	c.addSubscription(cmdResponse.Key, subscriptionCh)
 
 	subscriptionInfo := &zbmsgpack.TopicSubscription{
 		TopicName:     topic,
@@ -412,11 +406,10 @@ func NewClient(addr string) (*Client, error) {
 		&sync.Mutex{},
 		requestHandler{},
 		responseHandler{},
+		newDispatcher(),
 		conn,
 		nil,
 		make(chan bool),
-		New(),
-		New(),
 	}
 	go c.receiver()
 	//go c.manageTopology()

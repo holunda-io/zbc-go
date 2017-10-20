@@ -39,5 +39,7 @@ test-hexdump:
 test-integration:
 	go test -race -coverprofile=coverage_integration.txt -covermode=atomic tests/test-broker/*.go -v
 
+test-all: test-client test-protocol test-hexdump test-integration
+
 clean:
 	@rm -rf ./target *.tar.gz $(BINARY_NAME)

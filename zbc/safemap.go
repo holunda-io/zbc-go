@@ -14,7 +14,7 @@ type ConcurrentMapShared struct {
 	sync.RWMutex
 }
 
-func New() SafeMap {
+func NewSafeMap() SafeMap {
 	m := make(SafeMap, SHARD_COUNT)
 	for i := 0; i < SHARD_COUNT; i++ {
 		m[i] = &ConcurrentMapShared{items: make(map[string]interface{})}
