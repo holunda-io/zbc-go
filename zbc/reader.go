@@ -129,6 +129,7 @@ func (mr *MessageReader) readHeaders() (*Headers, *[]byte, error) {
 
 	headerByte := mr.getBytes(0, FrameHeaderSize)
 	frameHeader, err := mr.readFrameHeader(bytes.NewReader(headerByte))
+	frameHeader.Length = frameHeader.Length - FrameHeaderSize
 
 	if err != nil {
 		return nil, nil, err
@@ -145,7 +146,6 @@ func (mr *MessageReader) readHeaders() (*Headers, *[]byte, error) {
 
 	transportReader := bytes.NewReader(message[:TransportHeaderSize])
 	transport, err := mr.readTransportHeader(transportReader)
-
 	if err != nil {
 		return nil, nil, err
 	}

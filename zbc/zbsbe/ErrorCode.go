@@ -12,7 +12,7 @@ import (
 type ErrorCodeEnum uint8
 type ErrorCodeValues struct {
 	MESSAGE_NOT_SUPPORTED      ErrorCodeEnum
-	TOPIC_NOT_FOUND            ErrorCodeEnum
+	PARTITION_NOT_FOUND        ErrorCodeEnum
 	REQUEST_WRITE_FAILURE      ErrorCodeEnum
 	INVALID_CLIENT_VERSION     ErrorCodeEnum
 	REQUEST_TIMEOUT            ErrorCodeEnum

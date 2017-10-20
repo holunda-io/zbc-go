@@ -31,6 +31,7 @@ func TestTaskSubscription(t *testing.T) {
 	assert(t, nil, subscriptionCh, false)
 
 	message := <-subscriptionCh
+
 	_, err = zbClient.CloseTaskSubscription(subscription)
 	assert(t, nil, err, true)
 	assert(t, nil, message, false)

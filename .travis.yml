@@ -13,7 +13,7 @@ go:
   - tip
 
 before_script:
-  - docker run -p 51015:51015 -d camunda/zeebe:0.3.0
+  - docker run -p 51015:51015 -d camunda/zeebe:SNAPSHOT
 
 script:
   - make test-protocol

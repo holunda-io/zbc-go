@@ -4,12 +4,10 @@ package zbsbe
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
-	"unicode/utf8"
 )
 
 type ExecuteCommandRequest struct {
@@ -17,7 +15,6 @@ type ExecuteCommandRequest struct {
 	Position    uint64
 	Key         uint64
 	EventType   EventTypeEnum // alias for uint8 or byte
-	TopicName   []uint8
 	Command     []uint8
 }
 
@@ -37,12 +34,6 @@ func (e ExecuteCommandRequest) Encode(writer io.Writer, order binary.ByteOrder, 
 		return err
 	}
 	if err := e.EventType.Encode(writer, order); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, uint16(len(e.TopicName))); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, e.TopicName); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, uint16(len(e.Command))); err != nil {
@@ -86,17 +77,6 @@ func (e *ExecuteCommandRequest) Decode(reader io.Reader, order binary.ByteOrder,
 		io.CopyN(ioutil.Discard, reader, int64(blockLength-e.SbeBlockLength()))
 	}
 
-	if e.TopicNameInActingVersion(actingVersion) {
-		var TopicNameLength uint16
-		if err := binary.Read(reader, order, &TopicNameLength); err != nil {
-			return err
-		}
-		e.TopicName = make([]uint8, TopicNameLength)
-		if err := binary.Read(reader, order, &e.TopicName); err != nil {
-			return err
-		}
-	}
-
 	if e.CommandInActingVersion(actingVersion) {
 		var CommandLength uint16
 		if err := binary.Read(reader, order, &CommandLength); err != nil {
@@ -134,17 +114,7 @@ func (e ExecuteCommandRequest) RangeCheck(actingVersion uint16, schemaVersion ui
 	if err := e.EventType.RangeCheck(actingVersion, schemaVersion); err != nil {
 		return err
 	}
-	if !utf8.Valid(e.TopicName[:]) {
-		return errors.New("e.TopicName failed UTF-8 validation")
-	}
-	//if !utf8.Valid(e.Command[:]) { // TODO(menski) This is a bug
-	//	return errors.New("e.Command failed UTF-8 validation")
-	//}
 	return nil
-}
-
-func ExecuteCommandRequestInit(e *ExecuteCommandRequest) {
-	return
 }
 
 func (e ExecuteCommandRequest) SbeBlockLength() (blockLength uint16) {
@@ -293,38 +263,6 @@ func (e ExecuteCommandRequest) EventTypeMetaAttribute(meta int) string {
 		return ""
 	}
 	return ""
-}
-
-func (e ExecuteCommandRequest) TopicNameMetaAttribute(meta int) string {
-	switch meta {
-	case 1:
-		return "unix"
-	case 2:
-		return "nanosecond"
-	case 3:
-		return ""
-	}
-	return ""
-}
-
-func (e ExecuteCommandRequest) TopicNameSinceVersion() uint16 {
-	return 0
-}
-
-func (e ExecuteCommandRequest) TopicNameInActingVersion(actingVersion uint16) bool {
-	return actingVersion >= e.TopicNameSinceVersion()
-}
-
-func (e ExecuteCommandRequest) TopicNameDeprecated() uint16 {
-	return 0
-}
-
-func (e ExecuteCommandRequest) TopicNameCharacterEncoding() string {
-	return "UTF-8"
-}
-
-func (e ExecuteCommandRequest) TopicNameHeaderLength() uint64 {
-	return 2
 }
 
 func (e ExecuteCommandRequest) CommandMetaAttribute(meta int) string {

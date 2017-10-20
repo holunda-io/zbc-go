@@ -3,7 +3,7 @@ package zbc
 import "time"
 
 // RequestTimeout specifies default timeout for responder.
-const RequestTimeout = 5
+const RequestTimeout = 30
 
 // TopologyRefreshInterval defines time to live of topology object.
 const TopologyRefreshInterval = 30
@@ -31,6 +31,7 @@ const (
 	SBEMessageHeaderSize      = 8
 
 	TotalHeaderSizeNoFrame = 18
+	TotalHeaderSize        = 30
 	LengthFieldSize        = 2
 )
 

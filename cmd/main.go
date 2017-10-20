@@ -131,7 +131,7 @@ func main() {
 						},
 						cli.StringFlag{
 							Name:   "name, n",
-							Value:  "",
+							Value:  "default-topic",
 							Usage:  "Specify the name of the new topic",
 							EnvVar: "",
 						},
@@ -140,7 +140,6 @@ func main() {
 						client, err := zbc.NewClient(conf.Broker.String())
 						isFatal(err)
 						log.Println("Connected to Zeebe.")
-						// TODO: check if there is any value of those flags
 						topic, err := client.CreateTopic(c.String("name"), c.Int("partitions"))
 						isFatal(err)
 

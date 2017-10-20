@@ -16,4 +16,7 @@ func TestCreateTopic(t *testing.T) {
 	assert(t, nil, topic, false)
 
 	assert(t, zbc.TopicCreated, topic.State, true)
+
+	topic, _ = zbClient.CreateTopic("default-topic", 3)
+	assert(t, nil, topic, false)
 }

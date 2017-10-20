@@ -2,8 +2,8 @@ package zbc
 
 import (
 	"fmt"
-	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
+	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 )
 
 type dispatcher struct {
@@ -30,7 +30,6 @@ func (d *dispatcher) removeTransaction(requestID uint64) {
 func (d *dispatcher) addSubscription(key uint64, value interface{}) {
 	d.subscriptions.Set(fmt.Sprintf("%d", key), value)
 }
-
 
 func (d *dispatcher) dispatchTaskEvent(key uint64, message *zbsbe.SubscribedEvent, task *zbmsgpack.Task) {
 	subscriberKey := fmt.Sprintf("%d", key)

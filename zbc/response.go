@@ -49,10 +49,7 @@ func (rf *responseHandler) unmarshalTaskSubscription(m *Message) *zbmsgpack.Task
 	if err != nil {
 		return nil
 	}
-	if len(d.TopicName) > 0 {
-		return &d
-	}
-	return nil
+	return &d
 }
 
 func (rf *responseHandler) unmarshalWorkflow(m *Message) *zbmsgpack.Workflow {

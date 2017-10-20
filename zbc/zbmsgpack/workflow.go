@@ -9,6 +9,7 @@ import (
 type Workflow struct {
 	State        string `yaml:"state" msgpack:"state"`
 	ResourceType string `yaml:"resourceType" msgpack:"resourceType"`
+	TopicName    string `yaml:"topicName" msgpack:"topicName"`
 	Resource     []byte `yaml:"resource" msgpack:"resource"`
 }
 

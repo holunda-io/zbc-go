@@ -9,9 +9,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"math/rand"
 	"sync"
-	
+
 	"github.com/vmihailenco/msgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
@@ -32,9 +31,9 @@ type Client struct {
 	responseHandler
 	dispatcher
 
-	Connection    net.Conn
-	Cluster       *zbmsgpack.ClusterTopology
-	closeCh       chan bool
+	Connection net.Conn
+	Cluster    *zbmsgpack.ClusterTopology
+	closeCh    chan bool
 }
 
 func (c *Client) partitionID(topic string) (uint16, error) {
@@ -54,9 +53,10 @@ func (c *Client) partitionID(topic string) (uint16, error) {
 		}
 	}
 
-	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
-	index := rnd.Intn(len(leaders))
-	return leaders[index].PartitionID, nil
+	// TODO: zbc-go/issues#40 + zbc-go/issues#48
+	//rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	//index := rnd.Intn(len(leaders))
+	return leaders[0].PartitionID, nil
 }
 
 func (c *Client) sender(message *Message) error {
@@ -76,7 +76,6 @@ func (c *Client) sender(message *Message) error {
 }
 
 func (c *Client) receiver() {
-
 	reader := NewMessageReader(c.Connection)
 
 	for {
@@ -86,6 +85,7 @@ func (c *Client) receiver() {
 			return
 
 		default:
+
 			headers, tail, err := reader.readHeaders()
 			if err != nil {
 				continue
@@ -113,7 +113,6 @@ func (c *Client) receiver() {
 				} else {
 					c.dispatchTopicEvent(event.SubscriberKey, event)
 				}
-
 			}
 		}
 	}
@@ -148,7 +147,6 @@ func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*zbmsgpack.Task, e
 	commandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: partitionID,
 		Position:    0,
-		TopicName:   []uint8(topic),
 		Command:     []uint8{},
 	}
 	commandRequest.Key = commandRequest.KeyNullValue()
@@ -162,26 +160,26 @@ func (c *Client) CreateTask(topic string, m *zbmsgpack.Task) (*zbmsgpack.Task, e
 
 // CreateWorkflow will deploy process to the broker.
 func (c *Client) CreateWorkflow(topic string, resourceType string, resource []byte) (*zbmsgpack.Workflow, error) {
-	partitionID, err := c.partitionID(topic)
-	if err != nil {
-		return nil, err
-	}
-
 	deployment := zbmsgpack.Workflow{
 		State:        CreateDeployment,
 		ResourceType: resourceType,
 		Resource:     resource,
+		TopicName:    topic,
 	}
 	commandRequest := &zbsbe.ExecuteCommandRequest{
-		PartitionId: partitionID,
+		PartitionId: 0,
 		Position:    0,
-		TopicName:   []uint8(topic),
 		Command:     []uint8{},
 	}
 	commandRequest.Key = commandRequest.KeyNullValue()
 
 	msg, err := MessageRetry(func() (*Message, error) {
-		return c.responder(c.newWorkflowRequest(commandRequest, &deployment))
+		msg, err := c.responder(c.newWorkflowRequest(commandRequest, &deployment))
+		if c.unmarshalWorkflow(msg) == nil {
+			return nil, err
+		} else {
+			return msg, err
+		}
 	})
 	return c.unmarshalWorkflow(msg), err
 }
@@ -209,7 +207,6 @@ func (c *Client) CreateWorkflowInstance(topic string, m *zbmsgpack.WorkflowInsta
 	commandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: partitionID,
 		Position:    0,
-		TopicName:   []uint8(topic),
 		Command:     []uint8{},
 	}
 
@@ -229,8 +226,6 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Subscrip
 	}
 
 	taskSub := &zbmsgpack.TaskSubscription{
-		TopicName:     topic,
-		PartitionID:   partitionID,
 		Credits:       32,
 		LockDuration:  300000,
 		LockOwner:     lockOwner,
@@ -240,17 +235,26 @@ func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *Subscrip
 
 	subscriptionCh := make(chan *SubscriptionEvent, taskSub.Credits)
 
-	msg := c.openTaskSubscriptionRequest(taskSub)
-	response, err := MessageRetry(func() (*Message, error) { return c.responder(msg) })
+	response, err := MessageRetry(func() (*Message, error) {
+		msg, err := c.responder(c.openTaskSubscriptionRequest(partitionID, taskSub))
+		if c.unmarshalTaskSubscription(msg) == nil {
+			return nil, err
+		} else {
+			return msg, err
+		}
+	})
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	d := c.unmarshalTaskSubscription(response)
-	c.addSubscription(d.SubscriberKey, subscriptionCh)
+	taskSubInfo := c.unmarshalTaskSubscription(response)
+	if taskSubInfo == nil {
+		// TODO:
+	}
+	c.addSubscription(taskSubInfo.SubscriberKey, subscriptionCh)
 
-	return subscriptionCh, d, nil
+	return subscriptionCh, taskSubInfo, nil
 }
 
 // CompleteTask will notify broker about finished task.
@@ -295,7 +299,6 @@ func (c *Client) TopicSubscriptionAck(ts *zbmsgpack.TopicSubscription, s *Subscr
 		PartitionId: s.Event.PartitionId,
 		Position:    0,
 		EventType:   zbsbe.EventType.SUBSCRIPTION_EVENT,
-		TopicName:   s.Event.TopicName,
 	}
 	execCommandRequest.Key = execCommandRequest.KeyNullValue()
 
@@ -323,7 +326,6 @@ func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan
 		PartitionId: partitionID,
 		Position:    0,
 		EventType:   zbsbe.EventType.SUBSCRIBER_EVENT,
-		TopicName:   []byte(topic),
 	}
 	execCommandRequest.Key = execCommandRequest.KeyNullValue()
 
@@ -380,7 +382,6 @@ func (c *Client) CreateTopic(name string, partitionNum int) (*zbmsgpack.Topic, e
 		PartitionId: 0,
 		Position:    0,
 		EventType:   zbsbe.EventType.TOPIC_EVENT,
-		TopicName:   []byte(SystemTopic),
 	}
 	execCommandRequest.Key = execCommandRequest.KeyNullValue()
 
@@ -469,13 +470,5 @@ func NewWorkflowInstance(bpmnProcessId string, version int, payload map[string]i
 		BPMNProcessID: bpmnProcessId,
 		Version:       version,
 		Payload:       b,
-	}
-}
-
-func NewTopicSubscriptionAck(name string, position uint64) *zbmsgpack.TopicSubscriptionAck {
-	return &zbmsgpack.TopicSubscriptionAck{
-		Name:        name,
-		AckPosition: position,
-		State:       TopicSubscriptionAckState,
 	}
 }

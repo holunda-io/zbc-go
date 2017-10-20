@@ -4,24 +4,17 @@ package zbsbe
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
-	"unicode/utf8"
 )
 
 type ExecuteCommandResponse struct {
 	PartitionId uint16
 	Position    uint64
 	Key         uint64
-	TopicName   []uint8 // string and first byte is the length of string
-	Event       []uint8 // zbmsgpack
-}
-
-func (e ExecuteCommandResponse) ToString() string {
-	return string(e.TopicName[1:len(e.TopicName)])
+	Event       []uint8
 }
 
 func (e ExecuteCommandResponse) Encode(writer io.Writer, order binary.ByteOrder, doRangeCheck bool) error {
@@ -37,12 +30,6 @@ func (e ExecuteCommandResponse) Encode(writer io.Writer, order binary.ByteOrder,
 		return err
 	}
 	if err := binary.Write(writer, order, e.Key); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, uint16(len(e.TopicName))); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, e.TopicName); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, uint16(len(e.Event))); err != nil {
@@ -80,17 +67,6 @@ func (e *ExecuteCommandResponse) Decode(reader io.Reader, order binary.ByteOrder
 		io.CopyN(ioutil.Discard, reader, int64(blockLength-e.SbeBlockLength()))
 	}
 
-	if e.TopicNameInActingVersion(actingVersion) {
-		var TopicNameLength uint16
-		if err := binary.Read(reader, order, &TopicNameLength); err != nil {
-			return err
-		}
-		e.TopicName = make([]uint8, TopicNameLength)
-		if err := binary.Read(reader, order, &e.TopicName); err != nil {
-			return err
-		}
-	}
-
 	if e.EventInActingVersion(actingVersion) {
 		var EventLength uint16
 		if err := binary.Read(reader, order, &EventLength); err != nil {
@@ -125,17 +101,7 @@ func (e ExecuteCommandResponse) RangeCheck(actingVersion uint16, schemaVersion u
 			return fmt.Errorf("Range check failed on e.Position (%d < %d > %d)", e.PositionMinValue(), e.Position, e.PositionMaxValue())
 		}
 	}
-	if !utf8.Valid(e.TopicName[:]) {
-		return errors.New("e.TopicName failed UTF-8 validation")
-	}
-	//if !utf8.Valid(e.Event[:]) {  // TODO: Bug?
-	//	return errors.New("e.Event failed UTF-8 validation")
-	//}
 	return nil
-}
-
-func ExecuteCommandResponseInit(e *ExecuteCommandResponse) {
-	return
 }
 
 func (e ExecuteCommandResponse) SbeBlockLength() (blockLength uint16) {
@@ -256,38 +222,6 @@ func (e ExecuteCommandResponse) KeyMaxValue() uint64 {
 
 func (e ExecuteCommandResponse) KeyNullValue() uint64 {
 	return math.MaxUint64
-}
-
-func (e ExecuteCommandResponse) TopicNameMetaAttribute(meta int) string {
-	switch meta {
-	case 1:
-		return "unix"
-	case 2:
-		return "nanosecond"
-	case 3:
-		return ""
-	}
-	return ""
-}
-
-func (e ExecuteCommandResponse) TopicNameSinceVersion() uint16 {
-	return 0
-}
-
-func (e ExecuteCommandResponse) TopicNameInActingVersion(actingVersion uint16) bool {
-	return actingVersion >= e.TopicNameSinceVersion()
-}
-
-func (e ExecuteCommandResponse) TopicNameDeprecated() uint16 {
-	return 0
-}
-
-func (e ExecuteCommandResponse) TopicNameCharacterEncoding() string {
-	return "UTF-8"
-}
-
-func (e ExecuteCommandResponse) TopicNameHeaderLength() uint64 {
-	return 2
 }
 
 func (e ExecuteCommandResponse) EventMetaAttribute(meta int) string {

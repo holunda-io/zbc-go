@@ -7,20 +7,25 @@ Simple microservice example on how to use task subscriptions.
 * Credit system is not implemented so worker will eventually stop accepting work
 * Broker is expected to run the client API on 51015
 
+
 # Running
 
-1. Run the broker
+1.Run the broker
 
 ```
 docker-compose up -d
 ```
 
-2. Run the example with 
+2.Run the example with 
 
 ```
 go run main.go
 ```
 
+3.Create default-topic with the following command
+```
+zbctl create topic
+```
 
 # Using
 

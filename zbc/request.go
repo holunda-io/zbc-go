@@ -13,11 +13,8 @@ func (rf *requestHandler) headers(t interface{}) *Headers {
 	switch v := t.(type) {
 
 	case *zbsbe.ExecuteCommandRequest:
-		// We add +2 to every variable length attribute since all variable length attributes will have 2 bytes in front
-		// which will denote their size. Then we add 19 bytes which is size of non-variable length attributes of
-		// ExecuteCommandRequest and 26 bytes which is for SbeMessageHeader, RequestResponse and Transport.
-		length := uint32(LengthFieldSize+len(v.TopicName)) + uint32(LengthFieldSize+len(v.Command))
-		length += uint32(v.SbeBlockLength()) + TotalHeaderSizeNoFrame
+		length := uint32(LengthFieldSize + len(v.Command))
+		length += uint32(v.SbeBlockLength()) + TotalHeaderSize //TotalHeaderSizeNoFrame + 12
 
 		var headers Headers
 		headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
@@ -30,13 +27,12 @@ func (rf *requestHandler) headers(t interface{}) *Headers {
 		headers.SetRequestResponseHeader(zbprotocol.NewRequestResponseHeader())
 		headers.SetTransportHeader(zbprotocol.NewTransportHeader(zbprotocol.RequestResponse))
 
-		// Writer will set FrameHeader after serialization to byte array.
 		headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
 		return &headers
 
 	case *zbsbe.ControlMessageRequest:
 		length := uint32(LengthFieldSize + len(v.Data))
-		length += uint32(v.SbeBlockLength()) + TotalHeaderSizeNoFrame
+		length += uint32(v.SbeBlockLength()) + TotalHeaderSize //TotalHeaderSizeNoFrame + 12
 
 		var headers Headers
 		headers.SetSbeMessageHeader(&zbsbe.MessageHeader{
@@ -104,7 +100,6 @@ func (rf *requestHandler) completeTaskRequest(taskMessage *SubscriptionEvent) *M
 		PartitionId: taskMessage.Event.PartitionId,
 		Position:    taskMessage.Event.Position,
 		Key:         taskMessage.Event.Key,
-		TopicName:   taskMessage.Event.TopicName,
 	}
 	return rf.newCommandMessage(cmdReq, taskMessage.Task)
 }
@@ -127,9 +122,9 @@ func (rf *requestHandler) topologyRequest() *Message {
 	t := &zbmsgpack.TopologyRequest{}
 	cmr := &zbsbe.ControlMessageRequest{
 		MessageType: zbsbe.ControlMessageType.REQUEST_TOPOLOGY,
-		Data:        nil,
-	}
 
+		Data: nil,
+	}
 	return rf.newControlMessage(cmr, t)
 }
 
@@ -138,7 +133,7 @@ func (rf *requestHandler) newWorkflowRequest(commandRequest *zbsbe.ExecuteComman
 	return rf.newCommandMessage(commandRequest, d)
 }
 
-func (rf *requestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscription) *Message {
+func (rf *requestHandler) openTaskSubscriptionRequest(partitionId uint16, ts *zbmsgpack.TaskSubscription) *Message {
 	var msg Message
 
 	b, err := msgpack.Marshal(ts)
@@ -147,6 +142,7 @@ func (rf *requestHandler) openTaskSubscriptionRequest(ts *zbmsgpack.TaskSubscrip
 	}
 	controlRequest := &zbsbe.ControlMessageRequest{
 		MessageType: zbsbe.ControlMessageType.ADD_TASK_SUBSCRIPTION,
+		PartitionId: partitionId,
 		Data:        b,
 	}
 	msg.SetSbeMessage(controlRequest)
@@ -195,6 +191,7 @@ func (rf *requestHandler) closeTopicSubscriptionRequest(ts *zbmsgpack.TopicSubsc
 	}
 	controlRequest := &zbsbe.ControlMessageRequest{
 		MessageType: zbsbe.ControlMessageType.REMOVE_TOPIC_SUBSCRIPTION,
+		PartitionId: ts.PartitionID,
 		Data:        b,
 	}
 	msg.SetSbeMessage(controlRequest)

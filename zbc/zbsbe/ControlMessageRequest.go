@@ -12,6 +12,7 @@ import (
 
 type ControlMessageRequest struct {
 	MessageType ControlMessageTypeEnum
+	PartitionId uint16
 	Data        []uint8
 }
 
@@ -22,6 +23,9 @@ func (c ControlMessageRequest) Encode(writer io.Writer, order binary.ByteOrder, 
 		}
 	}
 	if err := c.MessageType.Encode(writer, order); err != nil {
+		return err
+	}
+	if err := binary.Write(writer, order, c.PartitionId); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, uint16(len(c.Data))); err != nil {
@@ -36,6 +40,11 @@ func (c ControlMessageRequest) Encode(writer io.Writer, order binary.ByteOrder, 
 func (c *ControlMessageRequest) Decode(reader io.Reader, order binary.ByteOrder, actingVersion uint16, blockLength uint16, doRangeCheck bool) error {
 	if c.MessageTypeInActingVersion(actingVersion) {
 		if err := c.MessageType.Decode(reader, order, actingVersion); err != nil {
+			return err
+		}
+	}
+	if c.PartitionIdInActingVersion(actingVersion) {
+		if err := binary.Read(reader, order, &c.PartitionId); err != nil {
 			return err
 		}
 	}
@@ -71,12 +80,8 @@ func (c ControlMessageRequest) RangeCheck(actingVersion uint16, schemaVersion ui
 	return nil
 }
 
-func ControlMessageRequestInit(c *ControlMessageRequest) {
-	return
-}
-
 func (c ControlMessageRequest) SbeBlockLength() (blockLength uint16) {
-	return 1
+	return 3
 }
 
 func (c ControlMessageRequest) SbeTemplateId() (templateId uint16) {
@@ -153,4 +158,12 @@ func (c ControlMessageRequest) DataCharacterEncoding() string {
 
 func (c ControlMessageRequest) DataHeaderLength() uint64 {
 	return 2
+}
+
+func (c *ControlMessageRequest) PartitionIdSinceVersion() uint16 {
+	return 0
+}
+
+func (c *ControlMessageRequest) PartitionIdInActingVersion(actingVersion uint16) bool {
+	return actingVersion >= c.PartitionIdSinceVersion()
 }

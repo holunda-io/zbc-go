@@ -17,7 +17,6 @@ type SubscribedEvent struct {
 	SubscriberKey    uint64
 	SubscriptionType SubscriptionTypeEnum
 	EventType        EventTypeEnum
-	TopicName        []uint8
 	Event            []uint8
 }
 
@@ -43,12 +42,6 @@ func (s SubscribedEvent) Encode(writer io.Writer, order binary.ByteOrder, doRang
 		return err
 	}
 	if err := s.EventType.Encode(writer, order); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, uint16(len(s.TopicName))); err != nil {
-		return err
-	}
-	if err := binary.Write(writer, order, s.TopicName); err != nil {
 		return err
 	}
 	if err := binary.Write(writer, order, uint16(len(s.Event))); err != nil {
@@ -103,17 +96,6 @@ func (s *SubscribedEvent) Decode(reader io.Reader, order binary.ByteOrder, actin
 		io.CopyN(ioutil.Discard, reader, int64(blockLength-s.SbeBlockLength()))
 	}
 
-	if s.TopicNameInActingVersion(actingVersion) {
-		var TopicNameLength uint16
-		if err := binary.Read(reader, order, &TopicNameLength); err != nil {
-			return err
-		}
-		s.TopicName = make([]uint8, TopicNameLength)
-		if err := binary.Read(reader, order, &s.TopicName); err != nil {
-			return err
-		}
-	}
-
 	if s.EventInActingVersion(actingVersion) {
 		var EventLength uint16
 		if err := binary.Read(reader, order, &EventLength); err != nil {
@@ -159,17 +141,7 @@ func (s SubscribedEvent) RangeCheck(actingVersion uint16, schemaVersion uint16) 
 	if err := s.EventType.RangeCheck(actingVersion, schemaVersion); err != nil {
 		return err
 	}
-	//if !utf8.Valid(s.TopicName[:]) {
-	//	return errors.New("s.TopicName failed UTF-8 validation")
-	//}
-	//if !utf8.Valid(s.Event[:]) {
-	//	return errors.New("s.Event failed UTF-8 validation")
-	//}
 	return nil
-}
-
-func SubscribedEventInit(s *SubscribedEvent) {
-	return
 }
 
 func (s SubscribedEvent) SbeBlockLength() (blockLength uint16) {
@@ -406,38 +378,6 @@ func (s SubscribedEvent) EventTypeMetaAttribute(meta int) string {
 		return ""
 	}
 	return ""
-}
-
-func (s SubscribedEvent) TopicNameMetaAttribute(meta int) string {
-	switch meta {
-	case 1:
-		return "unix"
-	case 2:
-		return "nanosecond"
-	case 3:
-		return ""
-	}
-	return ""
-}
-
-func (s SubscribedEvent) TopicNameSinceVersion() uint16 {
-	return 0
-}
-
-func (s SubscribedEvent) TopicNameInActingVersion(actingVersion uint16) bool {
-	return actingVersion >= s.TopicNameSinceVersion()
-}
-
-func (s SubscribedEvent) TopicNameDeprecated() uint16 {
-	return 0
-}
-
-func (s SubscribedEvent) TopicNameCharacterEncoding() string {
-	return "UTF-8"
-}
-
-func (s SubscribedEvent) TopicNameHeaderLength() uint64 {
-	return 2
 }
 
 func (s SubscribedEvent) EventMetaAttribute(meta int) string {
