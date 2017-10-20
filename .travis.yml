@@ -1,4 +1,8 @@
 language: go
+sudo: required
+
+services:
+  - docker
 
 go:
   - 1.5
@@ -8,9 +12,13 @@ go:
   - 1.9
   - tip
 
+before_script:
+  - docker run -p 51015:51015 -d camunda/zeebe:0.3.0
+
 script:
   - make test-protocol
   - make test-hexdump
+  - make test-integration
   - make cov
   - bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
 

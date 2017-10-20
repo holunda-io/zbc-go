@@ -1,8 +1,8 @@
 package zbmsgpack
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 // Workflow is msgpack structure used when creating a workflow

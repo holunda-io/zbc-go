@@ -7,7 +7,7 @@ import (
 
 type Socket struct {
 	connection net.Conn
-	stream []byte
+	stream     []byte
 }
 
 func (ss *Socket) ReadChunk() {

@@ -15,7 +15,7 @@ var (
 	errFrameHeaderRead    = errors.New("cannot read bytes for frame header")
 	errFrameHeaderDecode  = errors.New("cannot decode bytes into frame header")
 	errProtocolIDNotFound = errors.New("ProtocolID not found")
-	errSocketRead = errors.New("failed to read requested number of bytes")
+	errSocketRead         = errors.New("failed to read requested number of bytes")
 )
 
 // MessageReader is builder which will read byte array and construct Message with all their parts.
@@ -76,8 +76,7 @@ func (mr *MessageReader) readMessage(data []byte) (*Message, error) {
 		return nil, errFrameHeaderRead
 	}
 	header.SetFrameHeader(frameHeader)
-	message := data[FrameHeaderSize:int(frameHeader.Length)+FrameHeaderSize]
-
+	message := data[FrameHeaderSize : int(frameHeader.Length)+FrameHeaderSize]
 
 	if int(frameHeader.Length) != len(message) || len(message) == 0 {
 		return nil, errFrameHeaderRead
@@ -139,7 +138,6 @@ func (mr *MessageReader) readHeaders() (*Headers, *[]byte, error) {
 	}
 	header.SetFrameHeader(frameHeader)
 	message := mr.getBytes(FrameHeaderSize, int(frameHeader.Length)+FrameHeaderSize)
-
 
 	if int(frameHeader.Length) != len(message) || len(message) == 0 {
 		return nil, nil, errFrameHeaderRead
@@ -276,7 +274,6 @@ func (mr *MessageReader) parseMessage(headers *Headers, message *[]byte) (*Messa
 		}
 		msg.SetSbeMessage(subscribedEvent)
 		msg.SetData([]byte(subscribedEvent.Event))
-
 
 		break
 	}

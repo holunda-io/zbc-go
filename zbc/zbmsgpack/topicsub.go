@@ -1,8 +1,8 @@
 package zbmsgpack
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 // OpenTopicSubscription is used to open a topic subscription.
@@ -42,6 +42,8 @@ type TopicSubscription struct {
 	TopicName     string `msgpack:"topicName"`
 	PartitionID   uint16 `msgpack:"partitionId"`
 	SubscriberKey uint64 `msgpack:"subscriberKey"`
+
+	SubscriptionName string `msgpack:"-"`
 }
 
 func (t *TopicSubscription) String() string {

@@ -1,8 +1,8 @@
 package testbroker
 
 import (
-	"testing"
 	"github.com/zeebe-io/zbc-go/zbc"
+	"testing"
 )
 
 func TestTopicSubscription(t *testing.T) {
@@ -13,7 +13,7 @@ func TestTopicSubscription(t *testing.T) {
 	workflow, err := zbClient.CreateWorkflowFromFile(topicName, zbc.BpmnXml, "../../examples/demoProcess.bpmn")
 	assert(t, nil, err, true)
 	assert(t, nil, workflow, false)
-	assert(t, zbc.DeployementCreated, workflow.State,true)
+	assert(t, zbc.DeployementCreated, workflow.State, true)
 
 	payload := make(map[string]interface{})
 	payload["a"] = "b"
@@ -32,15 +32,19 @@ func TestTopicSubscription(t *testing.T) {
 	assert(t, nil, subscription, false)
 	assert(t, nil, subscriptionCh, false)
 
+	var message *zbc.SubscriptionEvent
 	for i := 0; i < 10; i++ {
-		message := <-subscriptionCh
+		message = <-subscriptionCh
 		assert(t, nil, message, false)
 	}
 
-	msg, err := zbClient.CloseTopicSubscription(subscription)
+	msg, err := zbClient.TopicSubscriptionAck(subscription, message)
 	assert(t, nil, err, true)
 	assert(t, nil, msg, false)
+	assert(t, "default-name", msg.Name, true)
+	assert(t, message.Event.Position, msg.AckPosition, true)
 
-	// TODO: ACK
+	closeMsg, err := zbClient.CloseTopicSubscription(subscription)
+	assert(t, nil, err, true)
+	assert(t, nil, closeMsg, false)
 }
-

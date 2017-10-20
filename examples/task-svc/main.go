@@ -38,7 +38,7 @@ func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo str
 	for {
 		select {
 		case message := <-subscriptionCh:
-			credits--;
+			credits--
 
 			processTask(lo, message)
 			response, err := client.CompleteTask(message)

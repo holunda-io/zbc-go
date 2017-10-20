@@ -1,9 +1,9 @@
 package zbmsgpack
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
-	"encoding/json"
 )
 
 // Broker is used to hold broker contact information.
@@ -41,7 +41,7 @@ func (t *TopicLeader) String() string {
 }
 
 // TopologyRequest is used to make a topology request.
-type TopologyRequest struct {}
+type TopologyRequest struct{}
 
 func (t *TopologyRequest) String() string {
 	b, err := json.MarshalIndent(t, "", "  ")

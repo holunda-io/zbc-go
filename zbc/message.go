@@ -81,7 +81,7 @@ func (m *Message) jsonString(data interface{}) string {
 
 // SubscriptionEvent is used on task and topic subscription.
 type SubscriptionEvent struct {
-	Task *zbmsgpack.Task
+	Task  *zbmsgpack.Task
 	Event *zbsbe.SubscribedEvent
 }
 

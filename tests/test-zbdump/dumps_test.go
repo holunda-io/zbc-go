@@ -10,30 +10,29 @@ import (
 const (
 	AppendRequest = "dumps/append-request.bin"
 
-	CreateDeploymentRequest = "dumps/create-deployment-request.bin"
-	CreateDeploymentResponse = "dumps/create-deployment-response.bin"
-	CreateTaskRequest = "dumps/create-task-request.bin"
-	CreateTaskResponse = "dumps/create-task-response.bin"
-	CreateWorkflowInstanceRequest = "dumps/create-workflow-instance-request.bin"
+	CreateDeploymentRequest        = "dumps/create-deployment-request.bin"
+	CreateDeploymentResponse       = "dumps/create-deployment-response.bin"
+	CreateTaskRequest              = "dumps/create-task-request.bin"
+	CreateTaskResponse             = "dumps/create-task-response.bin"
+	CreateWorkflowInstanceRequest  = "dumps/create-workflow-instance-request.bin"
 	CreateWorkflowInstanceResponse = "dumps/create-workflow-instance-response.bin"
 
-
-	CloseTaskSubscriptionRequest = "dumps/close-task-subscription-request.bin"
-	CloseTaskSubscriptionResponse = "dumps/close-task-subscription-response.bin"
-	CloseTopicSubscriptionRequest = "dumps/close-topic-subscription-request.bin"
+	CloseTaskSubscriptionRequest   = "dumps/close-task-subscription-request.bin"
+	CloseTaskSubscriptionResponse  = "dumps/close-task-subscription-response.bin"
+	CloseTopicSubscriptionRequest  = "dumps/close-topic-subscription-request.bin"
 	CloseTopicSubscriptionResponse = "dumps/close-topic-subscription-response.bin"
 
 	ErrorTopicNotFound = "dumps/error-topic-not-found.bin"
-	KeepAlive = "dumps/keep-alive.bin"
+	KeepAlive          = "dumps/keep-alive.bin"
 
-	OpenTaskSubscriptionRequest = "dumps/open-task-subscription-request.bin"
-	OpenTaskSubscriptionResponse = "dumps/open-task-subscription-response.bin"
-	OpenTopicSubscriptionRequest = "dumps/open-topic-subscription-request.bin"
+	OpenTaskSubscriptionRequest   = "dumps/open-task-subscription-request.bin"
+	OpenTaskSubscriptionResponse  = "dumps/open-task-subscription-response.bin"
+	OpenTopicSubscriptionRequest  = "dumps/open-topic-subscription-request.bin"
 	OpenTopicSubscriptionResponse = "dumps/open-topic-subscription-response.bin"
 
 	TaskSubscriptionLockedTask = "dumps/task-subscription-locked-task.bin"
-	TopologyRequest = "dumps/topology-request.bin"
-	TopologyResponse = "dumps/topology-response.bin"
+	TopologyRequest            = "dumps/topology-request.bin"
+	TopologyResponse           = "dumps/topology-response.bin"
 )
 
 func TestAppendRequest(t *testing.T) {

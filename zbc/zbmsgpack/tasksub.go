@@ -1,8 +1,8 @@
 package zbmsgpack
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 // TaskSubscription is structure which we use to handle a subscription on a task.

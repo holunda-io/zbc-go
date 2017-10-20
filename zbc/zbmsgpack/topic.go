@@ -1,8 +1,8 @@
 package zbmsgpack
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 type Topic struct {

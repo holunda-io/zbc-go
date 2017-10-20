@@ -1,8 +1,8 @@
 package zbmsgpack
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 // Task structure is used when creating or read a task.

@@ -10,7 +10,7 @@ var SHARD_COUNT = 32
 type SafeMap []*ConcurrentMapShared
 
 type ConcurrentMapShared struct {
-	items        map[string]interface{}
+	items map[string]interface{}
 	sync.RWMutex
 }
 
@@ -140,7 +140,6 @@ func (m SafeMap) IterBuffered() <-chan Tuple {
 	go fanIn(chans, ch)
 	return ch
 }
-
 
 func snapshot(m SafeMap) (chans []chan Tuple) {
 	chans = make([]chan Tuple, SHARD_COUNT)

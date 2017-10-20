@@ -11,10 +11,10 @@ import (
 
 	"math/rand"
 	"sync"
-
+	
+	"github.com/vmihailenco/msgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"github.com/vmihailenco/msgpack"
 )
 
 var (
@@ -65,7 +65,7 @@ func (c *Client) sender(message *Message) error {
 	writer.Write(byteBuff)
 
 	n, err := c.Connection.Write(byteBuff.Bytes())
-		if err != nil {
+	if err != nil {
 		return err
 	}
 
@@ -284,6 +284,27 @@ func (c *Client) CloseTopicSubscription(task *zbmsgpack.TopicSubscription) (*Mes
 	})
 }
 
+// TopicSubscriptionAck will ACK received events from the broker.
+func (c *Client) TopicSubscriptionAck(ts *zbmsgpack.TopicSubscription, s *SubscriptionEvent) (*zbmsgpack.TopicSubscriptionAck, error) {
+	tsa := &zbmsgpack.TopicSubscriptionAck{
+		Name:        ts.SubscriptionName,
+		AckPosition: s.Event.Position,
+		State:       TopicSubscriptionAckState,
+	}
+	execCommandRequest := &zbsbe.ExecuteCommandRequest{
+		PartitionId: s.Event.PartitionId,
+		Position:    0,
+		EventType:   zbsbe.EventType.SUBSCRIPTION_EVENT,
+		TopicName:   s.Event.TopicName,
+	}
+	execCommandRequest.Key = execCommandRequest.KeyNullValue()
+
+	msg, err := MessageRetry(func() (*Message, error) {
+		return c.responder(c.topicSubscriptionAckRequest(execCommandRequest, tsa))
+	})
+	return c.unmarshalTopicSubAck(msg), err
+}
+
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
 func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscription, error) {
 	partitionID, err := c.partitionID(topic)
@@ -319,9 +340,10 @@ func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan
 	c.addSubscription(cmdResponse.Key, subscriptionCh)
 
 	subscriptionInfo := &zbmsgpack.TopicSubscription{
-		TopicName:     topic,
-		PartitionID:   partitionID,
-		SubscriberKey: subscriberKey,
+		TopicName:        topic,
+		PartitionID:      partitionID,
+		SubscriberKey:    subscriberKey,
+		SubscriptionName: subName,
 	}
 
 	return subscriptionCh, subscriptionInfo, nil
@@ -447,5 +469,13 @@ func NewWorkflowInstance(bpmnProcessId string, version int, payload map[string]i
 		BPMNProcessID: bpmnProcessId,
 		Version:       version,
 		Payload:       b,
+	}
+}
+
+func NewTopicSubscriptionAck(name string, position uint64) *zbmsgpack.TopicSubscriptionAck {
+	return &zbmsgpack.TopicSubscriptionAck{
+		Name:        name,
+		AckPosition: position,
+		State:       TopicSubscriptionAckState,
 	}
 }

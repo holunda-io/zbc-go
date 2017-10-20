@@ -1,10 +1,10 @@
 package zbc
 
 import (
+	"github.com/vmihailenco/msgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbprotocol"
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
-	"github.com/vmihailenco/msgpack"
 )
 
 type requestHandler struct{}
@@ -51,7 +51,7 @@ func (rf *requestHandler) headers(t interface{}) *Headers {
 		// Writer will set FrameHeader after serialization to byte array.
 		headers.SetFrameHeader(zbprotocol.NewFrameHeader(uint32(length), 0, 0, 0, 0))
 		return &headers
- 	}
+	}
 
 	return nil
 }

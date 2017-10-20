@@ -36,14 +36,14 @@ const (
 
 // Message pack states for Task, Deployment and WorkflowInstance
 const (
-	TaskCreate               = "CREATE"
-	TaskCreated              = "CREATED"
+	TaskCreate  = "CREATE"
+	TaskCreated = "CREATED"
 
-	TaskComplete             = "COMPLETE"
-	TaskCompleted            = "COMPLETED"
+	TaskComplete  = "COMPLETE"
+	TaskCompleted = "COMPLETED"
 
-	CreateDeployment         = "CREATE_DEPLOYMENT"
-	DeployementCreated       = "DEPLOYMENT_CREATED"
+	CreateDeployment   = "CREATE_DEPLOYMENT"
+	DeployementCreated = "DEPLOYMENT_CREATED"
 
 	CreateWorkflowInstance   = "CREATE_WORKFLOW_INSTANCE"
 	WorkflowInstanceCreated  = "WORKFLOW_INSTANCE_CREATED"

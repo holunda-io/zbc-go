@@ -1,8 +1,8 @@
 package testbroker
 
 import (
-	"testing"
 	"github.com/zeebe-io/zbc-go/zbc"
+	"testing"
 )
 
 func TestCreateTopic(t *testing.T) {
@@ -17,4 +17,3 @@ func TestCreateTopic(t *testing.T) {
 
 	assert(t, zbc.TopicCreated, topic.State, true)
 }
-

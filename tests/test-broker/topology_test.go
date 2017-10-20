@@ -1,8 +1,8 @@
 package testbroker
 
 import (
-	"testing"
 	"github.com/zeebe-io/zbc-go/zbc"
+	"testing"
 )
 
 func TestTopology(t *testing.T) {

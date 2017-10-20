@@ -78,3 +78,15 @@ func (rf *responseHandler) unmarshalWorkflowInstance(m *Message) *zbmsgpack.Work
 	}
 	return nil
 }
+
+func (rf *responseHandler) unmarshalTopicSubAck(m *Message) *zbmsgpack.TopicSubscriptionAck {
+	var d zbmsgpack.TopicSubscriptionAck
+	err := msgpack.Unmarshal(m.Data, &d)
+	if err != nil {
+		return nil
+	}
+	if d.State == TopicSubscriptionAcknowledgedState {
+		return &d
+	}
+	return nil
+}
