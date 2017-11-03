@@ -10,21 +10,21 @@ Simple microservice example on how to use task subscriptions.
 
 # Running
 
-1.Run the broker
+1. Run the broker
 
 ```
 docker-compose up -d
 ```
 
-2.Run the example with 
+2. Create default-topic with the following command
+```
+zbctl create topic
+```
+
+3. Run the example with
 
 ```
 go run main.go
-```
-
-3.Create default-topic with the following command
-```
-zbctl create topic
 ```
 
 # Using
