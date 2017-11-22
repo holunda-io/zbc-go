@@ -75,11 +75,11 @@ func openSubscription(client *zbc.Client, stopCh chan bool, topic string, lo str
 				log.Print("Stopping worker.")
 				_, err := client.CloseTaskSubscription(subInfo)
 				if err != nil {
-					log.Println("Close task subscription request failed")
+					log.Println("close task subscription request failed")
 					log.Println(err)
 				}
 				log.Println("Gracefully shutting down the client.")
-				client.Close()
+				client.close()
 				return
 			}
 			break

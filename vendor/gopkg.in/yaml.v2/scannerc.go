@@ -960,7 +960,7 @@ func yaml_parser_roll_indent(parser *yaml_parser_t, column, number int, typ yaml
 	return true
 }
 
-// PopBytes indentation levels from the indents stack until the current level
+// popBytes indentation levels from the indents stack until the current level
 // becomes less or equal to the column.  For each indentation level, append
 // the BLOCK-END token.
 func yaml_parser_unroll_indent(parser *yaml_parser_t, column int) bool {

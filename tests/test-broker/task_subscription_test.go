@@ -14,7 +14,7 @@ func TestTaskSubscription(t *testing.T) {
 	assert(t, nil, err, true)
 	assert(t, nil, workflow, false)
 	assert(t, nil, workflow.State, false)
-	assert(t, zbc.DeployementCreated, workflow.State, true)
+	assert(t, zbc.DeploymentCreated, workflow.State, true)
 
 	payload := make(map[string]interface{})
 	payload["a"] = "b"

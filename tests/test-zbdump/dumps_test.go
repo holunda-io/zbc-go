@@ -55,7 +55,7 @@ func TestAppendRequest(t *testing.T) {
 
 //func TestCreateDeploymentRequest(t *testing.T) {
 //	reader, fsErr := os.Open(CreateDeploymentRequest)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", CreateDeploymentRequest)
@@ -127,7 +127,7 @@ func TestCreateTaskResponse(t *testing.T) {
 
 //func TestWorkflowInstanceRequest(t *testing.T) {
 //	reader, fsErr := os.Open(CreateWorkflowInstanceRequest)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", CreateWorkflowInstanceRequest)
@@ -253,7 +253,7 @@ func TestErrorTopicNotFound(t *testing.T) {
 
 //func TestKeepAlive(t *testing.T) {
 //	reader, fsErr := os.Open(KeepAlive)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", KeepAlive)
@@ -271,7 +271,7 @@ func TestErrorTopicNotFound(t *testing.T) {
 
 //func TestOpenTaskSubscriptionRequest(t *testing.T) {
 //	reader, fsErr := os.Open(OpenTaskSubscriptionRequest)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", OpenTaskSubscriptionRequest)
@@ -289,7 +289,7 @@ func TestErrorTopicNotFound(t *testing.T) {
 
 //func TestOpenTaskSubscriptionResponse(t *testing.T) {
 //	reader, fsErr := os.Open(OpenTaskSubscriptionResponse)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", OpenTaskSubscriptionResponse)
@@ -307,7 +307,7 @@ func TestErrorTopicNotFound(t *testing.T) {
 
 //func TestOpenTopicSubscriptionRequest(t *testing.T) {
 //	reader, fsErr := os.Open(OpenTopicSubscriptionRequest)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", OpenTopicSubscriptionRequest)
@@ -325,7 +325,7 @@ func TestErrorTopicNotFound(t *testing.T) {
 //
 //func TestOpenTopicSubscriptionResponse(t *testing.T) {
 //	reader, fsErr := os.Open(OpenTopicSubscriptionResponse)
-//	defer reader.Close()
+//	defer reader.close()
 //
 //	if fsErr != nil {
 //		t.Fatalf("Cannot read file %s", OpenTopicSubscriptionResponse)
