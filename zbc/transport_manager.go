@@ -42,17 +42,16 @@ func (tm *transportManager) transportWorker() {
 			if err != nil {
 				request.errorCh <- err
 			}
+
 			request.sock = sock
-			resp, err := MessageRetry(func() (*Message, error) {
-				return sock.responder(request)
+			MessageRetry(func() (*Message, error) {
+				sock.addTransaction(request)
+				if err := sock.sender(request.payload); err != nil {
+					return nil, err
+				}
+				return nil, nil
 			})
 
-			if err != nil {
-				request.errorCh <- err
-				continue
-			}
-
-			request.responseCh <- resp
 		}
 	}
 }

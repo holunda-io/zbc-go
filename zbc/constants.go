@@ -85,6 +85,4 @@ const (
 	SocketChunkSize = 4096
 )
 
-const (
-	requestQueueSize = 1024
-)
+const requestQueueSize uint64 = 4096

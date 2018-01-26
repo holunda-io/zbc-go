@@ -3,8 +3,6 @@ package zbprotocol
 import (
 	"encoding/binary"
 	"io"
-	"math/rand"
-	"time"
 )
 
 // RequestResponseHeader is layer to represent Request-Response model of communication. With it we keep transaction house keeping.
@@ -24,11 +22,5 @@ func (fh *RequestResponseHeader) Decode(reader io.Reader, order binary.ByteOrder
 
 // NewRequestResponseHeader is constructor for RequestResponseHeader object. Constructor will generate random ID's for fields.
 func NewRequestResponseHeader() *RequestResponseHeader {
-	max := ^uint64(0)
-	var s float64 = 10
-	var v float64 = 1000
-	zipf := rand.NewZipf(rand.New(rand.NewSource(time.Now().UnixNano())), s, v, max)
-	return &RequestResponseHeader{
-		zipf.Uint64(),
-	}
+	return &RequestResponseHeader{}
 }

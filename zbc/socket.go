@@ -15,26 +15,6 @@ type socket struct {
 	closeCh    chan bool
 }
 
-// responder implements synchronous way of sending ExecuteCommandRequest and waiting for ExecuteCommandResponse.
-func (c *socket) responder(request *requestWrapper) (*Message, error) {
-	message := request.payload
-	respCh := make(chan *Message)
-
-	c.addTransaction(message.Headers.RequestResponseHeader.RequestID, respCh)
-	if err := c.sender(message); err != nil {
-		return nil, err
-	}
-
-	select {
-	case resp := <-respCh:
-		c.removeTransaction(message.Headers.RequestResponseHeader.RequestID)
-		return resp, nil
-	case <-time.After(time.Second * RequestTimeout):
-		c.removeTransaction(message.Headers.RequestResponseHeader.RequestID)
-		return nil, errTimeout
-	}
-}
-
 func (s *socket) sender(message *Message) error {
 	writer := NewMessageWriter(message)
 	byteBuff := &bytes.Buffer{}
@@ -70,7 +50,7 @@ func (s *socket) receiver() {
 			message, err := reader.parseMessage(headers, tail)
 
 			if err != nil && !headers.IsSingleMessage() {
-				s.removeTransaction(headers.RequestResponseHeader.RequestID)
+				//s.removeTransaction(headers.RequestResponseHeader.RequestID)
 				continue
 			}
 

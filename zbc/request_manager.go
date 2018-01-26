@@ -5,24 +5,6 @@ import (
 	"github.com/zeebe-io/zbc-go/zbc/zbsbe"
 )
 
-type requestWrapper struct {
-	addr string
-	sock       *socket
-	responseCh chan *Message
-	errorCh    chan error
-	payload    *Message
-}
-
-func newRequestWrapper(payload *Message) *requestWrapper {
-	return &requestWrapper{
-		"",
-		nil,
-		make(chan *Message),
-		make(chan error),
-		payload,
-	}
-}
-
 type requestManager struct {
 	*requestFactory
 	*responseHandler
@@ -92,7 +74,6 @@ func (rm *requestManager) taskConsumer(topic, lockOwner, taskType string, credit
 	message := rm.openTaskSubscriptionRequest(partitionID, lockOwner, taskType, credits)
 	request := newRequestWrapper(message)
 	resp, err := rm.executeRequest(request)
-
 	if err != nil {
 		return nil, nil, err
 	}
@@ -102,7 +83,7 @@ func (rm *requestManager) taskConsumer(topic, lockOwner, taskType string, credit
 		// TODO:
 	}
 
-	request.sock.addSubscription(taskSubInfo.SubscriberKey, subscriptionCh)
+	request.sock.addTaskSubscription(taskSubInfo.SubscriberKey, subscriptionCh)
 	return subscriptionCh, taskSubInfo, nil
 }
 
@@ -166,7 +147,7 @@ func (rm *requestManager) topicConsumer(topic, subName string, startPosition int
 	cmdResponse := (*resp.SbeMessage).(*zbsbe.ExecuteCommandResponse)
 	subscriberKey := cmdResponse.Key
 
-	request.sock.addSubscription(cmdResponse.Key, subscriptionCh)
+	request.sock.addTopicSubscription(cmdResponse.Key, subscriptionCh)
 
 	subscriptionInfo := &zbmsgpack.TopicSubscription{
 		TopicName:        topic,
