@@ -1,8 +1,9 @@
 package testbroker
 
 import (
-	"github.com/zeebe-io/zbc-go/zbc"
 	"testing"
+
+	"github.com/zeebe-io/zbc-go/zbc"
 )
 
 func TestTopicSubscription(t *testing.T) {
@@ -20,7 +21,7 @@ func TestTopicSubscription(t *testing.T) {
 
 	instance := zbc.NewWorkflowInstance("demoProcess", -1, payload)
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 3; i++ {
 		createdInstance, err := zbClient.CreateWorkflowInstance(topicName, instance)
 		assert(t, nil, err, true)
 		assert(t, nil, createdInstance, false)
@@ -33,18 +34,11 @@ func TestTopicSubscription(t *testing.T) {
 	assert(t, nil, subscriptionCh, false)
 
 	var message *zbc.SubscriptionEvent
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 3; i++ {
 		message = <-subscriptionCh
 		assert(t, nil, message, false)
 	}
 
-	msg, err := zbClient.TopicSubscriptionAck(subscription, message)
-	assert(t, nil, err, true)
-	assert(t, nil, msg, false)
-	assert(t, "default-name", msg.Name, true)
-	assert(t, message.Event.Position, msg.AckPosition, true)
-
-	closeMsg, err := zbClient.CloseTopicSubscription(subscription)
-	assert(t, nil, err, true)
-	assert(t, nil, closeMsg, false)
+	errs := zbClient.CloseTopicSubscription(subscription)
+	assert(t, 0, len(errs), true)
 }

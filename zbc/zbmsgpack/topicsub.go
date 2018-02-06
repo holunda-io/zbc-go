@@ -5,6 +5,20 @@ import (
 	"fmt"
 )
 
+type TopicSubscriptionInfo struct {
+	Subs []TopicSubscription
+}
+
+func (tsi *TopicSubscriptionInfo) AddSubInfo(sub TopicSubscription) {
+	tsi.Subs = append(tsi.Subs, sub)
+}
+
+func NewTopicSubscriptionInfo() *TopicSubscriptionInfo {
+	return &TopicSubscriptionInfo{
+		make([]TopicSubscription, 0),
+	}
+}
+
 // OpenTopicSubscription is used to open a topic subscription.
 type OpenTopicSubscription struct {
 	StartPosition    int64  `msgpack:"startPosition"`

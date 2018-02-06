@@ -1,6 +1,7 @@
 package zbc
 
 import (
+	"errors"
 	"math/rand"
 
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
@@ -8,61 +9,100 @@ import (
 	"time"
 )
 
-type TopicRoundRobin struct {
-	index int
-	topic string
-}
+var (
+	errPartitionNotFound = errors.New("partition not found")
+	errNoBrokersFound    = errors.New("no brokers found")
+)
 
 type topologyManager struct {
 	*transportManager
 
 	topologyWorkload chan *requestWrapper
 
-	topicRoundRobin map[string][]int
-	bootstrapAddr   string
-	cluster         *zbmsgpack.ClusterTopology
+	lastIndexes map[string]uint16
+
+	bootstrapAddr string
+	cluster       *zbmsgpack.ClusterTopology
 }
 
-func (tm *topologyManager) topicBrokers(topic string) (*[]zbmsgpack.TopicLeader, error) {
-	leaders, ok := tm.cluster.TopicLeaders[topic]
-	if ok {
-		return &leaders, nil
+func (tm *topologyManager) topicPartitionsAddrs(topic string) (*map[uint16]string, error) {
+	addrs := make(map[uint16]string)
+	if partitions, ok := tm.cluster.PartitionIDByTopicName[topic]; ok {
+		for _, partitionID := range partitions {
+			if addr, ok := tm.cluster.AddrByPartitionID[partitionID]; ok {
+				addrs[partitionID] = addr
+			} else {
+				return nil, errPartitionNotFound
+			}
+
+		}
 	}
-	return nil, brokerNotFound
+
+	return &addrs, nil
 }
 
 func (tm *topologyManager) partitionID(topic string) (uint16, error) {
-	leaders, ok := tm.cluster.TopicLeaders[topic]
-
+	lastPartitionUsedIndex, ok := tm.lastIndexes[topic]
+	if !ok {
+		lastPartitionUsedIndex = 0
+	}
+	brokers, ok := tm.cluster.PartitionIDByTopicName[topic]
 	if !ok {
 		tm.refreshTopology()
 
-		leaders, ok = tm.cluster.TopicLeaders[topic]
+		brokers, ok = tm.cluster.PartitionIDByTopicName[topic]
 
 		if !ok {
 			return 0, errTopicLeaderNotFound
 		}
 	}
 
+	var partitionID uint16
+	if tm.lastIndexes[topic] >= uint16(len(brokers)) {
+		tm.lastIndexes[topic] = 0
+	} else {
+		partitionID = brokers[lastPartitionUsedIndex]
+		tm.lastIndexes[topic] = lastPartitionUsedIndex + 1
+	}
+
 	// TODO: zbc-go/issues#40 + zbc-go/issues#48
-	return leaders[0].PartitionID, nil
+	return partitionID, nil
 }
 
 func (tm *topologyManager) initTopology() (*zbmsgpack.ClusterTopology, error) {
-	resp, err := tm.executeRequest(newRequestWrapper(newRequestFactory().topologyRequest()))
-	topology := newResponseHandler().unmarshalTopology(resp)
-	tm.cluster = topology
-	return topology, err
+	factory := newRequestFactory()
+	responseHandler := newResponseHandler()
+
+	resp, err := tm.executeRequest(newRequestWrapper(factory.topologyRequest()))
+	topology := responseHandler.unmarshalTopology(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	tm.cluster = &topology
+	return tm.cluster, nil
 }
 
 func (tm *topologyManager) refreshTopology() (*zbmsgpack.ClusterTopology, error) {
 	rand.Seed(time.Now().Unix())
-	request := newRequestWrapper(newRequestFactory().topologyRequest())
-	request.addr = tm.cluster.Brokers[rand.Int()%len(tm.cluster.Brokers)].Addr()
+
+	factory := newRequestFactory()
+	responseHandler := newResponseHandler()
+
+	request := newRequestWrapper(factory.topologyRequest())
+	if len(tm.cluster.Brokers) == 0 {
+		return nil, errNoBrokersFound
+	}
+	broker := tm.cluster.GetRandomBroker()
+	request.addr = broker.Addr() //.Brokers[rand.Int()%len(tm.cluster.Brokers)].Addr() // Get random broker
 	resp, err := tm.executeRequest(request)
-	topology := newResponseHandler().unmarshalTopology(resp)
-	tm.cluster = topology
-	return topology, err
+	topology := responseHandler.unmarshalTopology(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	tm.cluster = &topology
+	return tm.cluster, err
 }
 
 func (tm *topologyManager) getDestinationAddr(msg *Message) (string, error) {
@@ -75,14 +115,10 @@ func (tm *topologyManager) getDestinationAddr(msg *Message) (string, error) {
 		return "", brokerNotFound
 	}
 
-	for _, topicLeaders := range tm.cluster.TopicLeaders {
-		for _, leader := range topicLeaders {
-			if leader.PartitionID == *partitionID {
-				addr := leader.Broker.Addr()
-				return addr, nil
-			}
-		}
+	if addr, ok := tm.cluster.AddrByPartitionID[*partitionID]; ok {
+		return addr, nil
 	}
+
 	return "", brokerNotFound
 }
 
@@ -134,7 +170,7 @@ func newTopologyManager(bootstrapAddr string) *topologyManager {
 	tm := &topologyManager{
 		newTransportManager(),
 		make(chan *requestWrapper, requestQueueSize),
-		make(map[string][]int),
+		make(map[string]uint16),
 		bootstrapAddr,
 		nil,
 	}

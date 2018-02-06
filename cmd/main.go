@@ -10,12 +10,13 @@ import (
 
 	yaml "gopkg.in/yaml.v2"
 
+	"os/signal"
+	"text/tabwriter"
+
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli"
 	"github.com/zeebe-io/zbc-go/zbc"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
-	"os/signal"
-	"text/tabwriter"
 )
 
 const (
@@ -282,9 +283,9 @@ func main() {
 						go func() {
 							<-osCh
 							fmt.Println("Closing subscription.")
-							_, err := client.CloseTaskSubscription(subscription)
-							if err != nil {
-								fmt.Println("failed to close subscription: ", err)
+							errs := client.CloseTaskSubscription(subscription)
+							if len(errs) > 0 {
+								fmt.Println("failed to close subscription: ", errs)
 							} else {
 								fmt.Println("Subscription closed.")
 							}
@@ -334,8 +335,8 @@ func main() {
 						go func() {
 							<-osCh
 							fmt.Println("Closing subscription.")
-							_, err := client.CloseTopicSubscription(sub)
-							if err != nil {
+							errs := client.CloseTopicSubscription(sub)
+							if len(errs) > 0 {
 								fmt.Println("failed to close subscription: ", err)
 							} else {
 								fmt.Println("Subscription closed.")
@@ -379,9 +380,11 @@ func main() {
 						w := tabwriter.NewWriter(os.Stdout, 0, 0, 10, ' ', tabwriter.TabIndent)
 
 						fmt.Fprintln(w, "Topic Name\tBroker\tPartitionID")
-						for key, value := range (*topology).TopicLeaders {
-							for _, leader := range value {
-								fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%d", key, leader.Addr(), leader.PartitionID))
+
+						for topicName, partitionIDs := range (*topology).PartitionIDByTopicName {
+							for _, partitionID := range partitionIDs {
+								line := fmt.Sprintf("%s\t%s\t%d", topicName, (*topology).AddrByPartitionID[partitionID], partitionID)
+								fmt.Fprintln(w, line)
 							}
 						}
 

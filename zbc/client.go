@@ -31,6 +31,7 @@ func (c *Client) CreateWorkflow(topic string, resources ...*zbmsgpack.Resource) 
 	return c.createWorkflow(topic, resources)
 }
 
+// CreateWorkflowFromFile will read workflow file and return message pack workflow object.
 func (c *Client) CreateWorkflowFromFile(topic, resourceType, path string) (*zbmsgpack.Workflow, error) {
 	if len(path) == 0 {
 		return nil, errResourceNotFound
@@ -51,7 +52,7 @@ func (c *Client) CreateWorkflowInstance(topic string, workflowInstance *zbmsgpac
 }
 
 // TaskConsumer opens a subscription on task and returns a channel where all the SubscribedEvents will arrive.
-func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *SubscriptionEvent, *zbmsgpack.TaskSubscription, error) {
+func (c *Client) TaskConsumer(topic, lockOwner, taskType string) (chan *SubscriptionEvent, *zbmsgpack.TaskSubscriptionInfo, error) {
 	return c.taskConsumer(topic, lockOwner, taskType, 32)
 }
 
@@ -60,18 +61,18 @@ func (c *Client) CompleteTask(task *SubscriptionEvent) (*zbmsgpack.Task, error) 
 	return c.completeTask(task)
 }
 
-//  IncreaseTaskSubscriptionCredits will increase the current credits of the task subscription.
+// IncreaseTaskSubscriptionCredits will increase the current credits of the task subscription.
 func (c *Client) IncreaseTaskSubscriptionCredits(task *zbmsgpack.TaskSubscription) (*zbmsgpack.TaskSubscription, error) {
 	return c.increaseTaskSubscriptionCredits(task)
 }
 
 // CloseTaskSubscription will tear down currently active task subscription.
-func (c *Client) CloseTaskSubscription(task *zbmsgpack.TaskSubscription) (*Message, error) {
+func (c *Client) CloseTaskSubscription(task *zbmsgpack.TaskSubscriptionInfo) []error {
 	return c.closeTaskSubscription(task)
 }
 
 // CloseTopicSubscription will tear down currently active topic subscription.
-func (c *Client) CloseTopicSubscription(topicSub *zbmsgpack.TopicSubscription) (*Message, error) {
+func (c *Client) CloseTopicSubscription(topicSub *zbmsgpack.TopicSubscriptionInfo) []error {
 	return c.closeTopicSubscription(topicSub)
 }
 
@@ -81,14 +82,21 @@ func (c *Client) TopicSubscriptionAck(ts *zbmsgpack.TopicSubscription, s *Subscr
 }
 
 // TopicConsumer opens a subscription on topic and returns a channel where all the SubscribedEvents will arrive.
-func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscription, error) {
+func (c *Client) TopicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscriptionInfo, error) {
 	return c.topicConsumer(topic, subName, startPosition)
 }
 
+// CreateTopic will create new topic with specified number of partitions.
 func (c *Client) CreateTopic(name string, partitionNum int) (*zbmsgpack.Topic, error) {
 	return c.createTopic(name, partitionNum)
 }
 
+// GetPartitions will return all partitions and information to which topic they belong to.
+func (c *Client) GetPartitions() (*zbmsgpack.PartitionCollection, error) {
+	return c.partitionRequest()
+}
+
+// UnmarshalFromFile will read binary message from disk.
 func (c *Client) UnmarshalFromFile(path string) (*Message, error) {
 	data, fsErr := ioutil.ReadFile(path)
 
@@ -100,6 +108,7 @@ func (c *Client) UnmarshalFromFile(path string) (*Message, error) {
 	return messageReader.readMessage(data)
 }
 
+// Topology request will retrieve all information about the cluster.
 func (c *Client) Topology() (*zbmsgpack.ClusterTopology, error) {
 	return c.refreshTopology()
 }
@@ -125,19 +134,21 @@ func NewTask(typeName, lockOwner string) *zbmsgpack.Task {
 	}
 }
 
-func NewWorkflowInstance(bpmnProcessId string, version int, payload map[string]interface{}) *zbmsgpack.WorkflowInstance {
+// NewWorkflowInstance will create new workflow instance.
+func NewWorkflowInstance(bpmnProcessID string, version int, payload map[string]interface{}) *zbmsgpack.WorkflowInstance {
 	b, err := msgpack.Marshal(payload)
 	if err != nil {
 		return nil
 	}
 	return &zbmsgpack.WorkflowInstance{
 		State:         CreateWorkflowInstance,
-		BPMNProcessID: bpmnProcessId,
+		BPMNProcessID: bpmnProcessID,
 		Version:       version,
 		Payload:       b,
 	}
 }
 
+// NewResource will create new message pack resource.
 func NewResource(resourceName, resourceType string, resource []byte) *zbmsgpack.Resource {
 	return &zbmsgpack.Resource{
 		ResourceName: resourceName,

@@ -1,6 +1,8 @@
 package zbc
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type subscriptionsManager struct {
 	taskSubscriptions  SafeMap
@@ -16,6 +18,10 @@ func (sm *subscriptionsManager) addTopicSubscription(key uint64, value interface
 }
 
 func (sm *subscriptionsManager) removeTaskSubscription(key uint64) {
+	if ch, ok := sm.taskSubscriptions.Get(fmt.Sprintf("%d", key)); ok {
+		c := ch.(chan *SubscriptionEvent)
+		close(c)
+	}
 	sm.taskSubscriptions.Remove(fmt.Sprintf("%d", key))
 }
 

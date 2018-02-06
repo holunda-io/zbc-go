@@ -86,3 +86,5 @@ const (
 )
 
 const requestQueueSize uint64 = 4096
+
+const stateLeader = "LEADER"

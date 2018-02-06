@@ -12,6 +12,16 @@ type requestManager struct {
 	*topologyManager
 }
 
+func (rm *requestManager) partitionRequest() (*zbmsgpack.PartitionCollection, error) {
+	message := rm.createPartitionRequest()
+	request := newRequestWrapper(message)
+	resp, err := rm.executeRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	return rm.unmarshalPartition(resp), nil
+}
+
 func (rm *requestManager) createTask(topic string, task *zbmsgpack.Task) (*zbmsgpack.Task, error) {
 	partitionID, err := rm.partitionID(topic)
 
@@ -64,27 +74,41 @@ func (rm *requestManager) completeTask(task *SubscriptionEvent) (*zbmsgpack.Task
 	return rm.unmarshalTask(resp), nil
 }
 
-func (rm *requestManager) taskConsumer(topic, lockOwner, taskType string, credits int32) (chan *SubscriptionEvent, *zbmsgpack.TaskSubscription, error) {
-	partitionID, err := rm.partitionID(topic)
+func (rm *requestManager) taskConsumer(topic, lockOwner, taskType string, credits int32) (chan *SubscriptionEvent, *zbmsgpack.TaskSubscriptionInfo, error) {
+	partitions, err := rm.topicPartitionsAddrs(topic)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	subscriptionCh := make(chan *SubscriptionEvent, credits)
-	message := rm.openTaskSubscriptionRequest(partitionID, lockOwner, taskType, credits)
-	request := newRequestWrapper(message)
-	resp, err := rm.executeRequest(request)
-	if err != nil {
-		return nil, nil, err
+	send := func(endSubscriptionCh chan *SubscriptionEvent, subscriptionCh <-chan *SubscriptionEvent) {
+		for {
+			msg := <-subscriptionCh
+			endSubscriptionCh <- msg
+		}
 	}
 
-	taskSubInfo := rm.unmarshalTaskSubscription(resp)
-	if taskSubInfo == nil {
-		// TODO:
+	tsi := zbmsgpack.NewTaskSubscriptionInfo()
+	endSubscriptionCh := make(chan *SubscriptionEvent)
+
+	for partitionID := range *partitions {
+		subscriptionCh := make(chan *SubscriptionEvent, credits)
+		message := rm.openTaskSubscriptionRequest(partitionID, lockOwner, taskType, credits)
+		request := newRequestWrapper(message)
+		resp, err := rm.executeRequest(request)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		taskSubInfo := rm.unmarshalTaskSubscription(resp)
+		if taskSubInfo != nil {
+			tsi.AddSubInfo(*taskSubInfo)
+			request.sock.addTaskSubscription(taskSubInfo.SubscriberKey, subscriptionCh)
+			go send(endSubscriptionCh, subscriptionCh)
+		}
+
 	}
 
-	request.sock.addTaskSubscription(taskSubInfo.SubscriberKey, subscriptionCh)
-	return subscriptionCh, taskSubInfo, nil
+	return endSubscriptionCh, tsi, nil
 }
 
 func (rm *requestManager) increaseTaskSubscriptionCredits(task *zbmsgpack.TaskSubscription) (*zbmsgpack.TaskSubscription, error) {
@@ -100,15 +124,45 @@ func (rm *requestManager) increaseTaskSubscriptionCredits(task *zbmsgpack.TaskSu
 	return rm.unmarshalTaskSubscription(resp), nil
 }
 
-func (rm *requestManager) closeTaskSubscription(task *zbmsgpack.TaskSubscription) (*Message, error) {
+func (rm *requestManager) closeTaskSubscription(sub *zbmsgpack.TaskSubscriptionInfo) []error {
+	var errs []error
+	for _, taskSub := range sub.Subs {
+		_, err := rm.closeTaskSubscriptionPartition(&taskSub)
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
+}
+
+func (rm *requestManager) closeTaskSubscriptionPartition(task *zbmsgpack.TaskSubscription) (*Message, error) {
 	message := rm.closeTaskSubscriptionRequest(task)
 	request := newRequestWrapper(message)
 	resp, err := rm.executeRequest(request)
+	request.sock.removeTaskSubscription(task.SubscriberKey)
 	return resp, err
 }
+func (rm *requestManager) closeTopicSubscription(sub *zbmsgpack.TopicSubscriptionInfo) []error {
+	var errs []error
+	for _, taskSub := range sub.Subs {
+		_, err := rm.closeTopicSubscriptionPartition(&taskSub)
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
 
-func (rm *requestManager) closeTopicSubscription(task *zbmsgpack.TopicSubscription) (*Message, error) {
-	message := rm.closeTopicSubscriptionRequest(task)
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
+}
+
+func (rm *requestManager) closeTopicSubscriptionPartition(topicPartition *zbmsgpack.TopicSubscription) (*Message, error) {
+	message := rm.closeTopicSubscriptionRequest(topicPartition)
 	request := newRequestWrapper(message)
 	resp, err := rm.executeRequest(request)
 	return resp, err
@@ -133,30 +187,48 @@ func (rm *requestManager) createTopic(name string, partitionNum int) (*zbmsgpack
 	return rm.unmarshalTopic(resp), nil
 }
 
-func (rm *requestManager) topicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscription, error) {
-	partitionID, err := rm.partitionID(topic)
+func (rm *requestManager) topicConsumer(topic, subName string, startPosition int64) (chan *SubscriptionEvent, *zbmsgpack.TopicSubscriptionInfo, error) {
+	partitions, err := rm.topicPartitionsAddrs(topic)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	subscriptionCh := make(chan *SubscriptionEvent, 1000)
-	message := rm.openTopicSubscriptionRequest(partitionID, topic, subName, startPosition)
-	request := newRequestWrapper(message)
-	resp, err := rm.executeRequest(request)
-
-	cmdResponse := (*resp.SbeMessage).(*zbsbe.ExecuteCommandResponse)
-	subscriberKey := cmdResponse.Key
-
-	request.sock.addTopicSubscription(cmdResponse.Key, subscriptionCh)
-
-	subscriptionInfo := &zbmsgpack.TopicSubscription{
-		TopicName:        topic,
-		PartitionID:      partitionID,
-		SubscriberKey:    subscriberKey,
-		SubscriptionName: subName,
+	send := func(subInfo *zbmsgpack.TopicSubscription, endSubscriptionCh chan *SubscriptionEvent, subscriptionCh <-chan *SubscriptionEvent) {
+		for {
+			msg := <-subscriptionCh
+			endSubscriptionCh <- msg
+			rm.topicSubscriptionAck(subInfo, msg)
+		}
 	}
 
-	return subscriptionCh, subscriptionInfo, nil
+	tsi := zbmsgpack.NewTopicSubscriptionInfo()
+	endSubscriptionCh := make(chan *SubscriptionEvent, 1000)
+
+	for partitionID := range *partitions {
+		subscriptionCh := make(chan *SubscriptionEvent, 1000)
+		message := rm.openTopicSubscriptionRequest(partitionID, topic, subName, startPosition)
+		request := newRequestWrapper(message)
+		resp, err := rm.executeRequest(request)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		cmdResponse := (*resp.SbeMessage).(*zbsbe.ExecuteCommandResponse)
+		subscriberKey := cmdResponse.Key
+
+		request.sock.addTopicSubscription(cmdResponse.Key, subscriptionCh)
+		subscriptionInfo := zbmsgpack.TopicSubscription{
+			TopicName:        topic,
+			PartitionID:      partitionID,
+			SubscriberKey:    subscriberKey,
+			SubscriptionName: subName,
+		}
+
+		tsi.AddSubInfo(subscriptionInfo)
+		go send(&subscriptionInfo, endSubscriptionCh, subscriptionCh)
+	}
+
+	return endSubscriptionCh, tsi, nil
 }
 
 func newRequestManager(bootstrapAddr string) *requestManager {

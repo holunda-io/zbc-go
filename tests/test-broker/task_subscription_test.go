@@ -1,8 +1,9 @@
 package testbroker
 
 import (
-	"github.com/zeebe-io/zbc-go/zbc"
 	"testing"
+
+	"github.com/zeebe-io/zbc-go/zbc"
 )
 
 func TestTaskSubscription(t *testing.T) {
@@ -32,11 +33,10 @@ func TestTaskSubscription(t *testing.T) {
 
 	message := <-subscriptionCh
 
-	_, err = zbClient.CloseTaskSubscription(subscription)
-	assert(t, nil, err, true)
-	assert(t, nil, message, false)
-
 	response, err := zbClient.CompleteTask(message)
 	assert(t, nil, err, true)
 	assert(t, nil, response, false)
+
+	errs := zbClient.CloseTaskSubscription(subscription)
+	assert(t, 0, len(errs), true)
 }

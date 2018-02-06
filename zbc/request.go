@@ -80,6 +80,16 @@ func (rf *requestFactory) newControlMessage(req *zbsbe.ControlMessageRequest, pa
 	return &msg
 }
 
+func (rf *requestFactory) createPartitionRequest() *Message {
+	controlMessage := &zbsbe.ControlMessageRequest{
+		MessageType: zbsbe.ControlMessageType.REQUEST_PARTITIONS,
+		PartitionId: 0,
+		Data:        nil,
+	}
+	return rf.newControlMessage(controlMessage, nil)
+
+}
+
 func (rf *requestFactory) createTaskRequest(partition uint16, position uint64, task *zbmsgpack.Task) *Message {
 	commandRequest := &zbsbe.ExecuteCommandRequest{
 		PartitionId: partition,

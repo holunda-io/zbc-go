@@ -21,3 +21,17 @@ func (t *TaskSubscription) String() string {
 	}
 	return fmt.Sprintf("%+v", string(b))
 }
+
+type TaskSubscriptionInfo struct {
+	Subs []TaskSubscription
+}
+
+func (tsi *TaskSubscriptionInfo) AddSubInfo(sub TaskSubscription) {
+	tsi.Subs = append(tsi.Subs, sub)
+}
+
+func NewTaskSubscriptionInfo() *TaskSubscriptionInfo {
+	return &TaskSubscriptionInfo{
+		make([]TaskSubscription, 0),
+	}
+}

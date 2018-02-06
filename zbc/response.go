@@ -1,26 +1,45 @@
 package zbc
 
 import (
+	"time"
+
 	"github.com/vmihailenco/msgpack"
 	"github.com/zeebe-io/zbc-go/zbc/zbmsgpack"
-	"time"
 )
 
 type responseHandler struct{}
 
-func (rf *responseHandler) unmarshalTopology(msg *Message) *zbmsgpack.ClusterTopology {
+func (rf *responseHandler) unmarshalPartition(msg *Message) *zbmsgpack.PartitionCollection {
+	var resp zbmsgpack.PartitionCollection
+	msgpack.Unmarshal(msg.Data, &resp)
+
+	return &resp
+}
+
+func (rf *responseHandler) unmarshalTopology(msg *Message) zbmsgpack.ClusterTopology {
 	var resp zbmsgpack.ClusterTopologyResponse
 	msgpack.Unmarshal(msg.Data, &resp)
 
-	ct := &zbmsgpack.ClusterTopology{
-		Brokers:      resp.Brokers,
-		TopicLeaders: make(map[string][]zbmsgpack.TopicLeader),
-		UpdatedAt:    time.Now(),
+	ct := zbmsgpack.ClusterTopology{
+		AddrByPartitionID:      make(map[uint16]string),   // contains partitionID: brokerAddr
+		PartitionIDByTopicName: make(map[string][]uint16), // contains topicName: [PartitionID]
+		Brokers:                resp.Brokers,
+		UpdatedAt:              time.Now(),
 	}
 
-	for _, leader := range resp.TopicLeaders {
-		ct.TopicLeaders[leader.TopicName] = append(ct.TopicLeaders[leader.TopicName], leader)
+	for _, broker := range resp.Brokers {
+		for _, partition := range broker.Partitions {
+
+			ct.PartitionIDByTopicName[partition.TopicName] = append(ct.PartitionIDByTopicName[partition.TopicName], partition.PartitionID)
+
+			if partition.State == stateLeader {
+				ct.AddrByPartitionID[partition.PartitionID] = broker.Addr()
+			}
+		}
 	}
+	ct.Brokers = resp.Brokers
+	ct.Partitions = nil
+
 	return ct
 }
 
