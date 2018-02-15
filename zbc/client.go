@@ -135,7 +135,7 @@ func NewTask(typeName, lockOwner string) *zbmsgpack.Task {
 }
 
 // NewWorkflowInstance will create new workflow instance.
-func NewWorkflowInstance(bpmnProcessID string, version int, payload map[string]interface{}) *zbmsgpack.WorkflowInstance {
+func NewWorkflowInstance(bpmnProcessID string, version int, payload ...interface{}) *zbmsgpack.WorkflowInstance {
 	b, err := msgpack.Marshal(payload)
 	if err != nil {
 		return nil
